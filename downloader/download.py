@@ -40,9 +40,9 @@ async def instagram_downloader_photo_video(link: str, session: aiohttp.ClientSes
 
 async def insta_user_data(language: str, link: str, session: aiohttp.ClientSession) -> any:
     try:
-        print({'User-Agent': fake_agent.get_random_user_agent()})
-        async with session.post(INSTA_API, data={'q': f"https://www.instagram.com/{link}/", 't': 'media', 'html': 'cs'},
-                                headers={'User-Agent': fake_agent.get_random_user_agent()}) as response:
+        # print({'User-Agent': fake_agent.get_random_user_agent()})
+        async with session.post(INSTA_API, data={'q': f"https://www.instagram.com/{link}/", 't': 'media',
+                                                 'html': 'cs'}) as response:
             content = await response.json()
             if 'url' not in content:
                 return None, "Invalid response from the Instagram API"
@@ -86,9 +86,7 @@ async def insta_user_data(language: str, link: str, session: aiohttp.ClientSessi
 
 
 async def insta_video_data(link: str, session: aiohttp.ClientSession) -> any:
-    print({'User-Agent': fake_agent.get_random_user_agent()})
-    async with session.post(INSTA_API, data={'q': link, 't': 'media', 'html': 'cs'},
-                            headers={'User-Agent': fake_agent.get_random_user_agent()}) as response:
+    async with session.post(INSTA_API, data={'q': link, 't': 'media', 'html': 'cs'}) as response:
         content = await response.json()
         async with session.get(f"{content['url']}?__a=1&__d=dis",
                                headers={'User-Agent': fake_agent.get_random_user_agent()}) as json_response:

@@ -131,13 +131,12 @@ async def callback_inline(message: types.Message, state: FSMContext):
                 stories_keyboard = InlineKeyboardMarkup(row_width=2)
                 stories_btn = InlineKeyboardButton(text="Stories yuklash", callback_data="stories_yuklash")
                 stories_keyboard.add(stories_btn)
-                await bot.send_photo(message.chat.id, photo=profile_photo, caption=user_data,
-                                     reply_markup=stories_keyboard)
+                await bot.send_photo(message.chat.id, photo=profile_photo, caption=user_data)
             else:
                 stories_keyboard = InlineKeyboardMarkup(row_width=2)
                 stories_btn = InlineKeyboardButton(text="Stories yuklash", callback_data="stories_yuklash")
                 stories_keyboard.add(stories_btn)
-                await bot.send_message(message.chat.id, text=user_data, reply_markup=stories_keyboard)
+                await bot.send_message(message.chat.id, text=user_data)
             await state.finish()
     except Exception as e:
         await bot.delete_message(message.chat.id, message_id=message.message_id)
