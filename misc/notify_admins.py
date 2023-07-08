@@ -9,3 +9,7 @@ async def on_startup(dp: Dispatcher):
         await dp.bot.send_message(ADMINS, "⚙ Bot ishga tushdi")
     except Exception as err:
         logging.exception(err)
+
+
+
+
