@@ -17,7 +17,6 @@ async def counts(views):
 
 async def instagram_downloader_photo_video(link: str, session: aiohttp.ClientSession) -> any:
     try:
-        print({'User-Agent': fake_agent.get_random_user_agent()})
         async with session.post(INSTA_API, data={'q': link, 't': 'media'},
                                 headers={'User-Agent': fake_agent.get_random_user_agent()}) as response:
             content = await response.json()
@@ -40,7 +39,6 @@ async def instagram_downloader_photo_video(link: str, session: aiohttp.ClientSes
 
 async def insta_user_data(language: str, link: str, session: aiohttp.ClientSession) -> any:
     try:
-        # print({'User-Agent': fake_agent.get_random_user_agent()})
         async with session.post(INSTA_API, data={'q': f"https://www.instagram.com/{link}/", 't': 'media',
                                                  'html': 'cs'}) as response:
             content = await response.json()

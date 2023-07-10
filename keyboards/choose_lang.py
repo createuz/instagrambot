@@ -2,91 +2,78 @@ choose_button = "🌐 Choose language"
 
 select_uz = f"👋🏻 Salom! @InstinBot botimizga xush kelibsiz!\n\n" \
             f"🤖 Bot orqali <a href='{'https://www.instagram.com'}'> Instagram </a> - Stories, Reels, IGTV va Rasmlarni tezkor va sifatli tarzda yuklab olishingiz mumkin.\n\n" \
-            "👤 Foydalanuvchi haqida ko'proq malumot olishni istasangiz, @username ni yuboring va bot sizga profil ma'lumotlarini, avatar va stories'ni yuklab olish imkonini beradi.\n\n" \
             "⚙ Tilni tanlash va yordam olish uchun /help va /lang buyruqlaridan foydalanishingiz mumkin.\n\n" \
             "🔗 Botga murojaat qilish uchun ushbu havolani yuboring.\n\n" \
             "👥 Bot guruhlarda ham ishlaydi. Botni guruhga qo'shing, xabar yuborish uchun ruxsat bering va havolani yuboring. Bot ushbu guruhga kontentingizni yuklab beradi."
 
 select_ru = f"👋 Привет! Добро пожаловать в нашего бота @InstinBot!\n\n" \
             f"🤖 С помощью бота вы можете легко загружать истории, реелсы, IGTV и фотографии с <a href='{'https://www.instagram.com'}'> Instagram </a> в быстром и качественном формате.\n\n" \
-            "👤 Если вы хотите получить больше информации о пользователе, просто отправьте нам его @username, и бот предоставит вам его профильные данные, аватарку и истории.\n\n" \
             "⚙ Вы можете выбрать язык и получить помощь с помощью команд /help и /lang.\n\n" \
             "🔗 Чтобы связаться с ботом, отправьте ему эту ссылку.\n\n" \
             "👥 Бот также работает в группах. Просто добавьте его в группу, дайте разрешение на отправку сообщений и отправьте ссылку на видео. Бот загрузит ваш контент в эту группу."
 
 select_ar = f"👋 مرحبًا! مرحبًا بك في بوتنا @InstinBot!\n\n" \
             f"🤖 يمكنك استخدام البوت لتنزيل قصص <a href='{'https://www.instagram.com'}'> Instagram </a> ومقاطع الفيديو وIGTV والصور بسرعة وبجودة عالية.\n\n" \
-            "👤 إذا كنت ترغب في الحصول على مزيد من المعلومات حول المستخدم، قم بإرسال لنا @username وسيقدم البوت لك بيانات الملف الشخصي والصورة الرمزية والقصص.\n\n" \
             "⚙ يمكنك اختيار اللغة والحصول على المساعدة باستخدام الأوامر /help و /lang.\n\n" \
             "🔗 للاتصال بالبوت، قم بإرسال هذا الرابط له.\n\n" \
             "👥 البوت يعمل أيضًا في المجموعات. فقط أضفه إلى المجموعة، ومنحه إذنًا لإرسال الرسائل، ثم أرسل رابط الفيديو. سيقوم البوت بتنزيل المحتوى الخاص بك في هذه المجموعة."
 
 select_tr = f"👋 Merhaba! @InstinBot botumuza hoş geldiniz!\n\n" \
             f"🤖 Bot aracılığıyla <a href='{'https://www.instagram.com'}'> Instagram </a> - Hikayeler, Reels, IGTV ve Gönderileri hızlı ve kaliteli bir şekilde indirebilirsiniz.\n\n" \
-            "👤 Bir kullanıcı hakkında daha fazla bilgi almak isterseniz, bize @kullanıcı adını gönderin ve bot size profil bilgilerini, avatarı ve hikayeleri indirme imkanı sunar.\n\n" \
             "⚙ Dil seçimi yapabilir ve /help ve /lang komutlarıyla yardım alabilirsiniz.\n\n" \
             "🔗 Bot ile iletişim kurmak için bu bağlantıyı gönderin.\n\n" \
             "👥 Bot aynı zamanda gruplarda da çalışır. Botu bir gruba ekleyin, mesaj gönderme izni verin ve ardından video bağlantısını gönderin. Bot içeriğinizi bu gruba indirecektir."
 
 select_nm = f"👋 Hallo! Herzlich willkommen bei unserem Bot @InstinBot!\n\n" \
             f"🤖 Mit dem Bot können Sie Stories, Reels, IGTV und Bilder von <a href='{'https://www.instagram.com'}'> Instagram </a> in schneller und hochwertiger Art und Weise herunterladen.\n\n" \
-            "👤 Wenn Sie mehr Informationen über einen Benutzer erhalten möchten, senden Sie uns einfach seinen @Benutzernamen, und der Bot stellt Ihnen seine Profilinformationen, sein Avatar und seine Stories zur Verfügung.\n\n" \
             "⚙ Sie können die Sprache auswählen und mit den Befehlen /help und /lang Hilfe erhalten.\n\n" \
             "🔗 Senden Sie diesem Link, um Kontakt mit dem Bot aufzunehmen.\n\n" \
             "👥 Der Bot funktioniert auch in Gruppen. Fügen Sie ihn einfach einer Gruppe hinzu, geben Sie ihm die Berechtigung zum Senden von Nachrichten und senden Sie dann den Videolink. Der Bot lädt Ihren Inhalt in diese Gruppe herunter."
 
 select_fr = f"👋 Bonjour! Bienvenue dans notre bot @InstinBot!\n\n" \
             f"🤖 Avec le bot, vous pouvez télécharger rapidement et facilement des Stories, Reels, IGTV et des photos depuis <a href='{'https://www.instagram.com'}'> Instagram </a>.\n\n" \
-            "👤 Si vous souhaitez obtenir plus d'informations sur un utilisateur, il vous suffit de nous envoyer son @nom_utilisateur, et le bot vous fournira ses informations de profil, son avatar et ses Stories.\n\n" \
             "⚙ Vous pouvez choisir la langue et obtenir de l'aide à l'aide des commandes /help et /lang.\n\n" \
             "🔗 Envoyez ce lien pour contacter le bot.\n\n" \
             "👥 Le bot fonctionne également dans les groupes. Ajoutez-le simplement à un groupe, donnez-lui l'autorisation d'envoyer des messages, puis envoyez le lien de la vidéo. Le bot téléchargera votre contenu dans ce groupe."
 
 select_es = f"👋 ¡Hola! ¡Bienvenido a nuestro bot @InstinBot!\n\n" \
             f"🤖 Con el bot, puedes descargar Stories, Reels, IGTV y fotos de <a href='{'https://www.instagram.com'}'> Instagram </a> de manera rápida y sencilla.\n\n" \
-            "👤 Si deseas obtener más información sobre un usuario, simplemente envíanos su @nombre_de_usuario y el bot te proporcionará sus datos de perfil, su avatar y sus historias.\n\n" \
             "⚙ Puedes seleccionar el idioma y obtener ayuda con los comandos /help y /lang.\n\n" \
             "🔗 Envía este enlace para comunicarte con el bot.\n\n" \
             "👥 El bot también funciona en grupos. Solo agrégalo a un grupo, otórgale permiso para enviar mensajes y luego envía el enlace del video. El bot descargará tu contenido en ese grupo."
 
 select_it = f"👋 Ciao! Benvenuto nel nostro bot @InstinBot!\n\n" \
             f"🤖 Con il bot puoi scaricare storie, Reels, IGTV e foto da <a href='{'https://www.instagram.com'}'> Instagram </a> in modo rapido e semplice.\n\n" \
-            "👤 Se desideri ottenere ulteriori informazioni su un utente, inviaci semplicemente il suo @nome_utente e il bot ti fornirà le sue informazioni di profilo, l'avatar e le storie.\n\n" \
             "⚙ Puoi selezionare la lingua e ottenere aiuto tramite i comandi /help e /lang.\n\n" \
             "🔗 Invia questo link per contattare il bot.\n\n" \
             "👥 Il bot funziona anche nei gruppi. Basta aggiungerlo a un gruppo, concedergli il permesso di inviare messaggi e inviare il link del video. Il bot scaricherà il tuo contenuto in quel gruppo."
 
 select_en = f"👋 Hello! Welcome to our bot @InstinBot!\n\n" \
             f"🤖 With the bot, you can easily download Stories, Reels, IGTV, and photos from <a href='{'https://www.instagram.com'}'> Instagram </a> in a fast and quality manner.\n\n" \
-            "👤 If you want to get more information about a user, simply send us their @username, and the bot will provide you with their profile information, avatar, and stories.\n\n" \
             "⚙ You can select the language and get help using the /help and /lang commands.\n\n" \
             "🔗 Send this link to contact the bot.\n\n" \
             "👥 The bot also works in groups. Just add it to a group, grant it permission to send messages, and then send the video link. The bot will download your content to that group."
 
 select_qz = f"👋 Сәлем! @InstinBot ботына қош келдіңіз!\n\n" \
             f"🤖 Бот арқылы <a href='{'https://www.instagram.com'}'> Instagram </a> - Stories, Reels, IGTV және Суреттерді тез жана сапалы түрде жүктеу мүмкін.\n\n" \
-            "👤 Пайдаланушы туралы толық ақпарат алу үшін, бізге @пайдаланушы_атын жіберіңіз, бот профиль деректерін, аватар және Stories жүктеу мүмкіндігін береді.\n\n" \
             "⚙ Тілді таңдау және көмек алу үшін /help және /lang командаларын пайдалануыңыз мүмкін.\n\n" \
             "🔗 Ботпен байланысу үшін осы сілтемені жіберіңіз.\n\n" \
             "👥 Бот жиынталарда да жұмыс істейді. Онды жиынтқа қосып, хабарлама жіберу құқығын беріңіз, онда бейненің сілтемесін жіберіңіз. Бот сізге осы жиынтқа контентті жүктеуін береді."
 
 select_uk = f"👋 Привіт! Ласкаво просимо до нашого бота @InstinBot!\n\n" \
             f"🤖 За допомогою бота ви можете швидко та якісно завантажувати Історії, Reels, IGTV та фотографії з <a href='{'https://www.instagram.com'}'> Instagram </a>.\n\n" \
-            "👤 Якщо ви бажаєте отримати більше інформації про користувача, просто надішліть нам його @ім'я_користувача, і бот надасть вам його профільні дані, аватарку та історії.\n\n" \
             "⚙ Ви можете вибрати мову та отримати допомогу за допомогою команд /help та /lang.\n\n" \
             "🔗 Надішліть це посилання, щоб зв'язатися з ботом.\n\n" \
             "👥 Бот також працює в групах. Просто додайте його до групи, надайте йому дозвіл на надсилання повідомлень, а потім надішліть посилання на відео. Бот завантажить ваш вміст до цієї групи."
 
 select_az = f"👋 Salam! @InstinBot botumuza xoş gəlmisiniz!\n\n" \
             f"🤖 Bot vasitəsilə <a href='{'https://www.instagram.com'}'> Instagram </a> - Stories, Reels, IGTV və Şəkilləri sürətli və keyfiyyətli şəkildə yükləyə bilərsiniz.\n\n" \
-            "👤 İstifadəçi haqqında daha çox məlumat əldə etmək istəsəniz, @istifadəçi_adını göndərərək bot sizi profil məlumatları, avatar və Stories yükləmə imkanı ilə təmin edəcəkdir.\n\n" \
             "⚙ Dil seçmək və kömək almaq üçün /help və /lang əmrindən istifadə edə bilərsiniz.\n\n" \
             "🔗 Botla əlaqə qurmaq üçün bu linki göndərin.\n\n" \
             "👥 Bot həm də qruplarda işləyir. Onu sadəcə bir qrupa əlavə edin, mesaj göndərmə icazəsi verin və sonra video linkini göndərin. Bot məzmununuzu bu qrupa yükləyəcəkdir."
 
 select_hn = f"👋 नमस्ते! हमारे बॉट @InstinBot में आपका स्वागत है!\n\n" \
             f"🤖 इस बॉट के साथ, आप <a href='{'https://www.instagram.com'}'> Instagram </a> से स्टोरीज़, रील्स, आईजीटीवी और फ़ोटोज़ को तेज़ और गुणवत्ता वाले तरीके से डाउनलोड कर सकते हैं।\n\n" \
-            "👤 यदि आप किसी उपयोगकर्ता के बारे में अधिक जानकारी प्राप्त करना चाहते हैं, तो उसका @उपयोगकर्ता_नाम हमें भेजें और बॉट आपको उसकी प्रोफ़ाइल जानकारी, अवतार और स्टोरीज़ डाउनलोड करने की सुविधा प्रदान करेगा।\n\n" \
             "⚙ आप भाषा का चयन कर सकते हैं और /help और /lang कमांड का उपयोग करके सहायता प्राप्त कर सकते हैं।\n\n" \
             "🔗 बॉट से संपर्क करने के लिए इस लिंक को भेजें।\n\n" \
             "👥 बॉट समूहों में भी काम करता है। इसे एक समूह में जोड़ें, संदेश भेजने की अनुमति दें, और फिर वीडियो लिंक भेजें। बॉट आपकी सामग्री को उस समूह में डाउनलोड करेगा।"
