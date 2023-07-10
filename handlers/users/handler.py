@@ -110,15 +110,15 @@ async def send_instagram_media(message: types.Message):
         logger.exception("Error while sending Instagram photo: %s", e)
 
 
-@dp.message_handler(commands=['username'], chat_type=types.ChatType.PRIVATE)
-async def insta_user_handler(message: types.Message):
-    try:
-        language = await User.get_language(message.chat.id)
-        await bot.send_message(message.chat.id,
-                               text=f"<b>Instagram user haqida kuproq malumot va storiesni yuklab olishni xohlasangiz foydalanuvchi @username'ni yuboring.</b>")
-        await InstaUserData.waiting_user_data.set()
-    except Exception as e:
-        logger.exception("Error while processing start command: %s", e)
+# @dp.message_handler(commands=['username'], chat_type=types.ChatType.PRIVATE)
+# async def insta_user_handler(message: types.Message):
+#     try:
+#         language = await User.get_language(message.chat.id)
+#         await bot.send_message(message.chat.id,
+#                                text=f"<b>Instagram user haqida kuproq malumot va storiesni yuklab olishni xohlasangiz foydalanuvchi @username'ni yuboring.</b>")
+#         await InstaUserData.waiting_user_data.set()
+#     except Exception as e:
+#         logger.exception("Error while processing start command: %s", e)
 
 
 @dp.message_handler(state=InstaUserData.waiting_user_data, content_types=ContentType.TEXT)
