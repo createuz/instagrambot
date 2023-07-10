@@ -51,14 +51,15 @@ keyboard_group = {
 
 menu = InlineKeyboardMarkup(row_width=1)
 send = InlineKeyboardButton("♻️ Xabar Yuborish", callback_data="send")
-stat = InlineKeyboardButton("📊 Statiska", callback_data="stat")
-menu_kb = menu.add(send, stat)
+stat = InlineKeyboardButton("📊 Statiska", callback_data="statistic")
+cancels = InlineKeyboardButton("❌ Bekor qilish", callback_data="bekor_qilish")
+menu_kb = menu.add(send, stat, cancels)
 
 menu = InlineKeyboardMarkup(row_width=1)
 text = InlineKeyboardButton("📝 Text xabar yuborish", callback_data="text")
 photo = InlineKeyboardButton("🖼 Photo xabar yuborish", callback_data="photo")
 video = InlineKeyboardButton("🎥 Videos xabar yuborish", callback_data="video")
-cancel = InlineKeyboardButton("❌ Bekor qilish", callback_data="cancel")
+cancel = InlineKeyboardButton("❌ Bekor qilish", callback_data="bekor_qilish")
 admin_kb = menu.add(text, photo, video, cancel)
 
 rek_kb2 = InlineKeyboardMarkup(row_width=1)
