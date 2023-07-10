@@ -4,7 +4,7 @@ from databasedb.models import *
 from loader import *
 
 
-@dp.message_handler(commands=['start'], chat_type=types.ChatType.SUPERGROUP or types.ChatType.GROUP)
+@dp.message_handler(commands=['start'])
 async def save_group_info(message: types.Message):
     try:
         language = await Group.get_language(message.chat.id)
@@ -18,7 +18,7 @@ async def save_group_info(message: types.Message):
         logger.exception("Error while processing start command: %s", e)
 
 
-@dp.message_handler(commands=['lang'], chat_type=types.ChatType.SUPERGROUP or types.ChatType.GROUP)
+@dp.message_handler(commands=['lang'])
 async def change_language_handler_group(message: types.Message):
     chat_id = message.chat.id
     try:
@@ -27,8 +27,7 @@ async def change_language_handler_group(message: types.Message):
         logger.exception("Error while processing language selection: %s", e)
 
 
-@dp.callback_query_handler(lambda c: c.data in languages.keys(),
-                           chat_type=types.ChatType.SUPERGROUP or types.ChatType.GROUP)
+@dp.callback_query_handler(lambda c: c.data in languages.keys())
 async def process_language_selection(callback_query: types.CallbackQuery, state: FSMContext):
     selected_language = callback_query.data
     chat_id = callback_query.message.chat.id
@@ -57,8 +56,7 @@ async def process_language_selection(callback_query: types.CallbackQuery, state:
         logger.exception("Error while processing language selection: %s", e)
 
 
-@dp.message_handler(regexp=r'https?:\/\/(www\.)?instagram\.com\/(reel|p|tv)\/([-_a-zA-Z0-9]{11})',
-                    chat_type=types.ChatType.SUPERGROUP or types.ChatType.GROUP)
+@dp.message_handler(regexp=r'https?:\/\/(www\.)?instagram\.com\/(reel|p|tv)\/([-_a-zA-Z0-9]{11})')
 async def send_instagram_media(message: types.Message):
     link = message.text
     await message.delete()
@@ -86,8 +84,7 @@ async def send_instagram_media(message: types.Message):
         logger.exception("Error while sending Instagram photo: %s", e)
 
 
-@dp.message_handler(regexp=r'https?:\/\/(www\.)?instagram\.com\/(stories)',
-                    chat_type=types.ChatType.SUPERGROUP or types.ChatType.GROUP)
+@dp.message_handler(regexp=r'https?:\/\/(www\.)?instagram\.com\/(stories)')
 async def send_instagram_media(message: types.Message):
     link = message.text
     await message.delete()
