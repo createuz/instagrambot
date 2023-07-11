@@ -3,7 +3,7 @@ choose_button = "🌐 Choose language"
 select_uz = f"👋🏻 Salom! @InstinBot botimizga xush kelibsiz!\n\n" \
             f"🤖 Bot orqali <a href='{'https://www.instagram.com'}'> Instagram </a> - Stories, Reels, IGTV va Rasmlarni tezkor va sifatli tarzda yuklab olishingiz mumkin.\n\n" \
             "⚙ Tilni tanlash va yordam olish uchun /help va /lang buyruqlaridan foydalanishingiz mumkin.\n\n" \
-            "🔗 Botga murojaat qilish uchun ushbu havolani yuboring.\n\n" \
+            "🔗 Botga murojat qilish uchun ushbu havolani yuboring.\n\n" \
             "👥 Bot guruhlarda ham ishlaydi. Botni guruhga qo'shing, xabar yuborish uchun ruxsat bering va havolani yuboring. Bot ushbu guruhga kontentingizni yuklab beradi."
 
 select_ru = f"👋 Привет! Добро пожаловать в нашего бота @InstinBot!\n\n" \
