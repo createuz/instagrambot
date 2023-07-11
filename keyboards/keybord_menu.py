@@ -55,6 +55,10 @@ stat = InlineKeyboardButton("📊 Statiska", callback_data="statistic")
 cancels = InlineKeyboardButton("❌ Bekor qilish", callback_data="bekor_qilish")
 menu_kb = menu.add(send, stat, cancels)
 
+stt = InlineKeyboardMarkup(row_width=1)
+cancelss = InlineKeyboardButton("❌ Bekor qilish", callback_data="bekor_qilish")
+menu_stt = stt.add(cancelss)
+
 menu = InlineKeyboardMarkup(row_width=1)
 text = InlineKeyboardButton("📝 Text xabar yuborish", callback_data="text")
 photo = InlineKeyboardButton("🖼 Photo xabar yuborish", callback_data="photo")

@@ -88,8 +88,8 @@ async def Admin_send(call: types.CallbackQuery):
     user, group = await print_language_statistics()
     chat_id = call.from_user.id
     callback_id = call.message.message_id
-    await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text=f'<b>{user}</b>')
-    await bot.send_message(chat_id=chat_id, text=f'<b>{group}</b>')
+    await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text=f'<b>{user}</b>', reply_markup=menu_stt)
+    await bot.send_message(chat_id=chat_id, text=f'<b>{group}</b>', reply_markup=menu_stt)
 
 
 @dp.callback_query_handler(text="send", chat_id=ADMINS)
