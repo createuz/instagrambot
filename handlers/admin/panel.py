@@ -58,6 +58,7 @@ async def group_language_statistics():
 
 @dp.message_handler(commands=['admin'], chat_id=ADMINS)
 async def bot_echo(message: types.Message):
+    await message.delete()
     await message.answer("⚙ ADMIN PANEL", reply_markup=menu_kb)
 
 
