@@ -65,9 +65,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                                reply_markup=tasdiqlash)
         await SendText.waiting_for_is_not_btn.set()
     else:
-        await call.message.answer('Xabar yuborish bekor qilindi.')
+        await call.message.delete()
         await state.finish()
-        return
 
 
 @dp.callback_query_handler(state=SendText.waiting_for_is_not_btn, chat_id=ADMINS)
@@ -100,9 +99,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                 await bot.send_message(ADMINS, 'Xabarni yuborishda xatolik yuz berdi.')
                 await state.finish()
     else:
-        await call.message.answer('❌Xabar yuborish bekor qilindi.')
+        await call.message.delete()
         await state.finish()
-        return
 
 
 @dp.message_handler(state=SendText.waiting_for_button_name_1, content_types=ContentType.TEXT)
@@ -146,9 +144,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                                reply_markup=tasdiqlash)
         await SendText.send_all_1.set()
     else:
-        await call.message.answer('Xabar yuborish bekor qilindi.')
+        await call.message.delete()
         await state.finish()
-        return
 
 
 @dp.callback_query_handler(state=SendText.send_all_1, chat_id=ADMINS)
@@ -190,9 +187,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                 await bot.send_message(ADMINS, 'Xabarni yuborishda xatolik yuz berdi.')
                 await state.finish()
     else:
-        await call.message.answer('❌Xabar yuborish bekor qilindi.')
+        await call.message.delete()
         await state.finish()
-        return
 
 
 @dp.message_handler(state=SendText.waiting_for_button_name_2, content_types=ContentType.TEXT)
@@ -235,9 +231,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                                reply_markup=tasdiqlash)
         await SendText.send_all_2.set()
     else:
-        await call.message.answer('❌Xabar yuborish bekor qilindi.')
+        await call.message.delete()
         await state.finish()
-        return
 
 
 @dp.callback_query_handler(state=SendText.send_all_2, chat_id=ADMINS)
@@ -281,9 +276,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
             await state.finish()
 
     else:
-        await call.message.answer('❌Xabar yuborish bekor qilindi.')
+        await call.message.delete()
         await state.finish()
-        return
 
 
 ## =============================== SEND A PHOTO ===================================
@@ -333,9 +327,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                                reply_markup=tasdiqlash)
         await SendPhoto.waiting_for_is_not_btn.set()
     else:
-        await call.message.answer('Xabar yuborish bekor qilindi.')
+        await call.message.delete()
         await state.finish()
-        return
 
 
 @dp.callback_query_handler(state=SendPhoto.waiting_for_is_not_btn, chat_id=ADMINS)
@@ -367,9 +360,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                 await bot.send_message(ADMINS, 'Xabarni yuborishda xatolik yuz berdi.')
                 await state.finish()
     else:
-        await call.message.answer('❌Xabar yuborish bekor qilindi.')
+        await call.message.delete()
         await state.finish()
-        return
 
 
 @dp.message_handler(state=SendPhoto.waiting_for_button_name_1, content_types=ContentType.TEXT)
@@ -413,9 +405,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                                reply_markup=tasdiqlash)
         await SendPhoto.send_all_1.set()
     else:
-        await call.message.answer('Xabar yuborish bekor qilindi.')
+        await call.message.delete()
         await state.finish()
-        return
 
 
 @dp.callback_query_handler(state=SendPhoto.send_all_1, chat_id=ADMINS)
@@ -454,9 +445,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                 await bot.send_message(ADMINS, 'Xabarni yuborishda xatolik yuz berdi.')
                 await state.finish()
     else:
-        await call.message.answer('❌Xabar yuborish bekor qilindi.')
+        await call.message.delete()
         await state.finish()
-        return
 
 
 @dp.message_handler(state=SendPhoto.waiting_for_button_name_2, content_types=ContentType.TEXT)
@@ -503,9 +493,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                                reply_markup=tasdiqlash)
         await SendPhoto.send_all_2.set()
     else:
-        await call.message.answer('❌Xabar yuborish bekor qilindi.')
+        await call.message.delete()
         await state.finish()
-        return
 
 
 @dp.callback_query_handler(state=SendPhoto.send_all_2, chat_id=ADMINS)
@@ -549,9 +538,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
             await state.finish()
 
     else:
-        await call.message.answer('❌Xabar yuborish bekor qilindi.')
+        await call.message.delete()
         await state.finish()
-        return
 
 
 @dp.message_handler(state=SendPhoto.waiting_for_button_name_3, content_types=ContentType.TEXT)
@@ -601,9 +589,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                                    reply_markup=tasdiqlash)
             await SendPhoto.send_all_3.set()
     else:
-        await call.message.answer('❌Xabar yuborish bekor qilindi.')
+        await call.message.delete()
         await state.finish()
-        return
 
 
 @dp.callback_query_handler(state=SendPhoto.send_all_3, chat_id=ADMINS)
@@ -650,9 +637,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
             await state.finish()
 
     else:
-        await call.message.answer('❌Xabar yuborish bekor qilindi.')
+        await call.message.delete()
         await state.finish()
-        return
 
 
 @dp.message_handler(state=SendPhoto.waiting_for_button_name_4, content_types=ContentType.TEXT)
@@ -702,9 +688,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                                    reply_markup=tasdiqlash)
             await SendPhoto.send_all_4.set()
     else:
-        await call.message.answer('❌Xabar yuborish bekor qilindi.')
+        await call.message.delete()
         await state.finish()
-        return
 
 
 @dp.callback_query_handler(state=SendPhoto.send_all_4, chat_id=ADMINS)
@@ -753,9 +738,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
             await bot.send_message(ADMINS, 'Xabarni yuborishda xatolik yuz berdi.')
             await state.finish()
     else:
-        await call.message.answer('❌Xabar yuborish bekor qilindi.')
+        await call.message.delete()
         await state.finish()
-        return
 
 
 ## =============================== SEND A VIDEO ===================================
@@ -806,9 +790,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                                reply_markup=tasdiqlash)
         await SendPhoto.waiting_for_is_not_btn.set()
     else:
-        await call.message.answer('Xabar yuborish bekor qilindi.')
+        await call.message.delete()
         await state.finish()
-        return
 
 
 @dp.callback_query_handler(state=SendPhoto.waiting_for_is_not_btn, chat_id=ADMINS)
@@ -841,16 +824,14 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                 await bot.send_message(ADMINS, 'Xabarni yuborishda xatolik yuz berdi.')
                 await state.finish()
     else:
-        await call.message.answer('❌Xabar yuborish bekor qilindi.')
+        await call.message.delete()
         await state.finish()
-        return
 
 
 @dp.message_handler(state=SendVideo.waiting_for_button_name_1, content_types=ContentType.TEXT)
 async def video_button_name(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data["button_name_1"] = message.text
-
     await message.answer("Iltimos, birinchi tugma uchun URL manzilini kiriting.")
     await SendVideo.waiting_for_button_url_1.set()
 
@@ -859,7 +840,6 @@ async def video_button_name(message: types.Message, state: FSMContext):
 async def video_button_url(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['button_url_1'] = message.text
-
     await message.answer("Birinchi tugma uchun URL manzili qabul qilindi.", reply_markup=button_2)
     await SendVideo.next_call_2.set()
 
@@ -887,9 +867,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                                reply_markup=tasdiqlash)
         await SendVideo.send_all_1.set()
     else:
-        await call.message.answer('Xabar yuborish bekor qilindi.')
+        await call.message.delete()
         await state.finish()
-        return
 
 
 @dp.callback_query_handler(state=SendVideo.send_all_1, chat_id=ADMINS)
@@ -930,9 +909,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                 await bot.send_message(ADMINS, 'Xabarni yuborishda xatolik yuz berdi.')
                 await state.finish()
     else:
-        await call.message.answer('❌Xabar yuborish bekor qilindi.')
+        await call.message.delete()
         await state.finish()
-        return
 
 
 @dp.message_handler(state=SendVideo.waiting_for_button_name_2, content_types=ContentType.TEXT)
@@ -966,12 +944,10 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
             button_name_2 = data["button_name_2"]
             button_url_1 = data['button_url_1']
             button_url_2 = data['button_url_2']
-
             button_1 = InlineKeyboardButton(text=button_name_1, url=button_url_1)
             button_2 = InlineKeyboardButton(text=button_name_2, url=button_url_2)
             keyboard = InlineKeyboardMarkup(row_width=1, resize_keyboard=True)
             keyboard.add(button_1, button_2)
-
         await bot.send_video(chat_id=ADMINS, video=video_file, caption=caption, reply_markup=keyboard)
         await bot.send_message(chat_id=ADMINS, text="Siz yubormoqchi bo'lgan xabar xuddi shunday kurinishda boladi."
                                                     "Haqiqatdan ham shu xabarni barcha foydalanuvchilarga yuborishni istaysizmi?\n"
@@ -979,9 +955,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                                reply_markup=tasdiqlash)
         await SendVideo.send_all_2.set()
     else:
-        await call.message.answer('❌Xabar yuborish bekor qilindi.')
+        await call.message.delete()
         await state.finish()
-        return
 
 
 @dp.callback_query_handler(state=SendVideo.send_all_2, chat_id=ADMINS)
@@ -1022,9 +997,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
             await bot.send_message(ADMINS, 'Xabarni yuborishda xatolik yuz berdi.')
             await state.finish()
     else:
-        await call.message.answer('❌Xabar yuborish bekor qilindi.')
+        await call.message.delete()
         await state.finish()
-        return
 
 
 @dp.message_handler(state=SendVideo.waiting_for_button_name_3, content_types=ContentType.TEXT)
@@ -1040,7 +1014,6 @@ async def video_button_name(message: types.Message, state: FSMContext):
 async def video_button_url(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['button_url_3'] = message.text
-
     await message.answer("Uchunchi tugma uchun URL manzili qabul qilindi.", reply_markup=button_4)
     await SendVideo.next_call_4.set()
 
@@ -1088,12 +1061,11 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
             button_url_1 = data['button_url_1']
             button_url_2 = data['button_url_2']
             button_url_3 = data['button_url_3']
-
-            btn_1 = InlineKeyboardButton(text=button_name_1, url=button_url_1)
-            btn_2 = InlineKeyboardButton(text=button_name_2, url=button_url_2)
-            btn_3 = InlineKeyboardButton(text=button_name_3, url=button_url_3)
-            keyboard = InlineKeyboardMarkup(row_width=2, resize_keyboard=True)
-            keyboard.add(btn_1, btn_2, btn_3)
+            keyboard = InlineKeyboardMarkup(row_width=2, resize_keyboard=True).add(
+                InlineKeyboardButton(text=button_name_1, url=button_url_1),
+                InlineKeyboardButton(text=button_name_2, url=button_url_2),
+                InlineKeyboardButton(text=button_name_3, url=button_url_3)
+            )
             all_user_id = await User.get_all_user()
             all_group_id = await Group.get_all_group()
         count_user = 0
@@ -1117,9 +1089,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
             await bot.send_message(ADMINS, 'Xabarni yuborishda xatolik yuz berdi.')
             await state.finish()
     else:
-        await call.message.answer('❌Xabar yuborish bekor qilindi.')
+        await call.message.delete()
         await state.finish()
-        return
 
 
 @dp.message_handler(state=SendVideo.waiting_for_button_name_4, content_types=ContentType.TEXT)
@@ -1167,9 +1138,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                                    reply_markup=tasdiqlash)
             await SendVideo.send_all_4.set()
     else:
-        await call.message.answer('❌Xabar yuborish bekor qilindi.')
+        await call.message.delete()
         await state.finish()
-        return
 
 
 @dp.callback_query_handler(state=SendVideo.send_all_4, chat_id=ADMINS)
@@ -1219,6 +1189,5 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
             await state.finish()
 
     else:
-        await call.message.answer('❌Xabar yuborish bekor qilindi.')
+        await call.message.delete()
         await state.finish()
-        return

@@ -33,6 +33,77 @@ keyboard_uk = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='�
 keyboard_az = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Qrupa əlavə edin', url=BOT_URL))
 keyboard_qz = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Топқа қосу', url=BOT_URL))
 
+
+bekor_qilish_kb = InlineKeyboardMarkup(row_width=1).add(
+    InlineKeyboardButton("❌ Cancel", callback_data="bekor_qilish")
+)
+
+menu_kb = InlineKeyboardMarkup(row_width=1).add(
+    InlineKeyboardButton("♻️ Send Message", callback_data="send"),
+    InlineKeyboardButton("📊 Statistic", callback_data="statistic"),
+    InlineKeyboardButton("❌ Cancel", callback_data="bekor_qilish")
+)
+
+chose_statistic_kb = InlineKeyboardMarkup(row_width=2).add(
+    InlineKeyboardButton("📊 User Statistic", callback_data="user_statistic"),
+    InlineKeyboardButton("📊 Group Statistic", callback_data="group_statistic"),
+    InlineKeyboardButton("❌ Cancel", callback_data="bekor_qilish")
+)
+
+update_user_statistic = InlineKeyboardMarkup(row_width=2).add(
+    InlineKeyboardButton("🔄 Update", callback_data="update_user_statistic"),
+    InlineKeyboardButton("❌ Cancel", callback_data="bekor_qilish")
+)
+
+update_user_statistic_2x = InlineKeyboardMarkup(row_width=2).add(
+    InlineKeyboardButton("🔄 Update", callback_data="user_statistic"),
+    InlineKeyboardButton("❌ Cancel", callback_data="bekor_qilish"))
+
+update_group_statistic = InlineKeyboardMarkup(row_width=2).add(
+    InlineKeyboardButton("🔄 Update", callback_data="update_group_statistic"),
+    InlineKeyboardButton("❌ Cancel", callback_data="bekor_qilish")
+)
+
+update_group_statistic_2x = InlineKeyboardMarkup(row_width=2).add(
+    InlineKeyboardButton("🔄 Update", callback_data="group_statistic"),
+    InlineKeyboardButton("❌ Cancel", callback_data="bekor_qilish"))
+
+admin_kb = InlineKeyboardMarkup(row_width=1).add(
+    InlineKeyboardButton("📝 Text message", callback_data="text"),
+    InlineKeyboardButton("🖼 Photo message", callback_data="photo"),
+    InlineKeyboardButton("🎥 Video message", callback_data="video"),
+    InlineKeyboardButton("❌ Cancel", callback_data="bekor_qilish")
+)
+
+button_2 = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton("📍2-Tugmani kiritish", callback_data="button_2"),
+                                                 InlineKeyboardButton("✅ Xabarni yuborish",
+                                                                      callback_data="send_message"),
+                                                 InlineKeyboardButton("❌ Bekor qilish", callback_data="cancel"))
+
+button_3 = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton("📍3-Tugmani kiritish", callback_data="button_3"),
+                                                 InlineKeyboardButton("✅ Xabarni yuborish",
+                                                                      callback_data="send_message"),
+                                                 InlineKeyboardButton("❌ Bekor qilish", callback_data="cancel"))
+
+button_4 = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton("📍4-Tugmani kiritish", callback_data="button_4"),
+                                                 InlineKeyboardButton("✅ Xabarni yuborish",
+                                                                      callback_data="send_message"),
+                                                 InlineKeyboardButton("❌ Bekor qilish", callback_data="cancel"))
+
+button_5 = InlineKeyboardMarkup(row_width=1).add(
+    InlineKeyboardButton("✅ Xabarni yuborish", callback_data="send_message"),
+    InlineKeyboardButton("❌ Bekor qilish ", callback_data="cancel"))
+
+tasdiqlash = InlineKeyboardMarkup(row_width=1).add(
+    InlineKeyboardButton("✅ Xabarni yuborish", callback_data="send_message"),
+    InlineKeyboardButton("❌ Bekor qilish ", callback_data="cancel"))
+
+add_btn = InlineKeyboardMarkup(row_width=1).add(
+    InlineKeyboardButton("📍Tugma yaratish", callback_data="add_btn"),
+    InlineKeyboardButton("✅ Xabarni yuborish", callback_data="send_message"),
+    InlineKeyboardButton("❌ Bekor qilish ", callback_data="cancel")
+)
+
 keyboard_group = {
     'Uzbek': keyboard_uz,
     'Russian': keyboard_ru,
@@ -48,48 +119,3 @@ keyboard_group = {
     "Azerbaijan": keyboard_az,
     "Indian": keyboard_hn
 }
-
-menu = InlineKeyboardMarkup(row_width=1)
-send = InlineKeyboardButton("♻️ Xabar Yuborish", callback_data="send")
-stat = InlineKeyboardButton("📊 Statiska", callback_data="statistic")
-cancels = InlineKeyboardButton("❌ Bekor qilish", callback_data="bekor_qilish")
-menu_kb = menu.add(send, stat, cancels)
-
-stt = InlineKeyboardMarkup(row_width=1)
-cancelss = InlineKeyboardButton("❌ Bekor qilish", callback_data="bekor_qilish")
-menu_stt = stt.add(cancelss)
-
-menu = InlineKeyboardMarkup(row_width=1)
-text = InlineKeyboardButton("📝 Text xabar yuborish", callback_data="text")
-photo = InlineKeyboardButton("🖼 Photo xabar yuborish", callback_data="photo")
-video = InlineKeyboardButton("🎥 Videos xabar yuborish", callback_data="video")
-cancel = InlineKeyboardButton("❌ Bekor qilish", callback_data="bekor_qilish")
-admin_kb = menu.add(text, photo, video, cancel)
-
-rek_kb2 = InlineKeyboardMarkup(row_width=1)
-rek_kb3 = InlineKeyboardMarkup(row_width=1)
-rek_kb4 = InlineKeyboardMarkup(row_width=1)
-rek_kb5 = InlineKeyboardMarkup(row_width=1)
-button_2 = rek_kb2.add(InlineKeyboardButton("📍2-Tugmani kiritish", callback_data="button_2"),
-                       InlineKeyboardButton("✅ Xabarni yuborish", callback_data="send_message"),
-                       InlineKeyboardButton("❌ Bekor qilish", callback_data="cancel"))
-
-button_3 = rek_kb3.add(InlineKeyboardButton("📍3-Tugmani kiritish", callback_data="button_3"),
-                       InlineKeyboardButton("✅ Xabarni yuborish", callback_data="send_message"),
-                       InlineKeyboardButton("❌ Bekor qilish", callback_data="cancel"))
-
-button_4 = rek_kb4.add(InlineKeyboardButton("📍4-Tugmani kiritish", callback_data="button_4"),
-                       InlineKeyboardButton("✅ Xabarni yuborish", callback_data="send_message"),
-                       InlineKeyboardButton("❌ Bekor qilish", callback_data="cancel"))
-
-button_5 = rek_kb5.add(InlineKeyboardButton("✅ Xabarni yuborish", callback_data="send_message"),
-                       InlineKeyboardButton("❌ Bekor qilish ", callback_data="cancel"))
-
-send_all = InlineKeyboardMarkup(row_width=1)
-tasdiqlash = send_all.add(InlineKeyboardButton("✅ Xabarni yuborish", callback_data="send_message"),
-                          InlineKeyboardButton("❌ Bekor qilish ", callback_data="cancel"))
-
-add_new_btn = InlineKeyboardMarkup(row_width=1)
-add_btn = add_new_btn.add(InlineKeyboardButton("📍Tugma yaratish", callback_data="add_btn"),
-                          InlineKeyboardButton("✅ Xabarni yuborish", callback_data="send_message"),
-                          InlineKeyboardButton("❌ Bekor qilish", callback_data="cancel"))

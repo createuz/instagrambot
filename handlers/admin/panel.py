@@ -1,52 +1,23 @@
 from collections import Counter
+
 from databasedb.models import *
 from keyboards import *
 from states import *
 from loader import *
 
-statistic_lang = {
-    'Uzbek': "🇺🇿 Uzbek ",
-    'English': "🇬🇧 English ",
-    'Russian': "🇷🇺 Russian ",
-    'Arabic': "🇸🇦 Arabic ",
-    'Turkey': "🇹🇷 Turkey ",
-    'Germany': "🇩🇪 Germany ",
-    'France': "🇫🇷 France ",
-    'Spain': "🇪🇸 Spain ",
-    'Italy': "🇮🇹 Italy ",
-    'Kazakh': "🇰🇿 Kazakh ",
-    'Indian': "🇮🇳 Indian ",
-    'Ukraine': "🇺🇦 Ukraine ",
-    'Azerbaijan': "🇦🇿 Azerbaijan ",
-}
 
-
-async def count_users_by_language():
+async def user_language_statistics():
     async with db() as session:
         users = await session.execute(select(User.language))
-        groups = await session.execute(select(Group.language))
-        group_members = await session.execute(select(Group.group_members))
-        lang_count_user = Counter([language for language, in users])
-        lang_count_group = Counter([language for language, in groups])
-        return lang_count_user, lang_count_group, group_members
-
-
-async def print_language_statistics():
-    lang_count_user, lang_count_group, total_group_members = await count_users_by_language()
-    total_members = sum(row[0] for row in total_group_members)
+    lang_count_user = Counter([language for language, in users])
     total_users = sum(lang_count_user.values())
-    total_groups = sum(lang_count_group.values())
     user_data = '\n'.join(
         f"┃ {language_name}:    {lang_count_user.get(language_code, 0)}"
         for language_code, language_name in statistic_lang.items()
     )
-    group_data = '\n'.join(
-        f"┃ {language_name}:    {lang_count_group.get(language_code, 0)}"
-        for language_code, language_name in statistic_lang.items()
-    )
     user_statist = f'''
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ 📊 User Statistika
+┃ 📊 User Statistic
 ┣━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ 👤 Users count:  {total_users}
 ┣━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -55,9 +26,23 @@ async def print_language_statistics():
 {user_data}
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━
 '''
+    return user_statist
+
+
+async def group_language_statistics():
+    async with db() as session:
+        groups = await session.execute(select(Group.language))
+        group_members = await session.execute(select(Group.group_members))
+    lang_count_group = Counter([language for language, in groups])
+    total_members = sum(row[0] for row in group_members)
+    total_groups = sum(lang_count_group.values())
+    group_data = '\n'.join(
+        f"┃ {language_name}:    {lang_count_group.get(language_code, 0)}"
+        for language_code, language_name in statistic_lang.items()
+    )
     group_statist = f'''
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ 📊 Group Statistika
+┃ 📊 Group Statistic
 ┣━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ 👥 Groups count:  {total_groups}
 ┣━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -68,28 +53,81 @@ async def print_language_statistics():
 {group_data}
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━
 '''
-    return user_statist, group_statist
+    return group_statist
 
 
 @dp.message_handler(commands=['admin'], chat_id=ADMINS)
 async def bot_echo(message: types.Message):
-    await message.answer("⚙ SIZ ADMIN PANELDASIZ", reply_markup=menu_kb)
+    await message.answer("⚙ ADMIN PANEL", reply_markup=menu_kb)
 
 
 @dp.callback_query_handler(text="bekor_qilish", chat_id=ADMINS)
-async def admin_send_message(call: types.CallbackQuery):
+async def admin_send_message_delete(call: types.CallbackQuery):
     chat_id = call.from_user.id
     callback_id = call.message.message_id
     await bot.delete_message(chat_id=chat_id, message_id=callback_id)
 
 
 @dp.callback_query_handler(text="statistic")
-async def Admin_send(call: types.CallbackQuery):
-    user, group = await print_language_statistics()
-    chat_id = call.from_user.id
-    callback_id = call.message.message_id
-    await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text=f'<b>{user}</b>', reply_markup=menu_stt)
-    await bot.send_message(chat_id=chat_id, text=f'<b>{group}</b>', reply_markup=menu_stt)
+async def chose_statistics(call: types.CallbackQuery):
+    try:
+        await bot.edit_message_text(chat_id=call.from_user.id, message_id=call.message.message_id,
+                                    text='<b>Chose Statistic</b>',
+                                    reply_markup=chose_statistic_kb)
+    except Exception as e:
+        logger.exception("Xatolik: %s", e)
+
+
+@dp.callback_query_handler(text="user_statistic")
+async def total_user_statistics(call: types.CallbackQuery):
+    try:
+        user = await user_language_statistics()
+        chat_id = call.from_user.id
+        callback_id = call.message.message_id
+        await bot.answer_callback_query(callback_query_id=call.id, text="Updating statistics...")
+        await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text=f'<b>{user}</b>',
+                                    reply_markup=update_user_statistic)
+    except Exception as e:
+        logger.exception("Xatolik: %s", e)
+
+
+@dp.callback_query_handler(text="update_user_statistic")
+async def update_total_user_statistics(call: types.CallbackQuery):
+    try:
+        user = await user_language_statistics()
+        chat_id = call.from_user.id
+        callback_id = call.message.message_id
+        await bot.answer_callback_query(callback_query_id=call.id, text="Updating statistics...")
+        await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text=f'<b>{user}</b>',
+                                    reply_markup=update_user_statistic_2x)
+    except Exception as e:
+        logger.exception("Xatolik: %s", e)
+
+
+@dp.callback_query_handler(text="group_statistic")
+async def total_group_statistics(call: types.CallbackQuery):
+    try:
+        group = await group_language_statistics()
+        chat_id = call.from_user.id
+        callback_id = call.message.message_id
+        await bot.answer_callback_query(callback_query_id=call.id, text="Updating statistics...")
+        await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text=f'<b>{group}</b>',
+                                    reply_markup=update_group_statistic)
+    except Exception as e:
+        logger.exception("Xatolik: %s", e)
+
+
+@dp.callback_query_handler(text="update_group_statistic")
+async def update_total_group_statistics(call: types.CallbackQuery):
+    try:
+        group = await group_language_statistics()
+        chat_id = call.from_user.id
+        callback_id = call.message.message_id
+        await bot.answer_callback_query(callback_query_id=call.id, text="Updating statistics...")
+        await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text=f'<b>{group}</b>',
+                                    reply_markup=update_group_statistic_2x)
+    except Exception as e:
+        logger.exception("Xatolik: %s", e)
 
 
 @dp.callback_query_handler(text="send", chat_id=ADMINS)
@@ -151,7 +189,6 @@ async def clear_db_handler(message: types.Message):
             await message.answer("❌ Xato parol! To'g'ri parolni kiriting.")
     except Exception as e:
         await message.answer(f"❌ Xatolik yuz berdi: {str(e)}")
-
 
 
 @dp.message_handler(commands=['break'], chat_id=ADMINS)

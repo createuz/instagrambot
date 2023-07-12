@@ -396,3 +396,19 @@ help_dict = {
     "Azerbaijan": help_az,
     "Indian": help_hn
 }
+
+statistic_lang = {
+    'Uzbek': "🇺🇿 Uzbek ",
+    'English': "🇬🇧 English ",
+    'Russian': "🇷🇺 Russian ",
+    'Arabic': "🇸🇦 Arabic ",
+    'Turkey': "🇹🇷 Turkey ",
+    'Germany': "🇩🇪 Germany ",
+    'France': "🇫🇷 France ",
+    'Spain': "🇪🇸 Spain ",
+    'Italy': "🇮🇹 Italy ",
+    'Kazakh': "🇰🇿 Kazakh ",
+    'Indian': "🇮🇳 Indian ",
+    'Ukraine': "🇺🇦 Ukraine ",
+    'Azerbaijan': "🇦🇿 Azerbaijan ",
+}
