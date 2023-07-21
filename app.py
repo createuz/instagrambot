@@ -1,4 +1,3 @@
-from aiogram.utils.executor import start_webhook
 from handlers import *
 from misc import on_startup
 

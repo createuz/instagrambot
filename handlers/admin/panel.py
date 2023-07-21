@@ -7,53 +7,59 @@ from loader import *
 
 
 async def user_language_statistics():
-    async with db() as session:
-        users = await session.execute(select(User.language))
-    lang_count_user = Counter([language for language, in users])
-    total_users = sum(lang_count_user.values())
-    user_data = '\n'.join(
-        f"┃ {language_name}:    {lang_count_user.get(language_code, 0)}"
-        for language_code, language_name in statistic_lang.items()
-    )
-    user_statist = f'''
-┏━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ 📊 User Statistic
-┣━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ 👤 Users count:  {total_users}
-┣━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ 🌐 Language used count
-┣━━━━━━━━━━━━━━━━━━━━━━━━━
-{user_data}
-┗━━━━━━━━━━━━━━━━━━━━━━━━━
-'''
-    return user_statist
+    try:
+        async with db() as session:
+            users = await session.execute(select(User.language))
+        lang_count_user = Counter([language for language, in users])
+        total_users = sum(lang_count_user.values())
+        user_data = '\n'.join(
+            f"┃ {language_name}:    {lang_count_user.get(language_code, 0)}"
+            for language_code, language_name in statistic_lang.items()
+        )
+        user_statist = f'''
+    ┏━━━━━━━━━━━━━━━━━━━━━━━━━
+    ┃ 📊 User Statistic
+    ┣━━━━━━━━━━━━━━━━━━━━━━━━━
+    ┃ 👤 Users count:  {total_users}
+    ┣━━━━━━━━━━━━━━━━━━━━━━━━━
+    ┃ 🌐 Language used count
+    ┣━━━━━━━━━━━━━━━━━━━━━━━━━
+    {user_data}
+    ┗━━━━━━━━━━━━━━━━━━━━━━━━━'''
+        return user_statist
+    except Exception as e:
+        logger.exception("Xatolik: %s", e)
+        return None
 
 
 async def group_language_statistics():
-    async with db() as session:
-        groups = await session.execute(select(Group.language))
-        group_members = await session.execute(select(Group.group_members))
-    lang_count_group = Counter([language for language, in groups])
-    total_members = sum(row[0] for row in group_members)
-    total_groups = sum(lang_count_group.values())
-    group_data = '\n'.join(
-        f"┃ {language_name}:    {lang_count_group.get(language_code, 0)}"
-        for language_code, language_name in statistic_lang.items()
-    )
-    group_statist = f'''
-┏━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ 📊 Group Statistic
-┣━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ 👥 Groups count:  {total_groups}
-┣━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ 👥 Group members:  {total_members}
-┣━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ 🌐 Language used count
-┣━━━━━━━━━━━━━━━━━━━━━━━━━
-{group_data}
-┗━━━━━━━━━━━━━━━━━━━━━━━━━
-'''
-    return group_statist
+    try:
+        async with db() as session:
+            groups = await session.execute(select(Group.language))
+            group_members = await session.execute(select(Group.group_members))
+        lang_count_group = Counter([language for language, in groups])
+        total_members = sum(row[0] for row in group_members)
+        total_groups = sum(lang_count_group.values())
+        group_data = '\n'.join(
+            f"┃ {language_name}:    {lang_count_group.get(language_code, 0)}"
+            for language_code, language_name in statistic_lang.items()
+        )
+        group_statist = f'''
+    ┏━━━━━━━━━━━━━━━━━━━━━━━━━
+    ┃ 📊 Group Statistic
+    ┣━━━━━━━━━━━━━━━━━━━━━━━━━
+    ┃ 👥 Groups count:  {total_groups}
+    ┣━━━━━━━━━━━━━━━━━━━━━━━━━
+    ┃ 👥 Group members:  {total_members}
+    ┣━━━━━━━━━━━━━━━━━━━━━━━━━
+    ┃ 🌐 Language used count
+    ┣━━━━━━━━━━━━━━━━━━━━━━━━━
+    {group_data}
+    ┗━━━━━━━━━━━━━━━━━━━━━━━━━'''
+        return group_statist
+    except Exception as e:
+        logger.exception("Xatolik: %s", e)
+        return None
 
 
 @dp.message_handler(commands=['admin'], chat_id=ADMINS)
@@ -66,7 +72,7 @@ async def bot_echo(message: types.Message):
 async def admin_send_message_delete(call: types.CallbackQuery):
     chat_id = call.from_user.id
     callback_id = call.message.message_id
-    await bot.delete_message(chat_id=chat_id, message_id=callback_id)
+    await bot.delet_messagee(chat_id=chat_id, message_id=callback_id)
 
 
 @dp.callback_query_handler(text="statistic")
