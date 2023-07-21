@@ -100,6 +100,7 @@ async def send_instagram_media(message: types.Message):
                                                  text=f"<b>📥 {keyboard_waiting[language]}</b>")
             async with aiohttp.ClientSession() as session:
                 urls = await instagram_downloader_photo_video(link, session=session)
+                print(urls)
                 media = [InputMediaPhoto(url) if 'jpg' in url else InputMediaVideo(url) for url in
                          urls]
                 media[-1].caption = f"<b>📥 {main_caption}{keyboard_saver[language]}</b>"
