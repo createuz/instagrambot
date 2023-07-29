@@ -100,12 +100,11 @@ async def send_instagram_media(message: types.Message):
                                                  text=f"<b>📥 {keyboard_waiting[language]}</b>")
             async with aiohttp.ClientSession() as session:
                 urls = await instagram_downloader_photo_video(link, session=session)
-                print(urls)
                 media = [InputMediaPhoto(url) if 'jpg' in url else InputMediaVideo(url) for url in
                          urls]
                 media[-1].caption = f"<b>📥 {main_caption}{keyboard_saver[language]}</b>"
                 await bot.send_media_group(chat_id=message.chat.id, media=media)
-                await waiting_msg.delete()
+            await waiting_msg.delete()
             await InstagramMediaDB.create_media_list(message.text, urls)
     except Exception as e:
         logger.exception("Error while sending Instagram photo: %s", e)
@@ -143,12 +142,12 @@ async def send_instagram_media(message: types.Message):
                                              text=f"<b>📥 {keyboard_waiting[language]}</b>")
         async with aiohttp.ClientSession() as session:
             urls = await instagram_downloader_photo_video(link, session=session)
-            await waiting_msg.delete()
             media_groups = [urls[i:i + 10] for i in range(0, len(urls), 10)]
             for group in media_groups:
                 media = [InputMediaPhoto(url) if 'jpg' in url else InputMediaVideo(url) for url in group]
                 media[-1].caption = f"📥 <b>{main_caption}{keyboard_saver[language]}</b>"
                 await bot.send_media_group(chat_id=message.chat.id, media=media)
+        await waiting_msg.delete()
     except Exception as e:
         await bot.delete_message(message.chat.id, message_id=message.message_id)
         logger.exception("Error while sending Instagram photo: %s", e)
