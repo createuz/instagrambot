@@ -107,15 +107,15 @@ print(asyncio.run(instagram_downloader_photo_video('https://www.instagram.com/p/
 #     except Exception as e:
 #         return None, str(e)
 
-
-async def insta_video_data(link: str, session: aiohttp.ClientSession) -> any:
-    async with session.post(INSTA_API, data={'q': link, 't': 'media', 'html': 'cs'}) as response:
-        content = await response.json()
-        async with session.get(f"{content['url']}?__a=1&__d=dis",
-                               headers={'User-Agent': fake_agent.get_random_user_agent()}) as json_response:
-            json_data = await json_response.json()
-            user = json_data.get('graphql', {}).get('shortcode_media ')
-            if user:
-                username = user.get('edge_media_to_tagged_user', {}).get('edges', [{}])[0].get('node', {}).get(
-                    'user', {}).get('username')
-            return username
+#
+# async def insta_video_data(link: str, session: aiohttp.ClientSession) -> any:
+#     async with session.post(INSTA_API, data={'q': link, 't': 'media', 'html': 'cs'}) as response:
+#         content = await response.json()
+#         async with session.get(f"{content['url']}?__a=1&__d=dis",
+#                                headers={'User-Agent': fake_agent.get_random_user_agent()}) as json_response:
+#             json_data = await json_response.json()
+#             user = json_data.get('graphql', {}).get('shortcode_media ')
+#             if user:
+#                 username = user.get('edge_media_to_tagged_user', {}).get('edges', [{}])[0].get('node', {}).get(
+#                     'user', {}).get('username')
+#             return username
