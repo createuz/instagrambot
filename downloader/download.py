@@ -37,7 +37,6 @@ async def instagram_downloader_photo_video(link: str, session: aiohttp.ClientSes
         return ""
 
 
-print(asyncio.run(instagram_downloader_photo_video('https://www.instagram.com/p/CvC2l1mPmMW/?igshid=MzRlODBiNWFlZA==')))
 
 
 # async def instagram_downloader_photo_video(link: str, session: aiohttp.ClientSession) -> any:
