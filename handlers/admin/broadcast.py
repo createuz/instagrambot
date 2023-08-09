@@ -138,7 +138,7 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
 
         await bot.send_message(chat_id=ADMINS, text=f"<b>{caption}</b>", reply_markup=keyboard,
                                disable_web_page_preview=True)
-        await bot.send_message(chat_id=ADMINS, text="Siz yubormoqchi bo'lgan xabar xuddi shunday kurinishda boladi."
+        await bot.send_message(chat_id=ADMINS, text="Siz yubormoqchi bo'lgan xabar xuddi shunday kurinishda boladi.."
                                                     "Haqiqatdan ham shu xabarni barcha foydalanuvchilarga yuborishni istaysizmi?\n"
                                                     "✅ Tastiqlash yoki ❌ Bekor qilish tugmasini bosing.",
                                reply_markup=tasdiqlash)
