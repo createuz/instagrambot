@@ -1,4 +1,3 @@
-import asyncio
 import logging
 import aiohttp
 from databasedb import *
@@ -34,7 +33,7 @@ async def instagram_downloader_photo_video(link: str, session: aiohttp.ClientSes
             return urls
     except Exception as e:
         logging.exception("Error while inserting video data: %s", e)
-        return ""
+        return None
 
 # async def insta_user_data(language: str, link: str, session: aiohttp.ClientSession) -> any:
 #     try:

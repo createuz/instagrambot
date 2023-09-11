@@ -130,6 +130,22 @@ help_it = "È possibile utilizzare i seguenti comandi per familiarizzare con il 
           f"<a href='{'https://t.me/tmcode'}'><b> Gestore bot </b></a>\n" \
           f"La tua opinione è importante per noi."
 
+down_err = {
+    'Uzbek': "🛑 <b>Yuklab olishda xato!</b>\n\n<a href='{}'><b>Ushbu media faylni </b></a> yuklab olib bo'lmadi.\nIltimos keyinroq qayta urinib ko'ring.",
+    'Russian': "🛑 <b>Ошибка при загрузке!</b>\n\n<a href='{}'><b>Этот медиа файл </b></a> не может быть загружен. \nПожалуйста, попробуйте позже.",
+    'Arabic': "🛑 <b>خطأ أثناء التحميل!</b>\n\n<a href='{}'><b>هذا الملف الإعلامي </b></a> لا يمكن تحميله. \nالرجاء المحاولة لاحقًا.",
+    'Turkey': "🛑 <b>İndirme hatası!</b>\n\n<a href='{}'><b>Bu medya dosyası </b></a> indirilemiyor. \nLütfen daha sonra tekrar deneyin.",
+    'Germany': "🛑 <b>Fehler beim Herunterladen!</b>\n\n<a href='{}'><b>Diese Mediendatei </b></a> kann nicht heruntergeladen werden. \nBitte versuchen Sie es später erneut.",
+    'France': "🛑 <b>Erreur de téléchargement!</b>\n\n<a href='{}'><b>Ce fichier multimédia </b></a> ne peut pas être téléchargé. \nVeuillez réessayer plus tard.",
+    'Spain': "🛑 <b>Error al descargar!</b>\n\n<a href='{}'><b>Este archivo multimedia </b></a> no se puede descargar. \nPor favor, inténtelo más tarde.",
+    'Italy': "🛑 <b>Errore durante il download!</b>\n\n<a href='{}'><b>Questa file multimediale </b></a> non può essere scaricata. \nRiprova più tardi.",
+    'English': "🛑 <b>Download error!</b>\n\n<a href='{}'><b>This media file </b></a> couldn't be downloaded. \nPlease try again later.",
+    "Kazakh": "🛑 <b>Жүктеу кезінде қате!</b>\n\n<a href='{}'><b>Бұл медиа файл </b></a> жүктелмейді. \nКейінірек көріңіз.",
+    "Ukraine": "🛑 <b>Помилка завантаження!</b>\n\n<a href='{}'><b>Цей медіа файл </b></a> не може бути завантажено. \nБудь ласка, спробуйте пізніше.",
+    "Azerbaijan": "🛑 <b>Yükləmə xətası!</b>\n\n<a href='{}'><b>Bu media faylı </b></a> yüklənə bilmir. \nXahiş edirəm daha sonra cəhd edin.",
+    "Indian": "🛑 <b>डाउनलोड की त्रुटि!</b>\n\n<a href='{}'><b>यह मीडिया फ़ाइल </b></a> डाउनलोड नहीं किया जा सकता है। \nकृपया बाद में पुन: प्रयास करें।"
+}
+
 select_lang_user_data = {
     'Uzbek': {
         'id': 'ID:  {user_id}\n',
