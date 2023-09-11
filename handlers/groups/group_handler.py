@@ -59,6 +59,7 @@ async def process_language_selection(callback_query: types.CallbackQuery, state:
 
 @dp.message_handler(regexp=r'https?:\/\/(www\.)?instagram\.com\/(reel|p|tv)\/([-_a-zA-Z0-9]{11})')
 async def send_instagram_media(message: types.Message):
+    global waiting_msg
     link = message.text
     language = await Group.get_language(message.chat.id)
     try:
@@ -85,6 +86,7 @@ async def send_instagram_media(message: types.Message):
             await waiting_msg.delete()
             await InstagramMediaDB.create_media_list(message.text, urls)
     except Exception as e:
+        await waiting_msg.delete()
         logger.exception("Error while sending Instagram photo: %s", e)
         return await bot.send_message(message.chat.id, text=down_err[language].format(link),
                                       disable_web_page_preview=True, protect_content=True)
