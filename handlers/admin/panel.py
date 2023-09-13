@@ -75,8 +75,7 @@ async def admin_send_message_delete(call: types.CallbackQuery):
 async def chose_statistics(call: types.CallbackQuery):
     try:
         await bot.edit_message_text(chat_id=call.from_user.id, message_id=call.message.message_id,
-                                    text='<b>Chose Statistic</b>',
-                                    reply_markup=chose_statistic_kb)
+                                    text='<b>Chose Statistic</b>', reply_markup=chose_statistic_kb)
     except Exception as e:
         logger.exception("Xatolik: %s", e)
 

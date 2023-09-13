@@ -1,3 +1,5 @@
+import re
+
 from keyboards import *
 from states import *
 from loader import *
@@ -5,31 +7,14 @@ import time
 from databasedb.models import User, Group
 
 
-async def replace_text_with_links(text: str) -> any:
-    try:
-        parts = []
-        while True:
-            start = text.find("[")
-            end = text.find("]")
-            if start == -1 or end == -1:
-                parts.append(text)
-                break
-            start += 1
-            link_start_index = text.find("(", end)
-            link_end_index = text.find(")", link_start_index)
-            if link_start_index == -1 or link_end_index == -1:
-                break
-            link = text[link_start_index + 1:link_end_index].strip("()")
-            text_part = text[start:end].strip()
-            parts.append(text[:start - 1])
-            parts.append(f"<a href='{link}'>{text_part}</a>")
-            text = text[link_end_index + 1:]
-        if not parts:
-            return None
-        return ''.join(parts)
-    except Exception as e:
-        await bot.send_message(ADMINS, "❌ Havolani aniqlashda xatolik yuz berdi!")
-        return None
+async def replace_text_with_links(text):
+    def create_html_link(match):
+        text, url = match.groups()
+        return f'<a href="{url}">{text}</a>'
+
+    pattern = r'\((.*?)\)\[(.*?)\]'
+    replaced_text = re.sub(pattern, create_html_link, text)
+    return replaced_text
 
 
 def format_time(elapsed_time):
@@ -44,11 +29,9 @@ async def send_message_all(chat_id, text=None, video=None, photo=None, caption=N
             await bot.send_message(chat_id=chat_id, text=f"<b>{text}</b>", reply_markup=keyboard,
                                    disable_web_page_preview=True)
         if video:
-            await bot.send_video(chat_id=chat_id, video=video, caption=f"<b>{caption}</b>", reply_markup=keyboard,
-                                 disable_web_page_preview=True)
+            await bot.send_video(chat_id=chat_id, video=video, caption=f"<b>{caption}</b>", reply_markup=keyboard, )
         if photo:
-            await bot.send_photo(chat_id=chat_id, photo=photo, caption=f"<b>{caption}</b>", reply_markup=keyboard,
-                                 disable_web_page_preview=True)
+            await bot.send_photo(chat_id=chat_id, photo=photo, caption=f"<b>{caption}</b>", reply_markup=keyboard)
         return True
     except Exception as e:
         logger.exception("Xabarni yuborishda xatolik: %s", e)
@@ -101,21 +84,21 @@ async def admin_send_message_all(text=None, video=None, photo=None, caption=None
         date = format_time(elapsed_time)
         msg = f'''
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ 📊 Sent message Statistic
+┃ 📊  Sent message Statistic
 ┣━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ • All users:  {len(all_user_ids)}
+┃ •  All users:  {len(all_user_ids)}
 ┣━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ • Active users:  {active_users}
+┃ •  Active users:  {active_users}
 ┣━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ • No active users:  {no_active_users}
+┃ •  No active users:  {no_active_users}
 ┣━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ • All groups:  {len(all_group_ids)}
+┃ •  All groups:  {len(all_group_ids)}
 ┣━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ • Active groups:  {active_groups}
+┃ •  Active groups:  {active_groups}
 ┣━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ • No active groups:  {no_active_groups}
+┃ •  No active groups:  {no_active_groups}
 ┣━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ • Total time:  {date}
+┃ •  Total time:  {date}
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━'''
         await bot.send_message(ADMINS, text=f"<b>{msg}</b>")
     except Exception as e:
@@ -138,12 +121,14 @@ async def send_voice_to_all(call: types.CallbackQuery):
 async def video_caption(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['text'] = await replace_text_with_links(message.text)
-    await message.answer("Xabar uchun tugma yaratishni hohlaysizmi?", reply_markup=add_btn)
+    await bot.send_message(chat_id=message.chat.id, text="<b>Xabar uchun tugma yaratishni hohlaysizmi?</b>",
+                           reply_markup=add_btn)
     await SendText.waiting_for_new_btn.set()
 
 
 @dp.callback_query_handler(state=SendText.waiting_for_new_btn, chat_id=ADMINS)
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
+    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'add_btn':
         await call.message.answer('Iltimos, birinchi tugma nomini kiriting.')
         await SendText.waiting_for_button_name_1.set()
@@ -152,9 +137,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
             text = data['text']
         await bot.send_message(chat_id=ADMINS, text=f"<b>{text}</b>", disable_web_page_preview=True)
         await bot.send_message(chat_id=ADMINS,
-                               text="Siz yubormoqchi bo'lgan xabar xuddi shunday kurinishda boladi! "
-                                    "✅ Tastiqlash yoki ❌ Bekor qilish tugmasini bosing.",
-                               reply_markup=tasdiqlash)
+                               text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
+                                    "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
         await SendText.waiting_for_is_not_btn.set()
     else:
         await call.message.delete()
@@ -163,6 +147,7 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(state=SendText.waiting_for_is_not_btn, chat_id=ADMINS)
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
+    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'send_message':
         async with state.proxy() as data:
             text = data['text']
@@ -191,6 +176,7 @@ async def photo_button_url(message: types.Message, state: FSMContext):
 
 @dp.callback_query_handler(state=SendText.next_call_2, chat_id=ADMINS)
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
+    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'button_2':
         await call.message.answer('Iltimos, ikkinchi tugma nomini kiriting.')
         await SendText.waiting_for_button_name_2.set()
@@ -201,9 +187,9 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                 InlineKeyboardButton(text=data["btname_1"], url=data['url_1']))
         await bot.send_message(chat_id=ADMINS, text=f"<b>{text}</b>", reply_markup=keyboard,
                                disable_web_page_preview=True)
-        await bot.send_message(chat_id=ADMINS, text="Siz yubormoqchi bo'lgan xabar xuddi shunday kurinishda boladi.."
-                                                    "✅ Tastiqlash yoki ❌ Bekor qilish tugmasini bosing.",
-                               reply_markup=tasdiqlash)
+        await bot.send_message(chat_id=ADMINS,
+                               text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
+                                    "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
         await SendText.send_all_1.set()
     else:
         await call.message.delete()
@@ -212,6 +198,7 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(state=SendText.send_all_1, chat_id=ADMINS)
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
+    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'send_message':
         async with state.proxy() as data:
             text = data['text']
@@ -242,6 +229,7 @@ async def photo_button_url(message: types.Message, state: FSMContext):
 
 @dp.callback_query_handler(state=SendText.next_call_3, chat_id=ADMINS)
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
+    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'send_message':
         async with state.proxy() as data:
             text = data['text']
@@ -250,9 +238,9 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                 InlineKeyboardButton(text=data["btname_2"], url=data['url_2']))
         await bot.send_message(chat_id=ADMINS, text=f"<b>{text}</b>", reply_markup=keyboard,
                                disable_web_page_preview=True)
-        await bot.send_message(chat_id=ADMINS, text="Siz yubormoqchi bo'lgan xabar xuddi shunday kurinishda boladi."
-                                                    "✅ Tastiqlash yoki ❌ Bekor qilish tugmasini bosing.",
-                               reply_markup=tasdiqlash)
+        await bot.send_message(chat_id=ADMINS,
+                               text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
+                                    "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
         await SendText.send_all_2.set()
     else:
         await call.message.delete()
@@ -261,6 +249,7 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(state=SendText.send_all_2, chat_id=ADMINS)
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
+    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'send_message':
         async with state.proxy() as data:
             text = data['text']
@@ -303,6 +292,7 @@ async def video_caption(message: types.Message, state: FSMContext):
 
 @dp.callback_query_handler(state=SendPhoto.waiting_for_new_btn, chat_id=ADMINS)
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
+    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'add_btn':
         await call.message.answer('Iltimos, birinchi tugma nomini kiriting.')
         await SendPhoto.waiting_for_button_name_1.set()
@@ -311,9 +301,9 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
             photo_file = data["photo_file"]
             caption = data['caption']
         await bot.send_photo(chat_id=ADMINS, photo=photo_file, caption=f"<b>{caption}</b>")
-        await bot.send_message(chat_id=ADMINS, text="Siz yubormoqchi bo'lgan xabar xuddi shunday kurinishda boladi."
-                                                    "✅ Tastiqlash yoki ❌ Bekor qilish tugmasini bosing.",
-                               reply_markup=tasdiqlash)
+        await bot.send_message(chat_id=ADMINS,
+                               text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
+                                    "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
         await SendPhoto.waiting_for_is_not_btn.set()
     else:
         await call.message.delete()
@@ -322,6 +312,7 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(state=SendPhoto.waiting_for_is_not_btn, chat_id=ADMINS)
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
+    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'send_message':
         async with state.proxy() as data:
             photo_file = data["photo_file"]
@@ -351,6 +342,7 @@ async def photo_button_url(message: types.Message, state: FSMContext):
 
 @dp.callback_query_handler(state=SendPhoto.next_call_2, chat_id=ADMINS)
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
+    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'button_2':
         await call.message.answer('Iltimos, ikkinchi tugma nomini kiriting.')
         await SendPhoto.waiting_for_button_name_2.set()
@@ -361,9 +353,9 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
             keyboard = InlineKeyboardMarkup(row_width=1, resize_keyboard=True).add(
                 InlineKeyboardButton(text=data["btname_1"], url=data['url_1']))
         await bot.send_photo(chat_id=ADMINS, photo=photo_file, caption=caption, reply_markup=keyboard)
-        await bot.send_message(chat_id=ADMINS, text="Siz yubormoqchi bo'lgan xabar xuddi shunday kurinishda boladi."
-                                                    "✅ Tastiqlash yoki ❌ Bekor qilish tugmasini bosing.",
-                               reply_markup=tasdiqlash)
+        await bot.send_message(chat_id=ADMINS,
+                               text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
+                                    "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
         await SendPhoto.send_all_1.set()
     else:
         await call.message.delete()
@@ -372,6 +364,7 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(state=SendPhoto.send_all_1, chat_id=ADMINS)
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
+    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'send_message':
         async with state.proxy() as data:
             photo_file = data["photo_file"]
@@ -403,6 +396,7 @@ async def photo_button_url(message: types.Message, state: FSMContext):
 
 @dp.callback_query_handler(state=SendPhoto.next_call_3, chat_id=ADMINS)
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
+    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'button_3':
         await call.message.answer('Iltimos, uchunchi tugma nomini kiriting.')
         await SendPhoto.waiting_for_button_name_3.set()
@@ -414,9 +408,9 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                 InlineKeyboardButton(text=data["btname_1"], url=data['url_1']),
                 InlineKeyboardButton(text=data["btname_2"], url=data['url_2']))
         await bot.send_photo(chat_id=ADMINS, photo=photo_file, caption=caption, reply_markup=keyboard)
-        await bot.send_message(chat_id=ADMINS, text="Siz yubormoqchi bo'lgan xabar xuddi shunday kurinishda boladi."
-                                                    "✅ Tastiqlash yoki ❌ Bekor qilish tugmasini bosing.",
-                               reply_markup=tasdiqlash)
+        await bot.send_message(chat_id=ADMINS,
+                               text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
+                                    "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
         await SendPhoto.send_all_2.set()
     else:
         await call.message.delete()
@@ -425,6 +419,7 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(state=SendPhoto.send_all_2, chat_id=ADMINS)
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
+    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'send_message':
         async with state.proxy() as data:
             photo_file = data["photo_file"]
@@ -457,6 +452,7 @@ async def photo_button_url(message: types.Message, state: FSMContext):
 
 @dp.callback_query_handler(state=SendPhoto.next_call_4, chat_id=ADMINS)
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
+    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'button_4':
         await call.message.answer("Iltimos, to'rtinchi tugma nomini kiriting.")
         await SendPhoto.waiting_for_button_name_4.set()
@@ -469,9 +465,9 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                 InlineKeyboardButton(text=data["btname_2"], url=data['url_2']),
                 InlineKeyboardButton(text=data["btname_3"], url=data['url_3']))
         await bot.send_photo(chat_id=ADMINS, photo=photo_file, caption=caption, reply_markup=keyboard)
-        await bot.send_message(chat_id=ADMINS, text="Siz yubormoqchi bo'lgan xabar xuddi shunday kurinishda boladi."
-                                                    "✅ Tastiqlash yoki ❌ Bekor qilish tugmasini bosing.",
-                               reply_markup=tasdiqlash)
+        await bot.send_message(chat_id=ADMINS,
+                               text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
+                                    "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
         await SendPhoto.send_all_3.set()
     else:
         await call.message.delete()
@@ -480,6 +476,7 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(state=SendPhoto.send_all_3, chat_id=ADMINS)
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
+    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'send_message':
         async with state.proxy() as data:
             photo_file = data["photo_file"]
@@ -513,6 +510,7 @@ async def photo_button_url(message: types.Message, state: FSMContext):
 
 @dp.callback_query_handler(state=SendPhoto.next_call_5, chat_id=ADMINS)
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
+    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'send_message':
         async with state.proxy() as data:
             photo_file = data["photo_file"]
@@ -522,11 +520,11 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                 InlineKeyboardButton(text=data["btname_2"], url=data['url_2']),
                 InlineKeyboardButton(text=data["btname_3"], url=data['url_3']),
                 InlineKeyboardButton(text=data["btname_4"], url=data['url_4']))
-            await bot.send_photo(chat_id=ADMINS, photo=photo_file, caption=caption, reply_markup=keyboard)
-            await bot.send_message(chat_id=ADMINS, text="Siz yubormoqchi bo'lgan xabar xuddi shunday kurinishda boladi."
-                                                        "✅ Tastiqlash yoki ❌ Bekor qilish tugmasini bosing.",
-                                   reply_markup=tasdiqlash)
-            await SendPhoto.send_all_4.set()
+        await bot.send_photo(chat_id=ADMINS, photo=photo_file, caption=caption, reply_markup=keyboard)
+        await bot.send_message(chat_id=ADMINS,
+                               text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
+                                    "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
+        await SendPhoto.send_all_4.set()
     else:
         await call.message.delete()
         await state.finish()
@@ -534,6 +532,7 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(state=SendPhoto.send_all_4, chat_id=ADMINS)
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
+    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'send_message':
         async with state.proxy() as data:
             photo_file = data["photo_file"]
@@ -573,12 +572,13 @@ async def send_video_to_all(message: types.Message, state: FSMContext):
 async def video_caption(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['caption'] = await replace_text_with_links(message.text)
-    await message.answer("Iltimos, birinchi tugma nomini kiriting.")
+    await message.answer("Xabar uchun tugma yaratishni hohlaysizmi?", reply_markup=add_btn)
     await SendVideo.waiting_for_new_btn.set()
 
 
 @dp.callback_query_handler(state=SendVideo.waiting_for_new_btn, chat_id=ADMINS)
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
+    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'add_btn':
         await call.message.answer('Iltimos, birinchi tugma nomini kiriting.')
         await SendVideo.waiting_for_button_name_1.set()
@@ -587,9 +587,9 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
             video_file = data["video_file"]
             caption = data['caption']
         await bot.send_video(chat_id=ADMINS, video=video_file, caption=f"<b>{caption}</b>")
-        await bot.send_message(chat_id=ADMINS, text="Siz yubormoqchi bo'lgan xabar xuddi shunday kurinishda boladi."
-                                                    "✅ Tastiqlash yoki ❌ Bekor qilish tugmasini bosing.",
-                               reply_markup=tasdiqlash)
+        await bot.send_message(chat_id=ADMINS,
+                               text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
+                                    "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
         await SendPhoto.waiting_for_is_not_btn.set()
     else:
         await call.message.delete()
@@ -598,6 +598,7 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(state=SendPhoto.waiting_for_is_not_btn, chat_id=ADMINS)
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
+    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'send_message':
         async with state.proxy() as data:
             video_file = data["video_file"]
@@ -627,6 +628,7 @@ async def video_button_url(message: types.Message, state: FSMContext):
 
 @dp.callback_query_handler(state=SendVideo.next_call_2, chat_id=ADMINS)
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
+    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'button_2':
         await call.message.answer('Iltimos, ikkinchi tugma nomini kiriting.')
         await SendVideo.waiting_for_button_name_2.set()
@@ -636,10 +638,11 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
             caption = data['caption']
             keyboard = InlineKeyboardMarkup(row_width=1, resize_keyboard=True).add(
                 InlineKeyboardButton(text=data["btname_1"], url=data['url_1']))
-        await bot.send_video(chat_id=ADMINS, video=video_file, caption=caption, reply_markup=keyboard)
-        await bot.send_message(chat_id=ADMINS, text="Siz yubormoqchi bo'lgan xabar xuddi shunday kurinishda boladi."
-                                                    "✅ Tastiqlash yoki ❌ Bekor qilish tugmasini bosing.",
-                               reply_markup=tasdiqlash)
+        await bot.send_video(chat_id=ADMINS, video=video_file, caption=caption,
+                             reply_markup=keyboard)
+        await bot.send_message(chat_id=ADMINS,
+                               text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
+                                    "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
         await SendVideo.send_all_1.set()
     else:
         await call.message.delete()
@@ -648,6 +651,7 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(state=SendVideo.send_all_1, chat_id=ADMINS)
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
+    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'send_message':
         async with state.proxy() as data:
             video_file = data["video_file"]
@@ -679,6 +683,7 @@ async def video_button_url(message: types.Message, state: FSMContext):
 
 @dp.callback_query_handler(state=SendVideo.next_call_3, chat_id=ADMINS)
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
+    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'button_3':
         await call.message.answer('Iltimos, uchunchi tugma nomini kiriting.')
         await SendVideo.waiting_for_button_name_3.set()
@@ -690,9 +695,9 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                 InlineKeyboardButton(text=data["btname_1"], url=data['url_1']),
                 InlineKeyboardButton(text=data["btname_2"], url=data['url_2']))
         await bot.send_video(chat_id=ADMINS, video=video_file, caption=caption, reply_markup=keyboard)
-        await bot.send_message(chat_id=ADMINS, text="Siz yubormoqchi bo'lgan xabar xuddi shunday kurinishda boladi."
-                                                    "✅ Tastiqlash yoki ❌ Bekor qilish tugmasini bosing.",
-                               reply_markup=tasdiqlash)
+        await bot.send_message(chat_id=ADMINS,
+                               text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
+                                    "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
         await SendVideo.send_all_2.set()
     else:
         await call.message.delete()
@@ -701,6 +706,7 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(state=SendVideo.send_all_2, chat_id=ADMINS)
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
+    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'send_message':
         async with state.proxy() as data:
             video_file = data["video_file"]
@@ -733,6 +739,7 @@ async def video_button_url(message: types.Message, state: FSMContext):
 
 @dp.callback_query_handler(state=SendVideo.next_call_4, chat_id=ADMINS)
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
+    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'button_4':
         await call.message.answer("Iltimos, to'rtinchi tugma nomini kiriting.")
         await SendVideo.waiting_for_button_name_4.set()
@@ -745,9 +752,9 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                 InlineKeyboardButton(text=data["btname_2"], url=data['url_2']),
                 InlineKeyboardButton(text=data["btname_3"], url=data['url_3']))
         await bot.send_video(chat_id=ADMINS, video=video_file, caption=caption, reply_markup=keyboard)
-        await bot.send_message(chat_id=ADMINS, text="Siz yubormoqchi bo'lgan xabar xuddi shunday kurinishda boladi."
-                                                    "✅ Tastiqlash yoki ❌ Bekor qilish tugmasini bosing.",
-                               reply_markup=tasdiqlash)
+        await bot.send_message(chat_id=ADMINS,
+                               text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
+                                    "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
         await SendVideo.send_all_3.set()
     else:
         await call.message.answer('❌Xabar yuborish bekor qilindi.')
@@ -756,6 +763,7 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(state=SendVideo.send_all_3, chat_id=ADMINS)
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
+    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'send_message':
         async with state.proxy() as data:
             video_file = data["video_file"]
@@ -789,6 +797,7 @@ async def video_button_url(message: types.Message, state: FSMContext):
 
 @dp.callback_query_handler(state=SendVideo.next_call_5, chat_id=ADMINS)
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
+    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'send_message':
         async with state.proxy() as data:
             video_file = data["video_file"]
@@ -799,9 +808,9 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                 InlineKeyboardButton(text=data["btname_3"], url=data['url_3']),
                 InlineKeyboardButton(text=data["btname_4"], url=data['url_4']))
         await bot.send_video(chat_id=ADMINS, video=video_file, caption=caption, reply_markup=keyboard)
-        await bot.send_message(chat_id=ADMINS, text="Siz yubormoqchi bo'lgan xabar xuddi shunday kurinishda boladi."
-                                                    "✅ Tastiqlash yoki ❌ Bekor qilish tugmasini bosing.",
-                               reply_markup=tasdiqlash)
+        await bot.send_message(chat_id=ADMINS,
+                               text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
+                                    "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
         await SendVideo.send_all_4.set()
     else:
         await call.message.delete()
@@ -810,6 +819,7 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(state=SendVideo.send_all_4, chat_id=ADMINS)
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
+    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'send_message':
         async with state.proxy() as data:
             video_file = data["video_file"]
@@ -824,3 +834,20 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
     else:
         await call.message.delete()
         await state.finish()
+
+
+'''
+📹 Instagramdan istalgan turdagi kontentni tez va oson yuklab beradigan bot!
+
+🤖 /start tugmasini bosing va shaxsiy (Robotingizdan)[https://t.me/LikeeinBot] foydalanishni boshlang 
+
+📹 Бот, который быстро и легко загружает любой тип контента из Инстаграм!
+
+🤖 Нажмите кнопку /start и начните использовать своего личного (Pобота)[https://t.me/LikeeinBot]
+
+
+📹 A bot that downloads any type of content from Instagram quickly and easily!
+
+🤖 Press the /start button and start using your personal (Robot)[https://t.me/LikeeinBot]
+
+'''

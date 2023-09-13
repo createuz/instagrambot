@@ -92,11 +92,11 @@ button_4 = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton("📍4-Tug
                                                  InlineKeyboardButton("🗑 Bekor qilish", callback_data="cancel"))
 
 button_5 = InlineKeyboardMarkup(row_width=1).add(
-    InlineKeyboardButton("✅ Xabarni yuborish", callback_data="send_message"),
+    InlineKeyboardButton("✅ Tasdiqlash", callback_data="send_message"),
     InlineKeyboardButton("🗑 Bekor qilish ", callback_data="cancel"))
 
 tasdiqlash = InlineKeyboardMarkup(row_width=1).add(
-    InlineKeyboardButton("✅ Xabarni yuborish", callback_data="send_message"),
+    InlineKeyboardButton("✅ Tasdiqlash", callback_data="send_message"),
     InlineKeyboardButton("🗑 Bekor qilish ", callback_data="cancel"))
 
 add_btn = InlineKeyboardMarkup(row_width=1).add(
