@@ -49,7 +49,7 @@ class User(Base):
             query = select(cls.chat_id)
             if admin_language == 'Uzbek':
                 query = query.where(cls.language == admin_language)
-            result = await session.execute(query)
+            result = await session.execute(query.where(cls.language != admin_language))
             return [row[0] for row in result.all()]
 
     @classmethod
@@ -102,7 +102,7 @@ class Group(Base):
             query = select(cls.chat_id)
             if admin_language == 'Uzbek':
                 query = query.where(cls.language == admin_language)
-            result = await session.execute(query)
+            result = await session.execute(query.where(cls.language != admin_language))
             return [row[0] for row in result.all()]
 
     @classmethod
