@@ -45,11 +45,9 @@ class User(Base):
 
     @classmethod
     async def get_all_user(cls, admin_language):
+        query = (cls.language == admin_language) if admin_language == 'Uzbek' else (cls.language != 'Uzbek')
         async with db() as session:
-            query = select(cls.chat_id)
-            if admin_language == 'Uzbek':
-                query = query.where(cls.language == admin_language)
-            result = await session.execute(query.where(cls.language != admin_language))
+            result = await session.execute(select(cls.chat_id).where(query))
             return [row[0] for row in result.all()]
 
     @classmethod
@@ -98,11 +96,9 @@ class Group(Base):
 
     @classmethod
     async def get_all_group(cls, admin_language):
+        query = (cls.language == admin_language) if admin_language == 'Uzbek' else (cls.language != 'Uzbek')
         async with db() as session:
-            query = select(cls.chat_id)
-            if admin_language == 'Uzbek':
-                query = query.where(cls.language == admin_language)
-            result = await session.execute(query.where(cls.language != admin_language))
+            result = await session.execute(select(cls.chat_id).where(query))
             return [row[0] for row in result.all()]
 
     @classmethod
