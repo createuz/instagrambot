@@ -44,9 +44,12 @@ class User(Base):
             return await session.scalar(select(cls.language).where(cls.chat_id == chat_id))
 
     @classmethod
-    async def get_all_user(cls):
+    async def get_all_user(cls, admin_language):
         async with db() as session:
-            result = await session.execute(select(cls.chat_id))
+            query = select(cls.chat_id)
+            if admin_language == 'Uzbek':
+                query = query.where(cls.language == admin_language)
+            result = await session.execute(query)
             return [row[0] for row in result.all()]
 
     @classmethod
@@ -94,9 +97,12 @@ class Group(Base):
             return await session.scalar(select(cls.language).where(cls.chat_id == chat_id))
 
     @classmethod
-    async def get_all_group(cls):
+    async def get_all_group(cls, admin_language):
         async with db() as session:
-            result = await session.execute(select(cls.chat_id))
+            query = select(cls.chat_id)
+            if admin_language == 'Uzbek':
+                query = query.where(cls.language == admin_language)
+            result = await session.execute(query)
             return [row[0] for row in result.all()]
 
     @classmethod

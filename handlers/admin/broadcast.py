@@ -74,8 +74,9 @@ async def send_messages_to_groups(group_ids: list, text=None, video=None, photo=
 async def admin_send_message_all(text=None, video=None, photo=None, caption=None, keyboard=None):
     try:
         start_time = time.time()
-        all_user_ids = await User.get_all_user()
-        all_group_ids = await Group.get_all_group()
+        admin_language = await User.get_language(int(ADMINS))
+        all_user_ids = await User.get_all_user(admin_language)
+        all_group_ids = await Group.get_all_group(admin_language)
         active_users, no_active_users = await send_messages_to_users(all_user_ids, text=text, video=video, photo=photo,
                                                                      caption=caption, keyboard=keyboard)
         active_groups, no_active_groups = await send_messages_to_groups(all_group_ids, text=text, video=video,
