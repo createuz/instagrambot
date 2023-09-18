@@ -5,13 +5,13 @@ import re
 from useragent import fake_agent
 
 
-async def counts(views):
-    views = int(views)
-    if views >= 1000000:
-        return f"{views / 1000000:.1f}M"
-    if views >= 1000:
-        return f"{views / 1000:.1f}K"
-    return str(views)
+# async def counts(views):
+#     views = int(views)
+#     if views >= 1000000:
+#         return f"{views / 1000000:.1f}M"
+#     if views >= 1000:
+#         return f"{views / 1000:.1f}K"
+#     return str(views)
 
 
 async def instagram_downloader_photo_video(link: str, session: aiohttp.ClientSession) -> any:
