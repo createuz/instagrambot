@@ -121,6 +121,8 @@ async def send_instagram_media(message: types.Message):
                                       disable_web_page_preview=True, protect_content=True)
 
 
+
+
 # @dp.message_handler(state=InstaUserData.waiting_user_data, content_types=ContentType.TEXT)
 # async def callback_inline(message: types.Message, state: FSMContext):
 #     try:
@@ -164,7 +166,7 @@ async def send_instagram_media(message: types.Message):
                 await bot.send_media_group(chat_id=message.chat.id, media=media)
         await waiting_msg.delete()
     except Exception as e:
-        logger.exception("Error while sending Instagram photo: %s", e)
+        logger.exception("Error while sending Instagram photo: %s", lang_count_groupe)
         await waiting_msg.delete()
         return await bot.send_message(message.chat.id, text=down_err[language].format(link),
                                       disable_web_page_preview=True, protect_content=True)

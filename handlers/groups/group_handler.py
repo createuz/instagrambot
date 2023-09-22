@@ -92,6 +92,8 @@ async def send_instagram_media(message: types.Message):
                                       disable_web_page_preview=True, protect_content=True)
 
 
+
+
 @dp.message_handler(regexp=r'https?:\/\/(www\.)?instagram\.com\/(stories)', chat_type=types.ChatType.PRIVATE)
 async def send_instagram_media(message: types.Message):
     link = message.text
