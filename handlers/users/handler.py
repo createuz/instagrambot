@@ -121,30 +121,6 @@ async def send_instagram_media(message: types.Message):
                                       disable_web_page_preview=True, protect_content=True)
 
 
-
-
-# @dp.message_handler(state=InstaUserData.waiting_user_data, content_types=ContentType.TEXT)
-# async def callback_inline(message: types.Message, state: FSMContext):
-#     try:
-#         language = await User.get_language(message.chat.id)
-#         async with aiohttp.ClientSession() as session:
-#             profile_photo, user_data = await insta_user_data(language, message.text.replace('@', ''), session)
-#             if profile_photo:
-#                 stories_keyboard = InlineKeyboardMarkup(row_width=2)
-#                 stories_btn = InlineKeyboardButton(text="Stories yuklash", callback_data="stories_yuklash")
-#                 stories_keyboard.add(stories_btn)
-#                 await bot.send_photo(message.chat.id, photo=profile_photo, caption=user_data)
-#             else:
-#                 stories_keyboard = InlineKeyboardMarkup(row_width=2)
-#                 stories_btn = InlineKeyboardButton(text="Stories yuklash", callback_data="stories_yuklash")
-#                 stories_keyboard.add(stories_btn)
-#                 await bot.send_message(message.chat.id, text=user_data)
-#             await state.finish()
-#     except Exception as e:
-#         await bot.delete_message(message.chat.id, message_id=message.message_id)
-#         logger.exception("Error while sending Instagram photo: %s", e)
-
-
 @dp.message_handler(regexp=r'https?:\/\/(www\.)?instagram\.com\/(stories)', chat_type=types.ChatType.PRIVATE)
 async def send_instagram_media(message: types.Message):
     link = message.text
@@ -166,7 +142,28 @@ async def send_instagram_media(message: types.Message):
                 await bot.send_media_group(chat_id=message.chat.id, media=media)
         await waiting_msg.delete()
     except Exception as e:
-        logger.exception("Error while sending Instagram photo: %s", lang_count_groupe)
+        logger.exception("Error while sending Instagram photo: %s", )
         await waiting_msg.delete()
         return await bot.send_message(message.chat.id, text=down_err[language].format(link),
                                       disable_web_page_preview=True, protect_content=True)
+
+# @dp.message_handler(state=InstaUserData.waiting_user_data, content_types=ContentType.TEXT)
+# async def callback_inline(message: types.Message, state: FSMContext):
+#     try:
+#         language = await User.get_language(message.chat.id)
+#         async with aiohttp.ClientSession() as session:
+#             profile_photo, user_data = await insta_user_data(language, message.text.replace('@', ''), session)
+#             if profile_photo:
+#                 stories_keyboard = InlineKeyboardMarkup(row_width=2)
+#                 stories_btn = InlineKeyboardButton(text="Stories yuklash", callback_data="stories_yuklash")
+#                 stories_keyboard.add(stories_btn)
+#                 await bot.send_photo(message.chat.id, photo=profile_photo, caption=user_data)
+#             else:
+#                 stories_keyboard = InlineKeyboardMarkup(row_width=2)
+#                 stories_btn = InlineKeyboardButton(text="Stories yuklash", callback_data="stories_yuklash")
+#                 stories_keyboard.add(stories_btn)
+#                 await bot.send_message(message.chat.id, text=user_data)
+#             await state.finish()
+#     except Exception as e:
+#         await bot.delete_message(message.chat.id, message_id=message.message_id)
+#         logger.exception("Error while sending Instagram photo: %s", e)
