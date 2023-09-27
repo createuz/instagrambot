@@ -104,7 +104,7 @@ async def send_instagram_media(message: types.Message):
                                                  text=f"<b>📥 {keyboard_waiting[language]}</b>", protect_content=True)
             async with aiohttp.ClientSession() as session:
                 urls = await instagram_downloader_photo_video(link, session=session)
-            if urls is None:
+            if urls is None or not urls:
                 await waiting_msg.delete()
                 return await bot.send_message(message.chat.id, text=down_err[language].format(link),
                                               disable_web_page_preview=True, protect_content=True)
