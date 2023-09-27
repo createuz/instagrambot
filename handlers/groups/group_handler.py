@@ -78,7 +78,7 @@ async def send_instagram_media(message: types.Message):
             if urls is None or not urls:
                 await waiting_msg.delete()
                 return await bot.send_message(message.chat.id, text=down_err[language].format(link),
-                                              disable_web_page_preview=True, protect_content=True)
+                                              disable_web_page_preview=True)
             media = [InputMediaPhoto(url) if 'jpg' in url else InputMediaVideo(url) for url in
                      urls]
             media[-1].caption = f"<b>📥 {main_caption}{keyboard_saver[language]}</b>"
@@ -107,7 +107,7 @@ async def send_instagram_media(message: types.Message):
             if urls is None or not urls:
                 await waiting_msg.delete()
                 return await bot.send_message(message.chat.id, text=down_err[language].format(link),
-                                              disable_web_page_preview=True, protect_content=True)
+                                              disable_web_page_preview=True)
             media_groups = [urls[i:i + 10] for i in range(0, len(urls), 10)]
             for group in media_groups:
                 media = [InputMediaPhoto(url) if 'jpg' in url else InputMediaVideo(url) for url in group]
