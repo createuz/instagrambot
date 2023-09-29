@@ -149,6 +149,22 @@ async def chose_statistics(call: types.CallbackQuery):
         logger.exception("Xatolik: %s", e)
 
 
+@dp.callback_query_handler(text="media_statistic")
+async def chose_statistics(call: types.CallbackQuery):
+    try:
+        stat = await InstagramMediaDB.count_media()
+        msj = f'''
+┏━━━━━━━━━━━━━━━━━━━━━━━━━
+┃ 📊 Media Statistic
+┣━━━━━━━━━━━━━━━━━━━━━━━━━
+┃ 📥 Downloaded Media:  {stat}
+┗━━━━━━━━━━━━━━━━━━━━━━━━━'''
+        await bot.edit_message_text(chat_id=call.from_user.id, message_id=call.message.message_id,
+                                    text=f"<b>{msj}</b>")
+    except Exception as e:
+        logger.exception("Xatolik: %s", e)
+
+
 async def user_language_statistics():
     try:
         async with db() as session:

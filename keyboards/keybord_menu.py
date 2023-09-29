@@ -54,6 +54,7 @@ admin_menu = InlineKeyboardMarkup(row_width=2).add(
 chose_statistic_kb = InlineKeyboardMarkup(row_width=2).add(
     InlineKeyboardButton("📊 User Statistic", callback_data="user_statistic"),
     InlineKeyboardButton("📊 Group Statistic", callback_data="group_statistic"),
+    InlineKeyboardButton("📊 Media Statistic", callback_data="media_statistic"),
     InlineKeyboardButton("🗑 Cancel", callback_data="bekor_qilish")
 )
 
