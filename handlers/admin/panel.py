@@ -121,7 +121,9 @@ async def clear_db_handler(message: types.Message):
             return
         if check_password(user_input, ADMIN_PASSWORD_HASH):
             async with db() as session:
-                await session.execute(InstagramMediaDB.__table__.delete())
+                # await session.execute(InstagramMediaDB.__table__.delete())
+                await session.execute(text("ALTER TABLE media DROP COLUMN video_id"))
+                await session.execute(text("ALTER TABLE media DROP COLUMN video_url"))
                 await session.commit()
             await message.answer("✅ Ma'lumotlar tozalandi.")
         else:

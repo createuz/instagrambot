@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 from aiogram.dispatcher.filters import Text
 import aiohttp, logging
-from sqlalchemy import select, insert, update
+from sqlalchemy import select, insert, update, text
 from sqlalchemy.ext.asyncio import create_async_engine
 from pyquery import PyQuery as pq
 from sqlalchemy.dialects.postgresql.psycopg2 import logger
