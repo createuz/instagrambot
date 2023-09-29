@@ -120,10 +120,10 @@ async def clear_db_handler(message: types.Message):
             await message.answer("❌ Parolni kiriting: /cleardb <parol>")
             return
         if check_password(user_input, ADMIN_PASSWORD_HASH):
+            new_media_count = await InstagramMediaDB.count_media()
+            await StatisticDB.create_media_count(new_media_count)
             async with db() as session:
-                # await session.execute(InstagramMediaDB.__table__.delete())
-                await session.execute(text("ALTER TABLE media DROP COLUMN video_id"))
-                await session.execute(text("ALTER TABLE media DROP COLUMN video_url"))
+                await session.execute(InstagramMediaDB.__table__.delete())
                 await session.commit()
             await message.answer("✅ Ma'lumotlar tozalandi.")
         else:
@@ -154,17 +154,34 @@ async def chose_statistics(call: types.CallbackQuery):
 @dp.callback_query_handler(text="media_statistic")
 async def chose_statistics(call: types.CallbackQuery):
     try:
-        stat = await InstagramMediaDB.count_media()
+        stat = await StatisticDB.get_total_media_count()
         msj = f'''
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ 📊 Media Statistic
 ┣━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ 📥 Downloaded Media:  {stat}
+┃ 📥 Total Media Count:  {stat}
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━'''
         await bot.edit_message_text(chat_id=call.from_user.id, message_id=call.message.message_id,
                                     text=f"<b>{msj}</b>")
     except Exception as e:
         logger.exception("Xatolik: %s", e)
+
+
+@dp.callback_query_handler(commands=['update_media'], chat_id=ADMINS)
+async def chose_statistics(message: types.Message):
+    await message.delete()
+    await bot.send_message(chat_id=message.chat.id, text='<b>Miqdorni kiriting max: 1000 ta</b>')
+    await AddAdmin.waiting_for_miqdor.set()
+
+
+@dp.message_handler(state=AddAdmin.waiting_for_miqdor, content_types=ContentType.TEXT)
+async def add_admin_save_handler(message: types.Message, state: FSMContext):
+    try:
+        await StatisticDB.update_media_count(int(message.text))
+        await bot.send_message(message.chat.id, f"Total media count oshirildi ✅")
+        await state.finish()
+    except Exception as e:
+        await message.answer(f"❌ Xatolik yuz berdi: {str(e)}")
 
 
 async def user_language_statistics():

@@ -16,6 +16,7 @@ class LanguageChange(StatesGroup):
 class AddAdmin(StatesGroup):
     waiting_for_add_chat_id = State()
     waiting_for_del_chat_id = State()
+    waiting_for_miqdor = State
 
 
 class Channelstate(StatesGroup):

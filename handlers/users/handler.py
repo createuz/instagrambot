@@ -8,20 +8,18 @@ from aiogram import types
 
 @dp.message_handler(commands=['start'], chat_type=types.ChatType.PRIVATE)
 async def start_handler_lang(message: types.Message):
-    tx = await InstagramMediaDB.last_id()
-    await bot.send_message(message.chat.id, text=tx)
-    # try:
-    #     language = await User.get_language(message.chat.id)
-    #     if language:
-    #         await bot.send_message(message.from_id, text=f"<b>{select_dict[language]}</b>",
-    #                                reply_markup=keyboard_group[language],
-    #                                disable_web_page_preview=True, protect_content=True)
-    #     else:
-    #         await bot.send_message(message.chat.id, text=choose_button, reply_markup=language_keyboard,
-    #                                protect_content=True)
-    #         await LanguageSelection.select_language.set()
-    # except Exception as e:
-    #     logger.exception("Error while processing start command: %s", e)
+    try:
+        language = await User.get_language(message.chat.id)
+        if language:
+            await bot.send_message(message.from_id, text=f"<b>{select_dict[language]}</b>",
+                                   reply_markup=keyboard_group[language],
+                                   disable_web_page_preview=True, protect_content=True)
+        else:
+            await bot.send_message(message.chat.id, text=choose_button, reply_markup=language_keyboard,
+                                   protect_content=True)
+            await LanguageSelection.select_language.set()
+    except Exception as e:
+        logger.exception("Error while processing start command: %s", e)
 
 
 @dp.callback_query_handler(lambda c: c.data in languages.keys(), state=LanguageSelection.select_language,
