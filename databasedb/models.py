@@ -1,9 +1,7 @@
-from sqlalchemy import Column, String, Integer, func, BigInteger, Text
-from sqlalchemy import update
+from sqlalchemy import Column, String, Integer, func, BigInteger, Text, DateTime, update, delete, JSON, cast
 from sqlalchemy.future import select
 from databasedb import Base, db
-from sqlalchemy import delete
-from sqlalchemy import JSON
+from datetime import datetime
 
 db.init()
 
@@ -42,6 +40,14 @@ class User(Base):
     async def get_language(cls, chat_id):
         async with db() as session:
             return await session.scalar(select(cls.language).where(cls.chat_id == chat_id))
+
+    @classmethod
+    async def get_user(cls, chat_id):
+        async with db() as session:
+            user = await session.scalar(select(cls).where(cls.chat_id == int(chat_id)))
+            if user:
+                return user.chat_id, user.username, user.first_name
+        return None, None, None
 
     @classmethod
     async def get_all_user(cls, admin_language):
@@ -127,19 +133,20 @@ class Admin(Base):
         return admin
 
     @classmethod
-    async def update_chat_id(cls, chat_id, **kwargs):
+    async def get_admins_data(cls):
         async with db() as session:
-            await session.execute(update(cls).where(cls.chat_id == chat_id).values(**kwargs))
-            try:
-                await session.commit()
-            except Exception:
-                await session.rollback()
-                raise
+            users = await session.execute(select(cls.chat_id, cls.first_name))
+            if users:
+                return [user for user in users]
+        return None
 
-    @classmethod
-    async def get_chat_id(cls, chat_id):
-        async with db() as session:
-            return await session.scalar(select(cls.chat_id).where(cls.chat_id == chat_id))
+    # @classmethod
+    # async def get_admins_data(cls):
+    #     async with db() as session:
+    #         users = await session.execute(select(cls))
+    #         if users:
+    #             return [user for user in users]
+    #     return None
 
     @classmethod
     async def get_all_admin(cls):
@@ -148,7 +155,7 @@ class Admin(Base):
             return [row[0] for row in result.all()]
 
     @classmethod
-    async def delete(cls, chat_id):
+    async def delete_admin(cls, chat_id):
         query = delete(cls).where(cls.chat_id == chat_id)
 
         async with db() as session:

@@ -37,9 +37,17 @@ bekor_qilish_kb = InlineKeyboardMarkup(row_width=1).add(
     InlineKeyboardButton("🗑 Cancel", callback_data="bekor_qilish")
 )
 
-menu_kb = InlineKeyboardMarkup(row_width=1).add(
-    InlineKeyboardButton("♻️ Send Message", callback_data="send"),
+menu_kb = InlineKeyboardMarkup(row_width=2).add(
+    InlineKeyboardButton("💬 Send Message", callback_data="send_all_msg"),
     InlineKeyboardButton("📊 Statistic", callback_data="statistic"),
+    InlineKeyboardButton("🅰 Admins", callback_data="admin_menu"),
+    InlineKeyboardButton("🗑 Cancel", callback_data="bekor_qilish")
+)
+
+admin_menu = InlineKeyboardMarkup(row_width=2).add(
+    InlineKeyboardButton("📄 Admins Data", callback_data="admins_data"),
+    InlineKeyboardButton("➕ Add Admin", callback_data="add_admin"),
+    InlineKeyboardButton("🗑 Delete Admin", callback_data="del_admin"),
     InlineKeyboardButton("🗑 Cancel", callback_data="bekor_qilish")
 )
 
