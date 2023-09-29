@@ -1,7 +1,6 @@
-from sqlalchemy import Column, String, Integer, func, BigInteger, Text, DateTime, update, delete, JSON, cast
+from sqlalchemy import Column, String, Integer, func, BigInteger, Text, update, delete, JSON
 from sqlalchemy.future import select
 from databasedb import Base, db
-from datetime import datetime
 
 db.init()
 
@@ -107,11 +106,6 @@ class Group(Base):
             result = await session.execute(select(cls.chat_id).where(query))
             return [row[0] for row in result.all()]
 
-    @classmethod
-    async def count_group(cls):
-        async with db() as session:
-            return await session.scalar(select(func.count(cls.chat_id)))
-
 
 class Admin(Base):
     __tablename__ = 'admins'
@@ -140,14 +134,6 @@ class Admin(Base):
                 return [user for user in users]
         return None
 
-    # @classmethod
-    # async def get_admins_data(cls):
-    #     async with db() as session:
-    #         users = await session.execute(select(cls))
-    #         if users:
-    #             return [user for user in users]
-    #     return None
-
     @classmethod
     async def get_all_admin(cls):
         async with db() as session:
@@ -156,8 +142,7 @@ class Admin(Base):
 
     @classmethod
     async def delete_admin(cls, chat_id):
-        query = delete(cls).where(cls.chat_id == chat_id)
-
+        query = delete(cls).where(cls.chat_id == int(chat_id))
         async with db() as session:
             await session.execute(query)
             try:
@@ -166,11 +151,6 @@ class Admin(Base):
                 await session.rollback()
                 raise
             return True
-
-    @classmethod
-    async def count_admin(cls):
-        async with db() as session:
-            return await session.scalar(select(func.count(cls.chat_id)))
 
 
 class Channel(Base):
@@ -225,11 +205,6 @@ class Channel(Base):
                 await session.rollback()
                 raise
             return True
-
-    @classmethod
-    async def count_channel(cls):
-        async with db() as session:
-            return await session.scalar(select(func.count(cls.chat_id)))
 
 
 class InstagramMediaDB(Base):

@@ -26,16 +26,16 @@ async def admin_send_message(call: types.CallbackQuery):
         data = await Admin.get_admins_data()
         if data:
             admin_data = '\n'.join([
-                f'''┃  Chat ID:  {user.chat_id}
-┃  {index}. First Name:  <a href='{f'tg://user?id={user.chat_id}'}'><b>Admin</b></a>''' for index, user in data])
+                f'''┃ ID: <code>{user.chat_id}</code>  ┃  <a href='{f'tg://user?id={user.chat_id}'}'>{user.first_name}</a>'''
+                for user in data])
             data_msg = f'''
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ <b>🅰 Admins Data</b>
+┃ 🅰  Admin Statistic
 ┣━━━━━━━━━━━━━━━━━━━━━━━━━
 {admin_data}
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━'''
             return await bot.edit_message_text(chat_id=call.message.chat.id, message_id=callback_id,
-                                               text=f'{data_msg}')
+                                               text=f'<b>{data_msg}</b>')
         return await bot.edit_message_text(chat_id=call.message.chat.id, message_id=callback_id,
                                            text=f'<b>🛑 Hozirda Admin malumotlari muvjud emas</b>')
     except Exception as e:
@@ -56,7 +56,8 @@ async def add_admin_save_handler(message: types.Message, state: FSMContext):
     try:
         chat_id, username, first_name = await User.get_user(message.text)
         await Admin.create_admin(chat_id, username, first_name)
-        await bot.send_message(message.chat.id, f"{first_name} Adminlar ro'yxatiga qo'shildi ✅")
+        await bot.send_message(message.chat.id, f"<b>{first_name}</b> Adminlar ro'yxatiga qo'shildi ✅",
+                               reply_markup=admin_menu)
         await state.finish()
     except Exception as e:
         await message.answer(f"❌ Xatolik yuz berdi: {str(e)}")
@@ -75,7 +76,8 @@ async def add_admin_handler(call: types.CallbackQuery):
 async def add_admin_save_handler(message: types.Message, state: FSMContext):
     try:
         await Admin.delete_admin(message.text)
-        await bot.send_message(message.chat.id, f"Chat ID: <b>{message.text}</b>  Adminlar ro'yxatidan chiqarildi ✅")
+        await bot.send_message(message.chat.id, f"Chat ID: <b>{message.text}</b>  Adminlar ro'yxatidan chiqarildi ✅",
+                               reply_markup=admin_menu)
         await state.finish()
     except Exception as e:
         await message.answer(f"❌ Xatolik yuz berdi: {str(e)}")
