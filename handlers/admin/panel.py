@@ -167,7 +167,7 @@ async def chose_statistics(call: types.CallbackQuery):
         logger.exception("Xatolik: %s", e)
 
 
-@dp.callback_query_handler(commands=['update_media'], chat_id=ADMINS)
+@dp.message_handler(commands=['update_media'], chat_id=ADMINS)
 async def chose_statistics(message: types.Message):
     await message.delete()
     await bot.send_message(chat_id=message.chat.id, text='<b>Miqdorni kiriting max: 1000 ta</b>')
