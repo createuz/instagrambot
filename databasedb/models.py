@@ -153,6 +153,40 @@ class Admin(Base):
             return True
 
 
+class StatisticDB(Base):
+    __tablename__ = 'statistic'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    media_count = Column(BigInteger)
+
+    @classmethod
+    async def create_media_count(cls, media_count):
+        media = cls(media_count=media_count)
+        async with db() as session:
+            session.add(media)
+            try:
+                await session.commit()
+            except Exception:
+                await session.rollback()
+                raise
+        return media
+
+    @classmethod
+    async def update_media_count(cls, new_media_count):
+        async with db() as session:
+            await session.execute(
+                update(cls).values(media_count=cls.media_count + new_media_count).order_by(cls.id.desc()).limit(1))
+            try:
+                await session.commit()
+            except Exception:
+                await session.rollback()
+                raise
+
+    @classmethod
+    async def get_total_media_count(cls):
+        async with db() as session:
+            return await session.scalar(select(func.sum(cls.media_count)))
+
+
 class Channel(Base):
     __tablename__ = 'channels'
     id = Column(BigInteger, primary_key=True, autoincrement=True)
@@ -250,4 +284,4 @@ class InstagramMediaDB(Base):
     @classmethod
     async def count_media(cls):
         async with db() as session:
-            return await session.scalar(select(cls.id).order_by(cls.id.desc()))
+            return await session.scalar(select(cls.id).order_by(cls.id.desc().limit(1)))
