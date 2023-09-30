@@ -120,8 +120,6 @@ async def clear_db_handler(message: types.Message):
             await message.answer("❌ Parolni kiriting: /cleardb <parol>")
             return
         if check_password(user_input, ADMIN_PASSWORD_HASH):
-            new_media_count = await InstagramMediaDB.count_media()
-            await StatisticDB.create_media_count(new_media_count)
             async with db() as session:
                 await session.execute(InstagramMediaDB.__table__.delete())
                 await session.commit()
@@ -154,7 +152,7 @@ async def chose_statistics(call: types.CallbackQuery):
 @dp.callback_query_handler(text="media_statistic")
 async def chose_statistics(call: types.CallbackQuery):
     try:
-        stat = await StatisticDB.get_total_media_count()
+        stat = await InstagramMediaDB.count_media()
         msj = f'''
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ 📊 Media Statistic

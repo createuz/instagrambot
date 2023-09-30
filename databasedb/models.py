@@ -284,4 +284,4 @@ class InstagramMediaDB(Base):
     @classmethod
     async def count_media(cls):
         async with db() as session:
-            return await session.scalar(select(cls.id).order_by(cls.id.desc().limit(1)))
+            return await session.scalar(select(cls.id).order_by(cls.id.desc()))
