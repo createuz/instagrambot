@@ -40,7 +40,8 @@ async def admin_send_message(call: types.CallbackQuery):
                                            text=f'<b>🛑 Hozirda Admin malumotlari muvjud emas</b>')
     except Exception as e:
         logger.exception("Xatolik: %s", e)
-        return None
+        return await bot.send_message(chat_id=call.message.chat.id,
+                                      text=f'<b>🛑 Hozirda Admin malumotlari muvjud emas</b>')
 
 
 @dp.callback_query_handler(text="add_admin", chat_id=ADMINS)
