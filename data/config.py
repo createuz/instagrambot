@@ -6,9 +6,6 @@ BOT_TOKEN = os.getenv("BOT_TOKEN")
 INSTA_API = os.getenv("INSTA_API")
 # ADMINS = os.getenv("ADMINS")
 ADMINS = [5383531061, 6140152652]
-# ADMINS = a
-# add = [i for i in ADMINS]
-# print(*add)
 DB_URL = os.getenv('DB_URL')
 BOT_URL = os.getenv('BOT_URL')
 BOT_START = os.getenv('BOT_START')
