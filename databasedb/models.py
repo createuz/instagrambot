@@ -1,4 +1,5 @@
-from sqlalchemy import Column, String, Integer, func, BigInteger, Text, update, delete, JSON
+from datetime import datetime, timedelta
+from sqlalchemy import Column, String, Integer, func, BigInteger, Text, update, delete, JSON, DateTime
 from sqlalchemy.future import select
 from databasedb import Base, db
 
@@ -12,10 +13,12 @@ class User(Base):
     username = Column(String)
     first_name = Column(String)
     language = Column(String)
+    created_add = Column(DateTime)
 
     @classmethod
-    async def create_user(cls, chat_id, username, first_name, language):
-        user = cls(chat_id=chat_id, username=username, first_name=first_name, language=language)
+    async def create_user(cls, chat_id, username, first_name, language, created_add):
+        user = cls(chat_id=chat_id, username=username, first_name=first_name,
+                   language=language, created_add=created_add)
         async with db() as session:
             session.add(user)
             try:
@@ -56,9 +59,16 @@ class User(Base):
             return [row[0] for row in result.all()]
 
     @classmethod
-    async def count_users(cls):
+    async def count_users_registered_last_month(cls):
+        last_month = datetime.now() - timedelta(days=30)
         async with db() as session:
-            return await session.scalar(select(func.count(cls.chat_id)))
+            return await session.scalar(select(func.count(cls.chat_id)).where(cls.created_add >= last_month))
+
+    @classmethod
+    async def count_users_registered_last_24_hours(cls):
+        last_24_hours = datetime.now() - timedelta(hours=24)
+        async with db() as session:
+            return await session.scalar(select(func.count(cls.chat_id)).where(cls.created_add >= last_24_hours))
 
 
 class Group(Base):
