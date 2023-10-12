@@ -29,6 +29,16 @@ class User(Base):
         return user
 
     @classmethod
+    async def update_data(cls, chat_id, new_created):
+        async with db() as session:
+            await session.execute(update(cls).where(cls.chat_id == chat_id).values(created_add=new_created))
+            try:
+                await session.commit()
+            except Exception:
+                await session.rollback()
+                raise
+
+    @classmethod
     async def update_language(cls, chat_id, new_language):
         async with db() as session:
             await session.execute(update(cls).where(cls.chat_id == chat_id).values(language=new_language))

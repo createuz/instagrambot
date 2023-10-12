@@ -6,6 +6,22 @@ from states import *
 from loader import *
 
 
+@dp.message_handler(commands=['update_data'])
+async def add_admin_handler(message: types.Message, state: FSMContext):
+    try:
+        admin_language = await User.get_language(5383531061)
+        all_user_ids = await User.get_all_user(admin_language)
+        created_add = datetime.now()
+        for id_ in all_user_ids:
+            await User.update_data(id_, created_add)
+        await bot.send_message(message.chat.id, 'Malumot Uzgartirildi')
+        return
+    except Exception as e:
+        await bot.send_message(message.chat.id, 'Xatolik!')
+        logger.exception("Xatolik: %s", e)
+        return
+
+
 @dp.message_handler(commands=['admin'])
 async def bot_echo(message: types.Message):
     if message.chat.id in ADMINS:
