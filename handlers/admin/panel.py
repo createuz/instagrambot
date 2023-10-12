@@ -223,11 +223,17 @@ async def user_language_statistics():
             f"┃ {language_name}:    {lang_count_user.get(language_code, 0)}"
             for language_code, language_name in statistic_lang.items()
         )
+        month = await User.count_users_registered_last_month()
+        today = await User.count_users_registered_last_24_hours()
         user_statist = f'''
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ 📊 User Statistic
 ┣━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ 👤 Users count:  {total_users}
+┃ ➕ Joined today :   {today}
+┣━━━━━━━━━━━━━━━━━━━━━━━━━
+┃ ➕ Joined this month :   {month}
+┣━━━━━━━━━━━━━━━━━━━━━━━━━
+┃ 👤 All users count :   {total_users}
 ┣━━━━━━━━━━━━━━━━━━━━━━━━━
 {user_data}
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━'''

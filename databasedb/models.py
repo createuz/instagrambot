@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from sqlalchemy import Column, String, Integer, func, BigInteger, Text, update, delete, JSON, DateTime
+from sqlalchemy import Column, String, Integer, func, BigInteger, Text, update, delete, JSON, DateTime, and_
 from sqlalchemy.future import select
 from databasedb import Base, db
 
@@ -68,7 +68,8 @@ class User(Base):
     async def count_users_registered_last_24_hours(cls):
         last_24_hours = datetime.now() - timedelta(hours=24)
         async with db() as session:
-            return await session.scalar(select(func.count(cls.chat_id)).where(cls.created_add >= last_24_hours))
+            return await session.scalar(select(func.count(cls.chat_id)).where(
+                and_(cls.created_add >= last_24_hours, cls.created_add <= datetime.now())))
 
 
 class Group(Base):

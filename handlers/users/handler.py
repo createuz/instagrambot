@@ -1,5 +1,3 @@
-from datetime import timezone
-
 import keyboards
 from states import *
 from downloader import *
@@ -10,23 +8,20 @@ from aiogram import types
 
 @dp.message_handler(commands=['start'], chat_type=types.ChatType.PRIVATE)
 async def start_handler_lang(message: types.Message):
-    oy = await User.count_users_registered_last_month()
-    kun = await User.count_users_registered_last_24_hours()
-    await bot.send_message(message.chat.id, text=f"Shu oy: {oy}\nBugun: {kun}")
-    # await message.delete()
-    # try:
-    #     language = await User.get_language(message.chat.id)
-    #     if language:
-    #         await bot.send_message(message.from_id, text=f"<b>{keyboards.select_dict[language]}</b>",
-    #                                reply_markup=keyboards.keyboard_group[language],
-    #                                disable_web_page_preview=True, protect_content=True)
-    #     else:
-    #         await bot.send_message(message.chat.id, text=keyboards.choose_button,
-    #                                reply_markup=keyboards.language_keyboard,
-    #                                protect_content=True)
-    #         await LanguageSelection.select_language.set()
-    # except Exception as e:
-    #     logger.exception("Error while processing start command: %s", e)
+    await message.delete()
+    try:
+        language = await User.get_language(message.chat.id)
+        if language:
+            await bot.send_message(message.from_id, text=f"<b>{keyboards.select_dict[language]}</b>",
+                                   reply_markup=keyboards.keyboard_group[language],
+                                   disable_web_page_preview=True, protect_content=True)
+        else:
+            await bot.send_message(message.chat.id, text=keyboards.choose_button,
+                                   reply_markup=keyboards.language_keyboard,
+                                   protect_content=True)
+            await LanguageSelection.select_language.set()
+    except Exception as e:
+        logger.exception("Error while processing start command: %s", e)
 
 
 @dp.callback_query_handler(lambda c: c.data in keyboards.languages.keys(), state=LanguageSelection.select_language,
@@ -37,7 +32,6 @@ async def process_language_selection(callback_query: types.CallbackQuery, state:
     username = callback_query.message.chat.username
     first_name = callback_query.from_user.first_name
     language = keyboards.languages[selected_language]
-    # created_add = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
     created_add = datetime.now()
     try:
         await User.create_user(chat_id, username, first_name, language, created_add)
