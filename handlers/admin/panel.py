@@ -6,27 +6,21 @@ from states import *
 from loader import *
 
 
-@dp.message_handler(commands=['update_data'])
-async def add_admin_handler(message: types.Message, state: FSMContext):
-    try:
-        admin_language = await User.get_language(5383531061)
-        all_user_ids = await User.get_all_user(admin_language)
-        created_add = datetime.now()
-        for id_ in all_user_ids:
-            await User.update_data(id_, created_add)
-        await bot.send_message(message.chat.id, 'Malumot Uzgartirildi')
-        return
-    except Exception as e:
-        await bot.send_message(message.chat.id, 'Xatolik!')
-        logger.exception("Xatolik: %s", e)
-        return
-
-
 @dp.message_handler(commands=['admin'])
 async def bot_echo(message: types.Message):
     if message.chat.id in ADMINS:
         await message.delete()
-        await message.answer("⚙ ADMIN PANEL", reply_markup=menu_kb)
+        await message.answer("<b>⚙ Welcome to Admin Panel</b>", reply_markup=menu_kb)
+    return
+
+
+@dp.callback_query_handler(text="menu_kb")
+async def add_admin_handler(call: types.CallbackQuery):
+    if call.message.chat.id in ADMINS:
+        chat_id = call.from_user.id
+        callback_id = call.message.message_id
+        await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text="<b>⚙ Welcome to Admin Panel</b>",
+                                    reply_markup=menu_kb)
     return
 
 
@@ -35,7 +29,8 @@ async def add_admin_handler(call: types.CallbackQuery):
     if call.message.chat.id in ADMINS:
         chat_id = call.from_user.id
         callback_id = call.message.message_id
-        await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text="Admin menu", reply_markup=admin_menu)
+        await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text="<b>🅰 Admin menu</b>",
+                                    reply_markup=admin_menu)
     return
 
 
@@ -133,8 +128,8 @@ async def admin_send_message_delete(call: types.CallbackQuery):
 async def admin_send_message(call: types.CallbackQuery):
     chat_id = call.from_user.id
     callback_id = call.message.message_id
-    await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text="Xabar turini Tanlang 👇🏻",
-                                reply_markup=admin_kb)
+    await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text="<b>💬 Xabar turini Tanlang</b>",
+                                reply_markup=send_message_kb)
 
 
 def hash_password(password):
@@ -184,7 +179,7 @@ async def chose_statistics(call: types.CallbackQuery):
     if call.message.chat.id in ADMINS:
         try:
             await bot.edit_message_text(chat_id=call.from_user.id, message_id=call.message.message_id,
-                                        text='<b>Chose Statistic</b>', reply_markup=chose_statistic_kb)
+                                        text='<b>📊 Chose Statistic</b>', reply_markup=chose_statistic_kb)
         except Exception as e:
             logger.exception("Xatolik: %s", e)
     return
@@ -202,7 +197,7 @@ async def chose_statistics(call: types.CallbackQuery):
 ┃ 📥 Total Media Count:  {stat}
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━'''
             await bot.edit_message_text(chat_id=call.from_user.id, message_id=call.message.message_id,
-                                        text=f"<b>{msj}</b>")
+                                        text=f"<b>{msj}</b>", reply_markup=back_media_statistic)
         except Exception as e:
             logger.exception("Xatolik: %s", e)
     return

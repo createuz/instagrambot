@@ -41,21 +41,23 @@ menu_kb = InlineKeyboardMarkup(row_width=2).add(
     InlineKeyboardButton("💬 Send Message", callback_data="send_all_msg"),
     InlineKeyboardButton("📊 Statistic", callback_data="statistic"),
     InlineKeyboardButton("🅰 Admins", callback_data="admin_menu"),
-    InlineKeyboardButton("🗑 Cancel", callback_data="bekor_qilish")
+    InlineKeyboardButton("🏠 Home", callback_data="bekor_qilish")
 )
 
 admin_menu = InlineKeyboardMarkup(row_width=2).add(
     InlineKeyboardButton("📄 Admins Data", callback_data="admins_data"),
     InlineKeyboardButton("➕ Add Admin", callback_data="add_admin"),
     InlineKeyboardButton("🗑 Delete Admin", callback_data="del_admin"),
-    InlineKeyboardButton("🗑 Cancel", callback_data="bekor_qilish")
+    InlineKeyboardButton("🗑 Cancel", callback_data="bekor_qilish"),
+    InlineKeyboardButton("⬅ Back", callback_data="menu_kb")
 )
 
 chose_statistic_kb = InlineKeyboardMarkup(row_width=2).add(
-    InlineKeyboardButton("📊 User Statistic", callback_data="user_statistic"),
-    InlineKeyboardButton("📊 Group Statistic", callback_data="group_statistic"),
-    InlineKeyboardButton("📊 Media Statistic", callback_data="media_statistic"),
-    InlineKeyboardButton("🗑 Cancel", callback_data="bekor_qilish")
+    InlineKeyboardButton("👤 User Statistic", callback_data="user_statistic"),
+    InlineKeyboardButton("👥 Group Statistic", callback_data="group_statistic"),
+    InlineKeyboardButton("📹 Media Statistic", callback_data="media_statistic"),
+    InlineKeyboardButton("🗑 Cancel", callback_data="bekor_qilish"),
+    InlineKeyboardButton("⬅ Back", callback_data="menu_kb")
 )
 
 update_user_statistic = InlineKeyboardMarkup(row_width=2).add(
@@ -78,11 +80,15 @@ update_group_statistic_2x = InlineKeyboardMarkup(row_width=2).add(
     InlineKeyboardButton("🗑 Cancel", callback_data="bekor_qilish"),
     InlineKeyboardButton("⬅ Back", callback_data="statistic"))
 
-admin_kb = InlineKeyboardMarkup(row_width=1).add(
-    InlineKeyboardButton("📝 Text message", callback_data="text"),
-    InlineKeyboardButton("🖼 Photo message", callback_data="photo"),
-    InlineKeyboardButton("🎥 Video message", callback_data="video"),
-    InlineKeyboardButton("🗑 Cancel", callback_data="bekor_qilish")
+back_media_statistic = InlineKeyboardMarkup(row_width=1).add(
+    InlineKeyboardButton("⬅ Back", callback_data="statistic"))
+
+send_message_kb = InlineKeyboardMarkup(row_width=2).add(
+    InlineKeyboardButton("📝 Send Message", callback_data="text"),
+    InlineKeyboardButton("🖼 Send Photo", callback_data="photo"),
+    InlineKeyboardButton("📹 Send Video", callback_data="video"),
+    InlineKeyboardButton("🗑 Cancel", callback_data="bekor_qilish"),
+    InlineKeyboardButton("⬅ Back", callback_data="menu_kb")
 )
 
 button_2 = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton("📍2-Tugmani kiritish", callback_data="button_2"),
