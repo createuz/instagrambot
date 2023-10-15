@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 INSTA_API = os.getenv("INSTA_API")
-# ADMINS = os.getenv("ADMINS")
 ADMINS = [5383531061, 6140152652]
 DB_URL = os.getenv('DB_URL')
 BOT_URL = os.getenv('BOT_URL')
