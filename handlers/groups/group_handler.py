@@ -66,7 +66,7 @@ async def send_instagram_media(message: types.Message):
         insta_data = await InstagramMediaDB.get_video_url(message.text)
         if insta_data:
             media = [InputMediaPhoto(url) if 'jpg' in url else InputMediaVideo(url) for url in insta_data]
-            media[-1].caption = f"📥 <b>{main_caption}{keyboard_saver[language]}</b>"
+            media[-1].caption = f"<a href='tg://user?id={message.from_user.id}'><b>↬  υ𝐬𝐞𝐫</b></a>\n\n<b>📥 {main_caption}{keyboard_saver[language]}</b>"
             await bot.send_media_group(chat_id=message.chat.id, media=media)
             await message.delete()
         else:
@@ -81,7 +81,7 @@ async def send_instagram_media(message: types.Message):
                                               disable_web_page_preview=True)
             media = [InputMediaPhoto(url) if 'jpg' in url else InputMediaVideo(url) for url in
                      urls]
-            media[-1].caption = f"<b>📥 {main_caption}{keyboard_saver[language]}</b>"
+            media[-1].caption = f"<a href='tg://user?id={message.from_user.id}'><b>↬  υ𝐬𝐞𝐫</b></a>\n\n<b>📥 {main_caption}{keyboard_saver[language]}</b>"
             await bot.send_media_group(chat_id=message.chat.id, media=media)
             await waiting_msg.delete()
             await InstagramMediaDB.create_media_list(message.text, urls)
@@ -90,8 +90,6 @@ async def send_instagram_media(message: types.Message):
         logger.exception("Error while sending Instagram photo: %s", e)
         return await bot.send_message(message.chat.id, text=down_err[language].format(link),
                                       disable_web_page_preview=True, protect_content=True)
-
-
 
 
 @dp.message_handler(regexp=r'https?:\/\/(www\.)?instagram\.com\/(stories)', chat_type=types.ChatType.PRIVATE)
@@ -111,7 +109,7 @@ async def send_instagram_media(message: types.Message):
             media_groups = [urls[i:i + 10] for i in range(0, len(urls), 10)]
             for group in media_groups:
                 media = [InputMediaPhoto(url) if 'jpg' in url else InputMediaVideo(url) for url in group]
-                media[-1].caption = f"📥 <b>{main_caption}{keyboard_saver[language]}</b>"
+                media[-1].caption = f"<a href='tg://user?id={message.from_user.id}'><b>↬  υ𝐬𝐞𝐫</b></a>\n\n<b>📥 {main_caption}{keyboard_saver[language]}</b>"
                 await bot.send_media_group(chat_id=message.chat.id, media=media)
         await waiting_msg.delete()
     except Exception as e:
