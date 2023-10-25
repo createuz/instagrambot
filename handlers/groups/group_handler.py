@@ -7,10 +7,10 @@ from loader import *
 @dp.message_handler(commands=['start'])
 async def save_group_info(message: types.Message):
     try:
-        language = await Group.get_language(message.chat.id)
-        if language:
-            await bot.send_message(message.chat.id, text=f"<b>{select_dict[language]}</b>",
-                                   reply_markup=keyboard_group[language],
+        group_lang = await Group.get_language(message.chat.id)
+        if group_lang:
+            await bot.send_message(message.chat.id, text=f"<b>{select_dict[group_lang]}</b>",
+                                   reply_markup=keyboard_group[group_lang],
                                    disable_web_page_preview=True, protect_content=True)
         else:
             await bot.send_message(message.chat.id, text=choose_button, reply_markup=language_keyboard,
@@ -29,28 +29,28 @@ async def change_language_handler_group(message: types.Message):
 
 
 @dp.callback_query_handler(lambda c: c.data in languages.keys())
-async def process_language_selection(callback_query: types.CallbackQuery, state: FSMContext):
-    selected_language = callback_query.data
-    chat_id = callback_query.message.chat.id
-    group_username = callback_query.message.chat.username
+async def process_language_selection(call: types.CallbackQuery, state: FSMContext):
+    selected_language = call.data
+    chat_id = call.message.chat.id
+    group_username = call.message.chat.username
     language = languages[selected_language]
-    group_name = callback_query.message.chat.title
+    group_name = call.message.chat.title
     try:
         group_lang = await Group.get_language(chat_id)
-
         if group_lang:
             await Group.update_language(chat_id, language)
             await state.finish()
-            await bot.answer_callback_query(callback_query.id)
-            callback_id = callback_query.message.message_id
+            await bot.answer_callback_query(call.id)
+            callback_id = call.message.message_id
             await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text=f"<b>{select_dict[language]}</b>",
                                         reply_markup=keyboard_group[language], disable_web_page_preview=True)
         else:
             chat_members = await bot.get_chat_members_count(chat_id)
             await Group.create_group(chat_id, group_name, group_username, chat_members, language)
+
             await state.finish()
-            await bot.answer_callback_query(callback_query.id)
-            callback_id = callback_query.message.message_id
+            await bot.answer_callback_query(call.id)
+            callback_id = call.message.message_id
             await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text=f"<b>{select_dict[language]}</b>",
                                         reply_markup=keyboard_group[language], disable_web_page_preview=True)
     except Exception as e:
@@ -66,7 +66,8 @@ async def send_instagram_media(message: types.Message):
         insta_data = await InstagramMediaDB.get_video_url(message.text)
         if insta_data:
             media = [InputMediaPhoto(url) if 'jpg' in url else InputMediaVideo(url) for url in insta_data]
-            media[-1].caption = f"<a href='tg://user?id={message.from_user.id}'><b>↬  υ𝐬𝐞𝐫</b></a>\n\n<b>📥 {main_caption}{keyboard_saver[language]}</b>"
+            media[
+                -1].caption = f"<a href='tg://user?id={message.from_user.id}'><b>↬  υ𝐬𝐞𝐫</b></a>\n\n<b>📥 {main_caption}{keyboard_saver[language]}</b>"
             await bot.send_media_group(chat_id=message.chat.id, media=media)
             await message.delete()
         else:
@@ -81,7 +82,8 @@ async def send_instagram_media(message: types.Message):
                                               disable_web_page_preview=True)
             media = [InputMediaPhoto(url) if 'jpg' in url else InputMediaVideo(url) for url in
                      urls]
-            media[-1].caption = f"<a href='tg://user?id={message.from_user.id}'><b>↬  υ𝐬𝐞𝐫</b></a>\n\n<b>📥 {main_caption}{keyboard_saver[language]}</b>"
+            media[
+                -1].caption = f"<a href='tg://user?id={message.from_user.id}'><b>↬  υ𝐬𝐞𝐫</b></a>\n\n<b>📥 {main_caption}{keyboard_saver[language]}</b>"
             await bot.send_media_group(chat_id=message.chat.id, media=media)
             await waiting_msg.delete()
             await InstagramMediaDB.create_media_list(message.text, urls)
@@ -109,7 +111,8 @@ async def send_instagram_media(message: types.Message):
             media_groups = [urls[i:i + 10] for i in range(0, len(urls), 10)]
             for group in media_groups:
                 media = [InputMediaPhoto(url) if 'jpg' in url else InputMediaVideo(url) for url in group]
-                media[-1].caption = f"<a href='tg://user?id={message.from_user.id}'><b>↬  υ𝐬𝐞𝐫</b></a>\n\n<b>📥 {main_caption}{keyboard_saver[language]}</b>"
+                media[
+                    -1].caption = f"<a href='tg://user?id={message.from_user.id}'><b>↬  υ𝐬𝐞𝐫</b></a>\n\n<b>📥 {main_caption}{keyboard_saver[language]}</b>"
                 await bot.send_media_group(chat_id=message.chat.id, media=media)
         await waiting_msg.delete()
     except Exception as e:
