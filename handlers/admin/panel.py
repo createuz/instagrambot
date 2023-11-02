@@ -34,6 +34,7 @@ async def add_admin_handler(call: types.CallbackQuery):
     return
 
 
+
 @dp.callback_query_handler(text="admins_data")
 async def admin_send_message(call: types.CallbackQuery):
     if call.message.chat.id in ADMINS:
@@ -59,6 +60,7 @@ async def admin_send_message(call: types.CallbackQuery):
             return await bot.send_message(chat_id=call.message.chat.id,
                                           text=f'<b>🛑 Hozirda Admin malumotlari muvjud emas</b>')
     return
+
 
 
 @dp.callback_query_handler(text="add_admin")
