@@ -154,3 +154,6 @@ async def send_instagram_media(message: types.Message):
         await waiting_msg.delete()
         return await bot.send_message(message.chat.id, text=keyboards.down_err[language].format(link),
                                       disable_web_page_preview=True, protect_content=True)
+
+
+

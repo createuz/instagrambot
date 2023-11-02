@@ -6,7 +6,7 @@ from sqlalchemy import Column, Integer, String, select, func, delete, insert
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 from aiogram.dispatcher.filters import Text
-import aiohttp, logging
+import aiohttp,logging
 from sqlalchemy import select, insert, update, text
 from sqlalchemy.ext.asyncio import create_async_engine
 from pyquery import PyQuery as pq
