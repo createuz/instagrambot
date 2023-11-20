@@ -63,30 +63,19 @@ async def send_instagram_media(message: types.Message):
     link = message.text
     language = await Group.get_language(message.chat.id)
     try:
-        insta_data = await InstagramMediaDB.get_video_url(message.text)
-        if insta_data:
-            media = [InputMediaPhoto(url) if 'jpg' in url else InputMediaVideo(url) for url in insta_data]
-            media[
-                -1].caption = f"<a href='tg://user?id={message.from_user.id}'><b>↬  υ𝐬𝐞𝐫</b></a>\n\n<b>📥 {main_caption}{keyboard_saver[language]}</b>"
-            await bot.send_media_group(chat_id=message.chat.id, media=media)
-            await message.delete()
-        else:
-            await message.delete()
-            waiting_msg = await bot.send_message(chat_id=message.chat.id,
-                                                 text=f"<b>📥 {keyboard_waiting[language]}</b>", protect_content=True)
-            async with aiohttp.ClientSession() as session:
-                urls = await instagram_downloader_photo_video(link, session=session)
-            if urls is None or not urls:
-                await waiting_msg.delete()
-                return await bot.send_message(message.chat.id, text=down_err[language].format(link),
-                                              disable_web_page_preview=True)
-            media = [InputMediaPhoto(url) if 'jpg' in url else InputMediaVideo(url) for url in
-                     urls]
-            media[
-                -1].caption = f"<a href='tg://user?id={message.from_user.id}'><b>↬  υ𝐬𝐞𝐫</b></a>\n\n<b>📥 {main_caption}{keyboard_saver[language]}</b>"
-            await bot.send_media_group(chat_id=message.chat.id, media=media)
+        await message.delete()
+        waiting_msg = await bot.send_message(chat_id=message.chat.id,
+                                             text=f"<b>📥 {keyboard_waiting[language]}</b>", protect_content=True)
+        urls = await download_media(link=link)
+        if urls is None or not urls:
             await waiting_msg.delete()
-            await InstagramMediaDB.create_media_list(message.text, urls)
+            return await bot.send_message(message.chat.id, text=down_err[language].format(link),
+                                          disable_web_page_preview=True)
+        media = [InputMediaPhoto(url) if 'jpg' in url else InputMediaVideo(url) for url in urls]
+        media[
+            -1].caption = f"<a href='tg://user?id={message.from_user.id}'><b>↬  υ𝐬𝐞𝐫</b></a>\n\n<b>📥 {main_caption}{keyboard_saver[language]}</b>"
+        await bot.send_media_group(chat_id=message.chat.id, media=media)
+        await waiting_msg.delete()
     except Exception as e:
         await waiting_msg.delete()
         logger.exception("Error while sending Instagram photo: %s", e)
@@ -102,18 +91,17 @@ async def send_instagram_media(message: types.Message):
     waiting_msg = await bot.send_message(chat_id=message.chat.id,
                                          text=f"<b>📥 {keyboard_waiting[language]}</b>", protect_content=True)
     try:
-        async with aiohttp.ClientSession() as session:
-            urls = await instagram_downloader_photo_video(link, session=session)
-            if urls is None or not urls:
-                await waiting_msg.delete()
-                return await bot.send_message(message.chat.id, text=down_err[language].format(link),
-                                              disable_web_page_preview=True)
-            media_groups = [urls[i:i + 10] for i in range(0, len(urls), 10)]
-            for group in media_groups:
-                media = [InputMediaPhoto(url) if 'jpg' in url else InputMediaVideo(url) for url in group]
-                media[
-                    -1].caption = f"<a href='tg://user?id={message.from_user.id}'><b>↬  υ𝐬𝐞𝐫</b></a>\n\n<b>📥 {main_caption}{keyboard_saver[language]}</b>"
-                await bot.send_media_group(chat_id=message.chat.id, media=media)
+        urls = await download_media(link=link)
+        if urls is None or not urls:
+            await waiting_msg.delete()
+            return await bot.send_message(message.chat.id, text=down_err[language].format(link),
+                                          disable_web_page_preview=True)
+        media_groups = [urls[i:i + 10] for i in range(0, len(urls), 10)]
+        for group in media_groups:
+            media = [InputMediaPhoto(url) if 'jpg' in url else InputMediaVideo(url) for url in group]
+            media[
+                -1].caption = f"<a href='tg://user?id={message.from_user.id}'><b>↬  υ𝐬𝐞𝐫</b></a>\n\n<b>📥 {main_caption}{keyboard_saver[language]}</b>"
+            await bot.send_media_group(chat_id=message.chat.id, media=media)
         await waiting_msg.delete()
     except Exception as e:
         logger.exception("Error while sending Instagram photo: %s", e)
