@@ -1,8 +1,10 @@
+from aiogram.dispatcher import FSMContext
+from aiogram.types import InputMediaPhoto, InputMediaVideo
+
 import keyboards
-from states import *
-from downloader import *
-from databasedb.models import *
-from loader import *
+from download import *
+from data import *
+from utlis.models import *
 from aiogram import types
 
 
@@ -105,7 +107,6 @@ async def send_instagram_media(message: types.Message):
                                              text=f"<b>📥 {keyboards.keyboard_waiting[language]}</b>",
                                              protect_content=True)
         urls = await download_media(link=link)
-        print(urls)
         if urls is None or not urls:
             await waiting_msg.delete()
             return await bot.send_message(message.chat.id, text=keyboards.down_err[language].format(link),
@@ -114,6 +115,7 @@ async def send_instagram_media(message: types.Message):
         media[-1].caption = f"<b>📥 {main_caption}{keyboards.keyboard_saver[language]}</b>"
         await bot.send_media_group(chat_id=message.chat.id, media=media)
         await waiting_msg.delete()
+
     except Exception as e:
         await waiting_msg.delete()
         logger.exception("Error while sending Instagram photo: %s", e)

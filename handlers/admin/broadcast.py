@@ -1,7 +1,16 @@
+import asyncio
+import re
+import time
+
+from aiogram.dispatcher import FSMContext
+from aiogram.types import ContentType
+
 from keyboards import *
-from states import *
-from loader import *
-from databasedb.models import User, Group
+from data import *
+from utlis.models import User, Group
+
+logging.basicConfig(format=u'%(filename)s [LINE:%(lineno)d] #%(levelname)-8s [%(asctime)s]  %(message)s',
+                    level=logging.INFO)
 
 
 async def replace_text_with_links(text):
@@ -31,7 +40,7 @@ async def send_message_all(chat_id, text=None, video=None, photo=None, caption=N
             await bot.send_photo(chat_id=chat_id, photo=photo, caption=f"<b>{caption}</b>", reply_markup=keyboard)
         return True
     except Exception as e:
-        logger.exception("Xabarni yuborishda xatolik: %s", e)
+        logging.exception("Xabarni yuborishda xatolik: %s", e)
         return False
 
 
@@ -47,7 +56,7 @@ async def send_messages_to_users(user_ids: list, text=None, video=None, photo=No
             await asyncio.sleep(.05)
         return active_count, no_active_count
     except Exception as e:
-        logger.exception("Xabarni yuborishda xatolik: %s", e)
+        logging.exception("Xabarni yuborishda xatolik: %s", e)
         return False
 
 
@@ -64,7 +73,7 @@ async def send_messages_to_groups(group_ids: list, text=None, video=None, photo=
             await asyncio.sleep(.05)
         return active_count, no_active_count
     except Exception as e:
-        logger.exception("Xabarni yuborishda xatolik: %s", e)
+        logging.exception("Xabarni yuborishda xatolik: %s", e)
         return False
 
 
@@ -100,7 +109,7 @@ async def admin_send_message_all(text=None, video=None, photo=None, caption=None
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━'''
         await bot.send_message(ADMINS, text=f"<b>{msg}</b>")
     except Exception as e:
-        logger.exception("Xabarni yuborishda xatolik: %s", e)
+        logging.exception("Xabarni yuborishda xatolik: %s", e)
         await bot.send_message(ADMINS, 'Xabarni yuborishda xatolik yuz berdi.')
 
 

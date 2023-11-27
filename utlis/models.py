@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from sqlalchemy import Column, String, Integer, func, BigInteger, Text, update, delete, JSON, DateTime, and_
 from sqlalchemy.future import select
-from databasedb import Base, db
+from utlis.database import Base, db
 
 db.init()
 
@@ -174,28 +174,16 @@ class Admin(Base):
             return True
 
 
-class StatisticDB(Base):
-    __tablename__ = 'statistic'
+class Statistics(Base):
+    __tablename__ = 'statistics'
     id = Column(Integer, primary_key=True, autoincrement=True)
-    media_count = Column(BigInteger)
+    media_count = Column(BigInteger, default=1)
 
     @classmethod
-    async def create_media_count(cls, media_count):
-        media = cls(media_count=media_count)
-        async with db() as session:
-            session.add(media)
-            try:
-                await session.commit()
-            except Exception:
-                await session.rollback()
-                raise
-        return media
-
-    @classmethod
-    async def update_media_count(cls, new_media_count):
+    async def add_media(cls, count: int):
         async with db() as session:
             await session.execute(
-                update(cls).values(media_count=cls.media_count + new_media_count).order_by(cls.id.desc()).limit(1))
+                update(cls).values(media_count=cls.media_count + count))
             try:
                 await session.commit()
             except Exception:
@@ -203,9 +191,10 @@ class StatisticDB(Base):
                 raise
 
     @classmethod
-    async def get_total_media_count(cls):
+    async def get_media_count(cls):
         async with db() as session:
-            return await session.scalar(select(func.sum(cls.media_count)))
+            return await session.scalar(select(cls.media_count))
+
 
 
 class Channel(Base):
@@ -260,52 +249,3 @@ class Channel(Base):
                 await session.rollback()
                 raise
             return True
-
-
-class InstagramMediaDB(Base):
-    __tablename__ = 'media'
-    id = Column(BigInteger, primary_key=True, autoincrement=True)
-    video_id = Column(Text)
-    video_url = Column(JSON)
-
-    @classmethod
-    async def create_media_list(cls, video_id, video_url):
-        media = cls(video_id=video_id, video_url=video_url)
-        async with db() as session:
-            session.add(media)
-            try:
-                await session.commit()
-            except Exception:
-                await session.rollback()
-                raise
-        return media
-
-    @classmethod
-    async def get_video_url(cls, video_id):
-        async with db() as session:
-            return await session.scalar(select(cls.video_url).where(cls.video_id == video_id))
-
-    @classmethod
-    async def get_all_video_url(cls):
-        async with db() as session:
-            result = await session.execute(select(cls.video_url))
-            return [row[0] for row in result.all()]
-
-    @classmethod
-    async def delete(cls, video_id):
-        async with db() as session:
-            await session.execute(delete(cls).where(cls.video_id == video_id))
-            try:
-                await session.commit()
-            except Exception:
-                await session.rollback()
-                raise
-            return True
-
-    @classmethod
-    async def count_media(cls):
-        async with db() as session:
-            return await session.scalar(select(cls.id).order_by(cls.id.desc()))
-
-
-

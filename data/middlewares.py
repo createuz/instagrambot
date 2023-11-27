@@ -7,7 +7,7 @@ from aiogram.utils.exceptions import Throttled
 
 def rate_limit(limit: int, key=None):
     """
-    Decorator for configuring rate limit and key in different downloader.
+    Decorator for configuring rate limit and key in different download.
 
     :param limit:
     :param key:

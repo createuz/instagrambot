@@ -1,7 +1,11 @@
+from aiogram.dispatcher import FSMContext
+from aiogram.types import InputMediaPhoto, InputMediaVideo
+
+from data import *
+from aiogram import types
 from keyboards import *
-from downloader import *
-from databasedb.models import *
-from loader import *
+from download import *
+from utlis.models import *
 
 
 @dp.message_handler(commands=['start'])

@@ -1,9 +1,14 @@
 from collections import Counter
+from aiogram.dispatcher import FSMContext
+from aiogram.types import ContentType
 
-from databasedb.models import *
+from utlis.models import *
+
 from keyboards import *
-from states import *
-from loader import *
+from data import *
+
+logging.basicConfig(format=u'%(filename)s [LINE:%(lineno)d] #%(levelname)-8s [%(asctime)s]  %(message)s',
+                    level=logging.INFO)
 
 
 @dp.message_handler(commands=['admin'])
@@ -55,7 +60,7 @@ async def admin_send_message(call: types.CallbackQuery):
             return await bot.edit_message_text(chat_id=call.message.chat.id, message_id=callback_id,
                                                text=f'<b>🛑 Hozirda Admin malumotlari muvjud emas</b>')
         except Exception as e:
-            logger.exception("Xatolik: %s", e)
+            logging.exception("Xatolik: %s", e)
             return await bot.send_message(chat_id=call.message.chat.id,
                                           text=f'<b>🛑 Hozirda Admin malumotlari muvjud emas</b>')
     return
@@ -120,7 +125,7 @@ async def admin_send_message_delete(call: types.CallbackQuery):
             await bot.delete_message(chat_id, callback_id)
             await bot.answer_callback_query(callback_query_id=call.id)
         except Exception as e:
-            logger.exception("Xatolik: %s", e)
+            logging.exception("Xatolik: %s", e)
     return
 
 
@@ -130,36 +135,6 @@ async def admin_send_message(call: types.CallbackQuery):
     callback_id = call.message.message_id
     await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text="<b>💬 Xabar turini Tanlang</b>",
                                 reply_markup=send_message_kb)
-
-
-def hash_password(password):
-    salt = bcrypt.gensalt()
-    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
-    return hashed_password.decode('utf-8')
-
-
-def check_password(password, hashed_password):
-    return bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8'))
-
-
-@dp.message_handler(commands=['cleardb'])
-async def clear_db_handler(message: types.Message):
-    if message.chat.id in ADMINS:
-        try:
-            user_input = message.text.split(' ')[1] if len(message.text.split(' ')) > 1 else None
-            if not user_input:
-                await message.answer("❌ Parolni kiriting: /cleardb <parol>")
-                return
-            if check_password(user_input, ADMIN_PASSWORD_HASH):
-                async with db() as session:
-                    await session.execute(InstagramMediaDB.__table__.delete())
-                    await session.commit()
-                await message.answer("✅ Ma'lumotlar tozalandi.")
-            else:
-                await message.answer("❌ Xato parol! To'g'ri parolni kiriting.")
-        except Exception as e:
-            await message.answer(f"❌ Xatolik yuz berdi: {str(e)}")
-    return
 
 
 @dp.message_handler(commands=['break'])
@@ -181,7 +156,7 @@ async def chose_statistics(call: types.CallbackQuery):
             await bot.edit_message_text(chat_id=call.from_user.id, message_id=call.message.message_id,
                                         text='<b>📊 Chose Statistic</b>', reply_markup=chose_statistic_kb)
         except Exception as e:
-            logger.exception("Xatolik: %s", e)
+            logging.exception("Xatolik: %s", e)
     return
 
 
@@ -189,38 +164,17 @@ async def chose_statistics(call: types.CallbackQuery):
 async def chose_statistics(call: types.CallbackQuery):
     if call.message.chat.id in ADMINS:
         try:
-            stat = await InstagramMediaDB.count_media()
+            media_count = await Statistics.get_media_count()
             msj = f'''
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ 📊 Media Statistic
 ┣━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ 📥 Total Media Count:  {stat}
+┃ 📥 Total Media Count:  {media_count}
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━'''
             await bot.edit_message_text(chat_id=call.from_user.id, message_id=call.message.message_id,
                                         text=f"<b>{msj}</b>", reply_markup=back_media_statistic)
         except Exception as e:
-            logger.exception("Xatolik: %s", e)
-    return
-
-
-@dp.message_handler(commands=['update_media'])
-async def chose_statistics(message: types.Message):
-    if message.chat.id in ADMINS:
-        await message.delete()
-        await bot.send_message(chat_id=message.chat.id, text='<b>Miqdorni kiriting max: 1000 ta</b>')
-        await AddAdmin.waiting_for_miqdor.set()
-    return
-
-
-@dp.message_handler(state=AddAdmin.waiting_for_miqdor, content_types=ContentType.TEXT)
-async def add_admin_save_handler(message: types.Message, state: FSMContext):
-    if message.chat.id in ADMINS:
-        try:
-            await StatisticDB.update_media_count(int(message.text))
-            await bot.send_message(message.chat.id, f"Total media count oshirildi ✅")
-            await state.finish()
-        except Exception as e:
-            await message.answer(f"❌ Xatolik yuz berdi: {str(e)}")
+            logging.exception("Xatolik: %s", e)
     return
 
 
@@ -250,7 +204,7 @@ async def user_language_statistics():
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━'''
         return user_statist
     except Exception as e:
-        logger.exception("Xatolik: %s", e)
+        logging.exception("Xatolik: %s", e)
         return None
 
 
@@ -278,7 +232,7 @@ async def group_language_statistics():
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━'''
         return group_statist
     except Exception as e:
-        logger.exception("Xatolik: %s", e)
+        logging.exception("Xatolik: %s", e)
         return None
 
 
@@ -293,7 +247,7 @@ async def total_user_statistics(call: types.CallbackQuery):
             await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text=f'<b>{user}</b>',
                                         reply_markup=update_user_statistic)
         except Exception as e:
-            logger.exception("Xatolik: %s", e)
+            logging.exception("Xatolik: %s", e)
     return
 
 
@@ -308,7 +262,7 @@ async def update_total_user_statistics(call: types.CallbackQuery):
             await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text=f'<b>{user}</b>',
                                         reply_markup=update_user_statistic_2x)
         except Exception as e:
-            logger.exception("Xatolik: %s", e)
+            logging.exception("Xatolik: %s", e)
     return
 
 
@@ -323,7 +277,7 @@ async def total_group_statistics(call: types.CallbackQuery):
             await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text=f'<b>{group}</b>',
                                         reply_markup=update_group_statistic)
         except Exception as e:
-            logger.exception("Xatolik: %s", e)
+            logging.exception("Xatolik: %s", e)
     return
 
 
@@ -338,5 +292,5 @@ async def update_total_group_statistics(call: types.CallbackQuery):
             await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text=f'<b>{group}</b>',
                                         reply_markup=update_group_statistic_2x)
         except Exception as e:
-            logger.exception("Xatolik: %s", e)
+            logging.exception("Xatolik: %s", e)
     return

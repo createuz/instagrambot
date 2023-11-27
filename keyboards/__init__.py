@@ -1,2 +1,2 @@
-from .keybord_menu import *
-from .choose_lang import *
+from .buttons import *
+from .langs import *

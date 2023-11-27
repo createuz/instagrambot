@@ -1,10 +1,11 @@
+from aiogram.utils import executor
+
 from handlers import *
-from misc import on_startup
 
 
 async def main():
     db.init()
-    logging.info("Starting bot polling...")
+    logger.info("....... Starting bot polling ........")
     await on_startup(dp)
     await db.create_all()
     await dp.start_polling()
