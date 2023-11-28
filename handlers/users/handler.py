@@ -10,20 +10,22 @@ from aiogram import types
 
 @dp.message_handler(commands=['start'], chat_type=types.ChatType.PRIVATE)
 async def start_handler_lang(message: types.Message):
-    await message.delete()
-    try:
-        language = await User.get_language(message.chat.id)
-        if language:
-            await bot.send_message(message.from_id, text=f"<b>{keyboards.select_dict[language]}</b>",
-                                   reply_markup=keyboards.keyboard_group[language],
-                                   disable_web_page_preview=True, protect_content=True)
-        else:
-            await bot.send_message(message.chat.id, text=keyboards.choose_button,
-                                   reply_markup=keyboards.language_keyboard,
-                                   protect_content=True)
-            await LanguageSelection.select_language.set()
-    except Exception as e:
-        logger.exception("Error while processing start command: %s", e)
+    await bot.send_video(message.chat.id,
+                         'https://instagram.ftas10-1.fna.fbcdn.net/o1/v/t16/f1/m69/GCnH7ROVfsQ-gwADANrlKzQdqq1SbpR1AAAF.mp4?efg=eyJxZV9ncm91cHMiOiJbXCJpZ193ZWJfZGVsaXZlcnlfdnRzX290ZlwiXSIsInZlbmNvZGVfdGFnIjoidnRzX3ZvZF91cmxnZW4uY2xpcHMuYzIuMTA4MC5oaWdoIn0&_nc_ht=instagram.ftas10-1.fna.fbcdn.net&_nc_cat=110&vs=249754724780452_488212320&_nc_vs=HBksFQIYOnBhc3N0aHJvdWdoX2V2ZXJzdG9yZS9HQ25IN1JPVmZzUS1nd0FEQU5ybEt6UWRxcTFTYnBSMUFBQUYVAALIAQAVAhg6cGFzc3Rocm91Z2hfZXZlcnN0b3JlL0dLVzNTQWVtRDVSOWZENERBTVZ3QnB1ZnVVWWxicFIxQUFBRhUCAsgBACgAGAAbABUAACaUlM%2FP4r7MPxUCKAJDMywXQCQAAAAAAAAYEmRhc2hfaGlnaF8xMDgwcF92MREAdf4HAA%3D%3D&_nc_rid=f5503844b5&ccb=9-4&oh=00_AfBA11UNmyNnxHvBvJ-gmrJ3ABZkHHe9cNoWRKE4I80zlg&oe=6567939A&_nc_sid=4f4799')
+    # await message.delete()
+    # try:
+    #     language = await User.get_language(message.chat.id)
+    #     if language:
+    #         await bot.send_message(message.from_id, text=f"<b>{keyboards.select_dict[language]}</b>",
+    #                                reply_markup=keyboards.keyboard_group[language],
+    #                                disable_web_page_preview=True, protect_content=True)
+    #     else:
+    #         await bot.send_message(message.chat.id, text=keyboards.choose_button,
+    #                                reply_markup=keyboards.language_keyboard,
+    #                                protect_content=True)
+    #         await LanguageSelection.select_language.set()
+    # except Exception as e:
+    #     logger.exception("Error while processing start command: %s", e)
 
 
 @dp.callback_query_handler(lambda c: c.data in keyboards.languages.keys(), state=LanguageSelection.select_language,
