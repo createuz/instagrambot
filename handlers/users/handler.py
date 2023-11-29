@@ -1,31 +1,32 @@
+import re
+import time
+
 from aiogram.dispatcher import FSMContext
 from aiogram.types import InputMediaPhoto, InputMediaVideo
-
-import keyboards
-from download import *
-from data import *
 from utlis.models import *
-from aiogram import types
+import keyboards
+from data import *
+from instagram.api import InstagramAPI
+
+instagram_api = InstagramAPI()
 
 
 @dp.message_handler(commands=['start'], chat_type=types.ChatType.PRIVATE)
 async def start_handler_lang(message: types.Message):
-    await bot.send_video(message.chat.id,
-                         'https://instagram.ftas10-1.fna.fbcdn.net/o1/v/t16/f1/m69/GCnH7ROVfsQ-gwADANrlKzQdqq1SbpR1AAAF.mp4?efg=eyJxZV9ncm91cHMiOiJbXCJpZ193ZWJfZGVsaXZlcnlfdnRzX290ZlwiXSIsInZlbmNvZGVfdGFnIjoidnRzX3ZvZF91cmxnZW4uY2xpcHMuYzIuMTA4MC5oaWdoIn0&_nc_ht=instagram.ftas10-1.fna.fbcdn.net&_nc_cat=110&vs=249754724780452_488212320&_nc_vs=HBksFQIYOnBhc3N0aHJvdWdoX2V2ZXJzdG9yZS9HQ25IN1JPVmZzUS1nd0FEQU5ybEt6UWRxcTFTYnBSMUFBQUYVAALIAQAVAhg6cGFzc3Rocm91Z2hfZXZlcnN0b3JlL0dLVzNTQWVtRDVSOWZENERBTVZ3QnB1ZnVVWWxicFIxQUFBRhUCAsgBACgAGAAbABUAACaUlM%2FP4r7MPxUCKAJDMywXQCQAAAAAAAAYEmRhc2hfaGlnaF8xMDgwcF92MREAdf4HAA%3D%3D&_nc_rid=f5503844b5&ccb=9-4&oh=00_AfBA11UNmyNnxHvBvJ-gmrJ3ABZkHHe9cNoWRKE4I80zlg&oe=6567939A&_nc_sid=4f4799')
-    # await message.delete()
-    # try:
-    #     language = await User.get_language(message.chat.id)
-    #     if language:
-    #         await bot.send_message(message.from_id, text=f"<b>{keyboards.select_dict[language]}</b>",
-    #                                reply_markup=keyboards.keyboard_group[language],
-    #                                disable_web_page_preview=True, protect_content=True)
-    #     else:
-    #         await bot.send_message(message.chat.id, text=keyboards.choose_button,
-    #                                reply_markup=keyboards.language_keyboard,
-    #                                protect_content=True)
-    #         await LanguageSelection.select_language.set()
-    # except Exception as e:
-    #     logger.exception("Error while processing start command: %s", e)
+    await message.delete()
+    try:
+        language = await User.get_language(message.chat.id)
+        if language:
+            await bot.send_message(message.from_id, text=f"<b>{keyboards.select_dict[language]}</b>",
+                                   reply_markup=keyboards.keyboard_group[language],
+                                   disable_web_page_preview=True, protect_content=True)
+        else:
+            await bot.send_message(message.chat.id, text=keyboards.choose_button,
+                                   reply_markup=keyboards.language_keyboard,
+                                   protect_content=True)
+            await LanguageSelection.select_language.set()
+    except Exception as e:
+        logger.exception("Error while processing start command: %s", e)
 
 
 @dp.callback_query_handler(lambda c: c.data in keyboards.languages.keys(), state=LanguageSelection.select_language,
@@ -97,18 +98,24 @@ async def help_handler(message: types.Message):
         logger.exception("Error while processing start command: %s", e)
 
 
-@dp.message_handler(regexp=r'https?:\/\/(www\.)?instagram\.com\/(reel|p|tv)\/([-_a-zA-Z0-9]{11})',
+@dp.message_handler(regexp=r'https?:\/\/(www\.)?instagram\.com\/(reel|p)\/([-_a-zA-Z0-9]{11})',
                     chat_type=types.ChatType.PRIVATE)
 async def send_instagram_media(message: types.Message):
     global waiting_msg, delete_msg
     link = message.text
     language = await User.get_language(message.chat.id)
+    await message.delete()
+    match = re.search(r'https://www.instagram.com/(?:p|reel)/([-_a-zA-Z0-9]{11})', link)
+    vid = match.group(1) if match else None
     try:
-        await message.delete()
+        cached_data = instagram_api.cache.get(vid, {})
+        if cached_data.get('timestamp', 0) >= time.time() - 2629746:
+            media = cached_data.get('result')
+            return await bot.send_media_group(chat_id=message.chat.id, media=media)
         waiting_msg = await bot.send_message(chat_id=message.chat.id,
                                              text=f"<b>📥 {keyboards.keyboard_waiting[language]}</b>",
                                              protect_content=True)
-        urls = await download_media(link=link)
+        urls = await instagram_api.instagram_downloader(vid=vid)
         if urls is None or not urls:
             await waiting_msg.delete()
             return await bot.send_message(message.chat.id, text=keyboards.down_err[language].format(link),
@@ -117,7 +124,7 @@ async def send_instagram_media(message: types.Message):
         media[-1].caption = f"<b>📥 {main_caption}{keyboards.keyboard_saver[language]}</b>"
         await bot.send_media_group(chat_id=message.chat.id, media=media)
         await waiting_msg.delete()
-
+        instagram_api.cache[vid] = {'result': media, 'timestamp': time.time()}
     except Exception as e:
         await waiting_msg.delete()
         logger.exception("Error while sending Instagram photo: %s", e)
@@ -133,7 +140,7 @@ async def send_instagram_media(message: types.Message):
     waiting_msg = await bot.send_message(chat_id=message.chat.id,
                                          text=f"<b>📥 {keyboards.keyboard_waiting[language]}</b>", protect_content=True)
     try:
-        urls = await download_media(link=link)
+        urls = await instagram_api.instagram_stories(link=link)
         if urls is None or not urls:
             await waiting_msg.delete()
             return await bot.send_message(message.chat.id, text=keyboards.down_err[language].format(link),
