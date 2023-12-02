@@ -22,7 +22,7 @@ class InstagramAPI:
                     for i in items.get('carousel_media', [{}])] if is_carousel else [
                 get_url(items, 'video_versions') or get_url(items.get('image_versions2', {}), 'candidates')]
         except Exception as e:
-            logger.error(f"• Download error: {e}")
+            logger.exception(f"• Download error: {e}")
             return None
 
     async def counts(self, views):
@@ -44,7 +44,8 @@ class InstagramAPI:
             user = response.json().get('graphql', {}).get('user', {})
             user_id, username, full_name, biography = (user.get('id', ''), user.get('username', ''),
                                                        user.get('full_name', ''), user.get('biography', ''))
-            bio_links = [f"<a href='{link.get('url')}'>{link.get('title', '• link')}</a>" for link in user.get('bio_links', [])]
+            bio_links = [f"<a href='{link.get('url')}'>{link.get('title', '• link')}</a>" for link in
+                         user.get('bio_links', []) if link.get('url')]
             bio_links = ' • '.join(bio_links) if bio_links else ''
             followers = await self.counts(user.get('edge_followed_by', {}).get('count', ''))
             following = await self.counts(user.get('edge_follow', {}).get('count', ''))
@@ -67,9 +68,9 @@ class InstagramAPI:
             user_data += f"👤  {language_dict.get('following', '').format(following=following)}" if following else ""
             user_data += f"❤  {language_dict.get('total_likes_count', '').format(total_likes_count=total_likes_count)}" if total_likes_count else ""
             user_data += f"💬  {language_dict.get('total_comments_count', '').format(total_comments_count=total_comments_count)}" if total_comments_count else ""
-            return user.get('profile_pic_url_hd', ''), user_data
+            return user
         except Exception as e:
-            logger.error(f"• User data error: {e}")
+            logger.exception(f"• User data error: {e}")
             return None
 
     async def instagram_user_stories(self, username: str) -> Union[list, None]:
@@ -80,11 +81,11 @@ class InstagramAPI:
             return [get_url(item, 'video_versions') or get_url(item.get('image_versions2', {}), 'candidates')
                     for item in response.json().get('result', [{}])]
         except Exception as e:
-            logger.error(f"• User stories error: {e}")
+            logger.exception(f"• User stories error: {e}")
             return None
 
 
 # 'https://www.instagram.com/abdullaziz_mee/?e=0ddc5e7e-6c7a-4084-85e4-ca7c2eecebc5&g=5'
 #
-tests = InstagramAPI()
-print(asyncio.run(tests.instagram_downloader('C0Qnm4HNMI3')))
+# tests = InstagramAPI()
+# print(asyncio.run(tests.instagram_user_data('Uzbek', 'sh.coder')))

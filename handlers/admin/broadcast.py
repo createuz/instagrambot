@@ -15,8 +15,8 @@ logging.basicConfig(format=u'%(filename)s [LINE:%(lineno)d] #%(levelname)-8s [%(
 
 async def replace_text_with_links(text):
     def create_html_link(match):
-        text, url = match.groups()
-        return f'<a href="{url}">{text}</a>'
+        text_name, url = match.groups()
+        return f'<a href="{url}">{text_name}</a>'
 
     pattern = r'\((.*?)\)\[(.*?)\]'
     replaced_text = re.sub(pattern, create_html_link, text)
@@ -40,7 +40,7 @@ async def send_message_all(chat_id, text=None, video=None, photo=None, caption=N
             await bot.send_photo(chat_id=chat_id, photo=photo, caption=f"<b>{caption}</b>", reply_markup=keyboard)
         return True
     except Exception as e:
-        logging.exception("Xabarni yuborishda xatolik: %s", e)
+        logger.exception("Xabarni yuborishda xatolik: %s", e)
         return False
 
 
@@ -53,7 +53,7 @@ async def send_messages_to_users(user_ids: list, text=None, video=None, photo=No
                 active_count += 1
             else:
                 no_active_count += 1
-            await asyncio.sleep(.05)
+            await asyncio.sleep(0.04)
         return active_count, no_active_count
     except Exception as e:
         logging.exception("Xabarni yuborishda xatolik: %s", e)
@@ -70,7 +70,7 @@ async def send_messages_to_groups(group_ids: list, text=None, video=None, photo=
                 active_count += 1
             else:
                 no_active_count += 1
-            await asyncio.sleep(.05)
+            await asyncio.sleep(0.04)
         return active_count, no_active_count
     except Exception as e:
         logging.exception("Xabarni yuborishda xatolik: %s", e)
@@ -79,8 +79,8 @@ async def send_messages_to_groups(group_ids: list, text=None, video=None, photo=
 
 async def admin_send_message_all(text=None, video=None, photo=None, caption=None, keyboard=None):
     try:
-        start_time = time.time()
         admin_language = await User.get_language(int(ADMINS[0]))
+        start_time = time.time()
         all_user_ids = await User.get_all_user(admin_language)
         all_group_ids = await Group.get_all_group(admin_language)
         active_users, no_active_users = await send_messages_to_users(all_user_ids, text=text, video=video, photo=photo,
@@ -107,16 +107,16 @@ async def admin_send_message_all(text=None, video=None, photo=None, caption=None
 ┣━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ •  Total time:  {date}
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━'''
-        await bot.send_message(ADMINS, text=f"<b>{msg}</b>")
+        await bot.send_message(ADMINS[0], text=f"<b>{msg}</b>")
     except Exception as e:
         logging.exception("Xabarni yuborishda xatolik: %s", e)
-        await bot.send_message(ADMINS, 'Xabarni yuborishda xatolik yuz berdi.')
+        await bot.send_message(ADMINS[0], 'Xabarni yuborishda xatolik yuz berdi.')
 
 
 ## =============================== SEND A TEXT ===================================
 
 
-@dp.callback_query_handler(text="text", chat_id=ADMINS)
+@dp.callback_query_handler(text="text", chat_id=ADMINS[0])
 async def send_voice_to_all(call: types.CallbackQuery):
     chat_id = call.from_user.id
     callback_id = call.message.message_id
@@ -133,36 +133,44 @@ async def video_caption(message: types.Message, state: FSMContext):
     await SendText.waiting_for_new_btn.set()
 
 
-@dp.callback_query_handler(state=SendText.waiting_for_new_btn, chat_id=ADMINS)
+@dp.callback_query_handler(state=SendText.waiting_for_new_btn, chat_id=ADMINS[0])
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
-    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
-    if call.data == 'add_btn':
-        await call.message.answer('Iltimos, birinchi tugma nomini kiriting.')
-        await SendText.waiting_for_button_name_1.set()
-    elif call.data == 'send_message':
-        async with state.proxy() as data:
-            text = data['text']
-        await bot.send_message(chat_id=ADMINS, text=f"<b>{text}</b>", disable_web_page_preview=True)
-        await bot.send_message(chat_id=ADMINS,
-                               text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
-                                    "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
-        await SendText.waiting_for_is_not_btn.set()
-    else:
-        await call.message.delete()
-        await state.finish()
-
-
-@dp.callback_query_handler(state=SendText.waiting_for_is_not_btn, chat_id=ADMINS)
-async def send_rek(call: types.CallbackQuery, state: FSMContext):
-    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
-    if call.data == 'send_message':
-        async with state.proxy() as data:
-            text = data['text']
-            await admin_send_message_all(text=text)
+    try:
+        await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
+        if call.data == 'add_btn':
+            await call.message.answer('Iltimos, birinchi tugma nomini kiriting.')
+            await SendText.waiting_for_button_name_1.set()
+        elif call.data == 'send_message':
+            async with state.proxy() as data:
+                text = data['text']
+            await bot.send_message(chat_id=ADMINS[0], text=f"<b>{text}</b>", disable_web_page_preview=True)
+            await bot.send_message(chat_id=ADMINS[0],
+                                   text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
+                                        "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
+            await SendText.waiting_for_is_not_btn.set()
+        else:
+            await call.message.delete()
             await state.finish()
-    else:
-        await call.message.delete()
-        await state.finish()
+    except Exception as e:
+        logging.exception("Xabarni yuborishda xatolik: %s", e)
+        return
+
+
+@dp.callback_query_handler(state=SendText.waiting_for_is_not_btn, chat_id=ADMINS[0])
+async def send_rek(call: types.CallbackQuery, state: FSMContext):
+    try:
+        await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
+        if call.data == 'send_message':
+            async with state.proxy() as data:
+                text = data['text']
+                await admin_send_message_all(text=text)
+                await state.finish()
+        else:
+            await call.message.delete()
+            await state.finish()
+    except Exception as e:
+        logging.exception("Xabarni yuborishda xatolik: %s", e)
+        return
 
 
 @dp.message_handler(state=SendText.waiting_for_button_name_1, content_types=ContentType.TEXT)
@@ -181,41 +189,49 @@ async def photo_button_url(message: types.Message, state: FSMContext):
     await SendText.next_call_2.set()
 
 
-@dp.callback_query_handler(state=SendText.next_call_2, chat_id=ADMINS)
+@dp.callback_query_handler(state=SendText.next_call_2, chat_id=ADMINS[0])
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
-    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
-    if call.data == 'button_2':
-        await call.message.answer('Iltimos, ikkinchi tugma nomini kiriting.')
-        await SendText.waiting_for_button_name_2.set()
-    elif call.data == 'send_message':
-        async with state.proxy() as data:
-            text = data['text']
-            keyboard = InlineKeyboardMarkup(row_width=1, resize_keyboard=True).add(
-                InlineKeyboardButton(text=data["btname_1"], url=data['url_1']))
-        await bot.send_message(chat_id=ADMINS, text=f"<b>{text}</b>", reply_markup=keyboard,
-                               disable_web_page_preview=True)
-        await bot.send_message(chat_id=ADMINS,
-                               text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
-                                    "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
-        await SendText.send_all_1.set()
-    else:
-        await call.message.delete()
-        await state.finish()
+    try:
+        await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
+        if call.data == 'button_2':
+            await call.message.answer('Iltimos, ikkinchi tugma nomini kiriting.')
+            await SendText.waiting_for_button_name_2.set()
+        elif call.data == 'send_message':
+            async with state.proxy() as data:
+                text = data['text']
+                keyboard = InlineKeyboardMarkup(row_width=1, resize_keyboard=True).add(
+                    InlineKeyboardButton(text=data["btname_1"], url=data['url_1']))
+            await bot.send_message(chat_id=ADMINS[0], text=f"<b>{text}</b>", reply_markup=keyboard,
+                                   disable_web_page_preview=True)
+            await bot.send_message(chat_id=ADMINS[0],
+                                   text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
+                                        "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
+            await SendText.send_all_1.set()
+        else:
+            await call.message.delete()
+            await state.finish()
+    except Exception as e:
+        logging.exception("Xabarni yuborishda xatolik: %s", e)
+        return
 
 
-@dp.callback_query_handler(state=SendText.send_all_1, chat_id=ADMINS)
+@dp.callback_query_handler(state=SendText.send_all_1, chat_id=ADMINS[0])
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
-    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
-    if call.data == 'send_message':
-        async with state.proxy() as data:
-            text = data['text']
-            keyboard = InlineKeyboardMarkup(row_width=1, resize_keyboard=True).add(
-                InlineKeyboardButton(text=data["btname_1"], url=data['url_1']))
-        await admin_send_message_all(text=text, keyboard=keyboard)
-        await state.finish()
-    else:
-        await call.message.delete()
-        await state.finish()
+    try:
+        await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
+        if call.data == 'send_message':
+            async with state.proxy() as data:
+                text = data['text']
+                keyboard = InlineKeyboardMarkup(row_width=1, resize_keyboard=True).add(
+                    InlineKeyboardButton(text=data["btname_1"], url=data['url_1']))
+            await admin_send_message_all(text=text, keyboard=keyboard)
+            await state.finish()
+        else:
+            await call.message.delete()
+            await state.finish()
+    except Exception as e:
+        logging.exception("Xabarni yuborishda xatolik: %s", e)
+        return
 
 
 @dp.message_handler(state=SendText.waiting_for_button_name_2, content_types=ContentType.TEXT)
@@ -234,46 +250,54 @@ async def photo_button_url(message: types.Message, state: FSMContext):
     await SendText.next_call_3.set()
 
 
-@dp.callback_query_handler(state=SendText.next_call_3, chat_id=ADMINS)
+@dp.callback_query_handler(state=SendText.next_call_3, chat_id=ADMINS[0])
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
-    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
-    if call.data == 'send_message':
-        async with state.proxy() as data:
-            text = data['text']
-            keyboard = InlineKeyboardMarkup(row_width=1, resize_keyboard=True).add(
-                InlineKeyboardButton(text=data["btname_1"], url=data['url_1']),
-                InlineKeyboardButton(text=data["btname_2"], url=data['url_2']))
-        await bot.send_message(chat_id=ADMINS, text=f"<b>{text}</b>", reply_markup=keyboard,
-                               disable_web_page_preview=True)
-        await bot.send_message(chat_id=ADMINS,
-                               text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
-                                    "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
-        await SendText.send_all_2.set()
-    else:
-        await call.message.delete()
-        await state.finish()
+    try:
+        await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
+        if call.data == 'send_message':
+            async with state.proxy() as data:
+                text = data['text']
+                keyboard = InlineKeyboardMarkup(row_width=1, resize_keyboard=True).add(
+                    InlineKeyboardButton(text=data["btname_1"], url=data['url_1']),
+                    InlineKeyboardButton(text=data["btname_2"], url=data['url_2']))
+            await bot.send_message(chat_id=ADMINS[0], text=f"<b>{text}</b>", reply_markup=keyboard,
+                                   disable_web_page_preview=True)
+            await bot.send_message(chat_id=ADMINS[0],
+                                   text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
+                                        "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
+            await SendText.send_all_2.set()
+        else:
+            await call.message.delete()
+            await state.finish()
+    except Exception as e:
+        logging.exception("Xabarni yuborishda xatolik: %s", e)
+        return
 
 
-@dp.callback_query_handler(state=SendText.send_all_2, chat_id=ADMINS)
+@dp.callback_query_handler(state=SendText.send_all_2, chat_id=ADMINS[0])
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
-    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
-    if call.data == 'send_message':
-        async with state.proxy() as data:
-            text = data['text']
-            keyboard = InlineKeyboardMarkup(row_width=1, resize_keyboard=True).add(
-                InlineKeyboardButton(text=data["btname_1"], url=data['url_1']),
-                InlineKeyboardButton(text=data["btname_2"], url=data['url_2']))
-        await admin_send_message_all(text=text, keyboard=keyboard)
-        await state.finish()
-    else:
-        await call.message.delete()
-        await state.finish()
+    try:
+        await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
+        if call.data == 'send_message':
+            async with state.proxy() as data:
+                text = data['text']
+                keyboard = InlineKeyboardMarkup(row_width=1, resize_keyboard=True).add(
+                    InlineKeyboardButton(text=data["btname_1"], url=data['url_1']),
+                    InlineKeyboardButton(text=data["btname_2"], url=data['url_2']))
+            await admin_send_message_all(text=text, keyboard=keyboard)
+            await state.finish()
+        else:
+            await call.message.delete()
+            await state.finish()
+    except Exception as e:
+        logging.exception("Xabarni yuborishda xatolik: %s", e)
+        return
 
 
 ## =============================== SEND A PHOTO ===================================
 
 
-@dp.callback_query_handler(text="photo", chat_id=ADMINS)
+@dp.callback_query_handler(text="photo", chat_id=ADMINS[0])
 async def send_photo_to_all(call: types.CallbackQuery):
     chat_id = call.from_user.id
     callback_id = call.message.message_id
@@ -297,38 +321,46 @@ async def video_caption(message: types.Message, state: FSMContext):
     await SendPhoto.waiting_for_new_btn.set()
 
 
-@dp.callback_query_handler(state=SendPhoto.waiting_for_new_btn, chat_id=ADMINS)
+@dp.callback_query_handler(state=SendPhoto.waiting_for_new_btn, chat_id=ADMINS[0])
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
-    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
-    if call.data == 'add_btn':
-        await call.message.answer('Iltimos, birinchi tugma nomini kiriting.')
-        await SendPhoto.waiting_for_button_name_1.set()
-    elif call.data == 'send_message':
-        async with state.proxy() as data:
-            photo_file = data["photo_file"]
-            caption = data['caption']
-        await bot.send_photo(chat_id=ADMINS, photo=photo_file, caption=f"<b>{caption}</b>")
-        await bot.send_message(chat_id=ADMINS,
-                               text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
-                                    "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
-        await SendPhoto.waiting_for_is_not_btn.set()
-    else:
-        await call.message.delete()
-        await state.finish()
+    try:
+        await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
+        if call.data == 'add_btn':
+            await call.message.answer('Iltimos, birinchi tugma nomini kiriting.')
+            await SendPhoto.waiting_for_button_name_1.set()
+        elif call.data == 'send_message':
+            async with state.proxy() as data:
+                photo_file = data["photo_file"]
+                caption = data['caption']
+            await bot.send_photo(chat_id=ADMINS[0], photo=photo_file, caption=f"<b>{caption}</b>")
+            await bot.send_message(chat_id=ADMINS[0],
+                                   text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
+                                        "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
+            await SendPhoto.waiting_for_is_not_btn.set()
+        else:
+            await call.message.delete()
+            await state.finish()
+    except Exception as e:
+        logging.exception("Xabarni yuborishda xatolik: %s", e)
+        return
 
 
-@dp.callback_query_handler(state=SendPhoto.waiting_for_is_not_btn, chat_id=ADMINS)
+@dp.callback_query_handler(state=SendPhoto.waiting_for_is_not_btn, chat_id=ADMINS[0])
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
-    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
-    if call.data == 'send_message':
-        async with state.proxy() as data:
-            photo_file = data["photo_file"]
-            caption = data['caption']
-        await admin_send_message_all(photo=photo_file, caption=caption)
-        await state.finish()
-    else:
-        await call.message.delete()
-        await state.finish()
+    try:
+        await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
+        if call.data == 'send_message':
+            async with state.proxy() as data:
+                photo_file = data["photo_file"]
+                caption = data['caption']
+            await admin_send_message_all(photo=photo_file, caption=caption)
+            await state.finish()
+        else:
+            await call.message.delete()
+            await state.finish()
+    except Exception as e:
+        logging.exception("Xabarni yuborishda xatolik: %s", e)
+        return
 
 
 @dp.message_handler(state=SendPhoto.waiting_for_button_name_1, content_types=ContentType.TEXT)
@@ -347,42 +379,50 @@ async def photo_button_url(message: types.Message, state: FSMContext):
     await SendPhoto.next_call_2.set()
 
 
-@dp.callback_query_handler(state=SendPhoto.next_call_2, chat_id=ADMINS)
+@dp.callback_query_handler(state=SendPhoto.next_call_2, chat_id=ADMINS[0])
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
-    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
-    if call.data == 'button_2':
-        await call.message.answer('Iltimos, ikkinchi tugma nomini kiriting.')
-        await SendPhoto.waiting_for_button_name_2.set()
-    elif call.data == 'send_message':
-        async with state.proxy() as data:
-            photo_file = data["photo_file"]
-            caption = data['caption']
-            keyboard = InlineKeyboardMarkup(row_width=1, resize_keyboard=True).add(
-                InlineKeyboardButton(text=data["btname_1"], url=data['url_1']))
-        await bot.send_photo(chat_id=ADMINS, photo=photo_file, caption=caption, reply_markup=keyboard)
-        await bot.send_message(chat_id=ADMINS,
-                               text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
-                                    "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
-        await SendPhoto.send_all_1.set()
-    else:
-        await call.message.delete()
-        await state.finish()
+    try:
+        await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
+        if call.data == 'button_2':
+            await call.message.answer('Iltimos, ikkinchi tugma nomini kiriting.')
+            await SendPhoto.waiting_for_button_name_2.set()
+        elif call.data == 'send_message':
+            async with state.proxy() as data:
+                photo_file = data["photo_file"]
+                caption = data['caption']
+                keyboard = InlineKeyboardMarkup(row_width=1, resize_keyboard=True).add(
+                    InlineKeyboardButton(text=data["btname_1"], url=data['url_1']))
+            await bot.send_photo(chat_id=ADMINS[0], photo=photo_file, caption=caption, reply_markup=keyboard)
+            await bot.send_message(chat_id=ADMINS[0],
+                                   text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
+                                        "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
+            await SendPhoto.send_all_1.set()
+        else:
+            await call.message.delete()
+            await state.finish()
+    except Exception as e:
+        logging.exception("Xabarni yuborishda xatolik: %s", e)
+        return
 
 
-@dp.callback_query_handler(state=SendPhoto.send_all_1, chat_id=ADMINS)
+@dp.callback_query_handler(state=SendPhoto.send_all_1, chat_id=ADMINS[0])
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
-    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
-    if call.data == 'send_message':
-        async with state.proxy() as data:
-            photo_file = data["photo_file"]
-            caption = data['caption']
-            keyboard = InlineKeyboardMarkup(row_width=1, resize_keyboard=True).add(
-                InlineKeyboardButton(text=data["btname_1"], url=data['url_1']))
-        await admin_send_message_all(photo=photo_file, caption=caption, keyboard=keyboard)
-        await state.finish()
-    else:
-        await call.message.delete()
-        await state.finish()
+    try:
+        await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
+        if call.data == 'send_message':
+            async with state.proxy() as data:
+                photo_file = data["photo_file"]
+                caption = data['caption']
+                keyboard = InlineKeyboardMarkup(row_width=1, resize_keyboard=True).add(
+                    InlineKeyboardButton(text=data["btname_1"], url=data['url_1']))
+            await admin_send_message_all(photo=photo_file, caption=caption, keyboard=keyboard)
+            await state.finish()
+        else:
+            await call.message.delete()
+            await state.finish()
+    except Exception as e:
+        logging.exception("Xabarni yuborishda xatolik: %s", e)
+        return
 
 
 @dp.message_handler(state=SendPhoto.waiting_for_button_name_2, content_types=ContentType.TEXT)
@@ -401,44 +441,52 @@ async def photo_button_url(message: types.Message, state: FSMContext):
     await SendPhoto.next_call_3.set()
 
 
-@dp.callback_query_handler(state=SendPhoto.next_call_3, chat_id=ADMINS)
+@dp.callback_query_handler(state=SendPhoto.next_call_3, chat_id=ADMINS[0])
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
-    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
-    if call.data == 'button_3':
-        await call.message.answer('Iltimos, uchunchi tugma nomini kiriting.')
-        await SendPhoto.waiting_for_button_name_3.set()
-    elif call.data == 'send_message':
-        async with state.proxy() as data:
-            photo_file = data["photo_file"]
-            caption = data['caption']
-            keyboard = InlineKeyboardMarkup(row_width=1, resize_keyboard=True).add(
-                InlineKeyboardButton(text=data["btname_1"], url=data['url_1']),
-                InlineKeyboardButton(text=data["btname_2"], url=data['url_2']))
-        await bot.send_photo(chat_id=ADMINS, photo=photo_file, caption=caption, reply_markup=keyboard)
-        await bot.send_message(chat_id=ADMINS,
-                               text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
-                                    "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
-        await SendPhoto.send_all_2.set()
-    else:
-        await call.message.delete()
-        await state.finish()
+    try:
+        await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
+        if call.data == 'button_3':
+            await call.message.answer('Iltimos, uchunchi tugma nomini kiriting.')
+            await SendPhoto.waiting_for_button_name_3.set()
+        elif call.data == 'send_message':
+            async with state.proxy() as data:
+                photo_file = data["photo_file"]
+                caption = data['caption']
+                keyboard = InlineKeyboardMarkup(row_width=1, resize_keyboard=True).add(
+                    InlineKeyboardButton(text=data["btname_1"], url=data['url_1']),
+                    InlineKeyboardButton(text=data["btname_2"], url=data['url_2']))
+            await bot.send_photo(chat_id=ADMINS[0], photo=photo_file, caption=caption, reply_markup=keyboard)
+            await bot.send_message(chat_id=ADMINS[0],
+                                   text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
+                                        "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
+            await SendPhoto.send_all_2.set()
+        else:
+            await call.message.delete()
+            await state.finish()
+    except Exception as e:
+        logging.exception("Xabarni yuborishda xatolik: %s", e)
+        return
 
 
-@dp.callback_query_handler(state=SendPhoto.send_all_2, chat_id=ADMINS)
+@dp.callback_query_handler(state=SendPhoto.send_all_2, chat_id=ADMINS[0])
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
-    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
-    if call.data == 'send_message':
-        async with state.proxy() as data:
-            photo_file = data["photo_file"]
-            caption = data['caption']
-            keyboard = InlineKeyboardMarkup(row_width=1, resize_keyboard=True).add(
-                InlineKeyboardButton(text=data["btname_1"], url=data['url_1']),
-                InlineKeyboardButton(text=data["btname_2"], url=data['url_2']))
-        await admin_send_message_all(photo=photo_file, caption=caption, keyboard=keyboard)
-        await state.finish()
-    else:
-        await call.message.delete()
-        await state.finish()
+    try:
+        await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
+        if call.data == 'send_message':
+            async with state.proxy() as data:
+                photo_file = data["photo_file"]
+                caption = data['caption']
+                keyboard = InlineKeyboardMarkup(row_width=1, resize_keyboard=True).add(
+                    InlineKeyboardButton(text=data["btname_1"], url=data['url_1']),
+                    InlineKeyboardButton(text=data["btname_2"], url=data['url_2']))
+            await admin_send_message_all(photo=photo_file, caption=caption, keyboard=keyboard)
+            await state.finish()
+        else:
+            await call.message.delete()
+            await state.finish()
+    except Exception as e:
+        logging.exception("Xabarni yuborishda xatolik: %s", e)
+        return
 
 
 @dp.message_handler(state=SendPhoto.waiting_for_button_name_3, content_types=ContentType.TEXT)
@@ -457,46 +505,54 @@ async def photo_button_url(message: types.Message, state: FSMContext):
     await SendPhoto.next_call_4.set()
 
 
-@dp.callback_query_handler(state=SendPhoto.next_call_4, chat_id=ADMINS)
+@dp.callback_query_handler(state=SendPhoto.next_call_4, chat_id=ADMINS[0])
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
-    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
-    if call.data == 'button_4':
-        await call.message.answer("Iltimos, to'rtinchi tugma nomini kiriting.")
-        await SendPhoto.waiting_for_button_name_4.set()
-    elif call.data == 'send_message':
-        async with state.proxy() as data:
-            photo_file = data["photo_file"]
-            caption = data['caption']
-            keyboard = InlineKeyboardMarkup(row_width=2, resize_keyboard=True).add(
-                InlineKeyboardButton(text=data["btname_1"], url=data['url_1']),
-                InlineKeyboardButton(text=data["btname_2"], url=data['url_2']),
-                InlineKeyboardButton(text=data["btname_3"], url=data['url_3']))
-        await bot.send_photo(chat_id=ADMINS, photo=photo_file, caption=caption, reply_markup=keyboard)
-        await bot.send_message(chat_id=ADMINS,
-                               text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
-                                    "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
-        await SendPhoto.send_all_3.set()
-    else:
-        await call.message.delete()
-        await state.finish()
+    try:
+        await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
+        if call.data == 'button_4':
+            await call.message.answer("Iltimos, to'rtinchi tugma nomini kiriting.")
+            await SendPhoto.waiting_for_button_name_4.set()
+        elif call.data == 'send_message':
+            async with state.proxy() as data:
+                photo_file = data["photo_file"]
+                caption = data['caption']
+                keyboard = InlineKeyboardMarkup(row_width=2, resize_keyboard=True).add(
+                    InlineKeyboardButton(text=data["btname_1"], url=data['url_1']),
+                    InlineKeyboardButton(text=data["btname_2"], url=data['url_2']),
+                    InlineKeyboardButton(text=data["btname_3"], url=data['url_3']))
+            await bot.send_photo(chat_id=ADMINS[0], photo=photo_file, caption=caption, reply_markup=keyboard)
+            await bot.send_message(chat_id=ADMINS[0],
+                                   text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
+                                        "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
+            await SendPhoto.send_all_3.set()
+        else:
+            await call.message.delete()
+            await state.finish()
+    except Exception as e:
+        logging.exception("Xabarni yuborishda xatolik: %s", e)
+        return
 
 
-@dp.callback_query_handler(state=SendPhoto.send_all_3, chat_id=ADMINS)
+@dp.callback_query_handler(state=SendPhoto.send_all_3, chat_id=ADMINS[0])
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
-    await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
-    if call.data == 'send_message':
-        async with state.proxy() as data:
-            photo_file = data["photo_file"]
-            caption = data['caption']
-            keyboard = InlineKeyboardMarkup(row_width=2, resize_keyboard=True).add(
-                InlineKeyboardButton(text=data["btname_1"], url=data['url_1']),
-                InlineKeyboardButton(text=data["btname_2"], url=data['url_2']),
-                InlineKeyboardButton(text=data["btname_3"], url=data['url_3']))
-        await admin_send_message_all(photo=photo_file, caption=caption, keyboard=keyboard)
-        await state.finish()
-    else:
-        await call.message.delete()
-        await state.finish()
+    try:
+        await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
+        if call.data == 'send_message':
+            async with state.proxy() as data:
+                photo_file = data["photo_file"]
+                caption = data['caption']
+                keyboard = InlineKeyboardMarkup(row_width=2, resize_keyboard=True).add(
+                    InlineKeyboardButton(text=data["btname_1"], url=data['url_1']),
+                    InlineKeyboardButton(text=data["btname_2"], url=data['url_2']),
+                    InlineKeyboardButton(text=data["btname_3"], url=data['url_3']))
+            await admin_send_message_all(photo=photo_file, caption=caption, keyboard=keyboard)
+            await state.finish()
+        else:
+            await call.message.delete()
+            await state.finish()
+    except Exception as e:
+        logging.exception("Xabarni yuborishda xatolik: %s", e)
+        return
 
 
 @dp.message_handler(state=SendPhoto.waiting_for_button_name_4, content_types=ContentType.TEXT)
@@ -515,7 +571,7 @@ async def photo_button_url(message: types.Message, state: FSMContext):
     await SendPhoto.next_call_5.set()
 
 
-@dp.callback_query_handler(state=SendPhoto.next_call_5, chat_id=ADMINS)
+@dp.callback_query_handler(state=SendPhoto.next_call_5, chat_id=ADMINS[0])
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
     await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'send_message':
@@ -527,8 +583,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                 InlineKeyboardButton(text=data["btname_2"], url=data['url_2']),
                 InlineKeyboardButton(text=data["btname_3"], url=data['url_3']),
                 InlineKeyboardButton(text=data["btname_4"], url=data['url_4']))
-        await bot.send_photo(chat_id=ADMINS, photo=photo_file, caption=caption, reply_markup=keyboard)
-        await bot.send_message(chat_id=ADMINS,
+        await bot.send_photo(chat_id=ADMINS[0], photo=photo_file, caption=caption, reply_markup=keyboard)
+        await bot.send_message(chat_id=ADMINS[0],
                                text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
                                     "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
         await SendPhoto.send_all_4.set()
@@ -537,7 +593,7 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
         await state.finish()
 
 
-@dp.callback_query_handler(state=SendPhoto.send_all_4, chat_id=ADMINS)
+@dp.callback_query_handler(state=SendPhoto.send_all_4, chat_id=ADMINS[0])
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
     await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'send_message':
@@ -559,7 +615,7 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
 ## =============================== SEND A VIDEO ===================================
 
 
-@dp.callback_query_handler(text="video", chat_id=ADMINS)
+@dp.callback_query_handler(text="video", chat_id=ADMINS[0])
 async def send_video_to_all(call: types.CallbackQuery):
     chat_id = call.from_user.id
     callback_id = call.message.message_id
@@ -583,7 +639,7 @@ async def video_caption(message: types.Message, state: FSMContext):
     await SendVideo.waiting_for_new_btn.set()
 
 
-@dp.callback_query_handler(state=SendVideo.waiting_for_new_btn, chat_id=ADMINS)
+@dp.callback_query_handler(state=SendVideo.waiting_for_new_btn, chat_id=ADMINS[0])
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
     await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'add_btn':
@@ -593,8 +649,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
         async with state.proxy() as data:
             video_file = data["video_file"]
             caption = data['caption']
-        await bot.send_video(chat_id=ADMINS, video=video_file, caption=f"<b>{caption}</b>")
-        await bot.send_message(chat_id=ADMINS,
+        await bot.send_video(chat_id=ADMINS[0], video=video_file, caption=f"<b>{caption}</b>")
+        await bot.send_message(chat_id=ADMINS[0],
                                text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
                                     "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
         await SendPhoto.waiting_for_is_not_btn.set()
@@ -603,7 +659,7 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
         await state.finish()
 
 
-@dp.callback_query_handler(state=SendPhoto.waiting_for_is_not_btn, chat_id=ADMINS)
+@dp.callback_query_handler(state=SendPhoto.waiting_for_is_not_btn, chat_id=ADMINS[0])
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
     await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'send_message':
@@ -633,7 +689,7 @@ async def video_button_url(message: types.Message, state: FSMContext):
     await SendVideo.next_call_2.set()
 
 
-@dp.callback_query_handler(state=SendVideo.next_call_2, chat_id=ADMINS)
+@dp.callback_query_handler(state=SendVideo.next_call_2, chat_id=ADMINS[0])
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
     await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'button_2':
@@ -645,9 +701,9 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
             caption = data['caption']
             keyboard = InlineKeyboardMarkup(row_width=1, resize_keyboard=True).add(
                 InlineKeyboardButton(text=data["btname_1"], url=data['url_1']))
-        await bot.send_video(chat_id=ADMINS, video=video_file, caption=caption,
+        await bot.send_video(chat_id=ADMINS[0], video=video_file, caption=caption,
                              reply_markup=keyboard)
-        await bot.send_message(chat_id=ADMINS,
+        await bot.send_message(chat_id=ADMINS[0],
                                text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
                                     "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
         await SendVideo.send_all_1.set()
@@ -656,7 +712,7 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
         await state.finish()
 
 
-@dp.callback_query_handler(state=SendVideo.send_all_1, chat_id=ADMINS)
+@dp.callback_query_handler(state=SendVideo.send_all_1, chat_id=ADMINS[0])
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
     await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'send_message':
@@ -688,7 +744,7 @@ async def video_button_url(message: types.Message, state: FSMContext):
     await SendVideo.next_call_3.set()
 
 
-@dp.callback_query_handler(state=SendVideo.next_call_3, chat_id=ADMINS)
+@dp.callback_query_handler(state=SendVideo.next_call_3, chat_id=ADMINS[0])
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
     await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'button_3':
@@ -701,8 +757,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
             keyboard = InlineKeyboardMarkup(row_width=1, resize_keyboard=True).add(
                 InlineKeyboardButton(text=data["btname_1"], url=data['url_1']),
                 InlineKeyboardButton(text=data["btname_2"], url=data['url_2']))
-        await bot.send_video(chat_id=ADMINS, video=video_file, caption=caption, reply_markup=keyboard)
-        await bot.send_message(chat_id=ADMINS,
+        await bot.send_video(chat_id=ADMINS[0], video=video_file, caption=caption, reply_markup=keyboard)
+        await bot.send_message(chat_id=ADMINS[0],
                                text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
                                     "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
         await SendVideo.send_all_2.set()
@@ -711,7 +767,7 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
         await state.finish()
 
 
-@dp.callback_query_handler(state=SendVideo.send_all_2, chat_id=ADMINS)
+@dp.callback_query_handler(state=SendVideo.send_all_2, chat_id=ADMINS[0])
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
     await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'send_message':
@@ -744,7 +800,7 @@ async def video_button_url(message: types.Message, state: FSMContext):
     await SendVideo.next_call_4.set()
 
 
-@dp.callback_query_handler(state=SendVideo.next_call_4, chat_id=ADMINS)
+@dp.callback_query_handler(state=SendVideo.next_call_4, chat_id=ADMINS[0])
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
     await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'button_4':
@@ -758,8 +814,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                 InlineKeyboardButton(text=data["btname_1"], url=data['url_1']),
                 InlineKeyboardButton(text=data["btname_2"], url=data['url_2']),
                 InlineKeyboardButton(text=data["btname_3"], url=data['url_3']))
-        await bot.send_video(chat_id=ADMINS, video=video_file, caption=caption, reply_markup=keyboard)
-        await bot.send_message(chat_id=ADMINS,
+        await bot.send_video(chat_id=ADMINS[0], video=video_file, caption=caption, reply_markup=keyboard)
+        await bot.send_message(chat_id=ADMINS[0],
                                text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
                                     "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
         await SendVideo.send_all_3.set()
@@ -768,7 +824,7 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
         return await state.finish()
 
 
-@dp.callback_query_handler(state=SendVideo.send_all_3, chat_id=ADMINS)
+@dp.callback_query_handler(state=SendVideo.send_all_3, chat_id=ADMINS[0])
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
     await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'send_message':
@@ -802,7 +858,7 @@ async def video_button_url(message: types.Message, state: FSMContext):
     await SendVideo.next_call_5.set()
 
 
-@dp.callback_query_handler(state=SendVideo.next_call_5, chat_id=ADMINS)
+@dp.callback_query_handler(state=SendVideo.next_call_5, chat_id=ADMINS[0])
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
     await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'send_message':
@@ -814,8 +870,8 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
                 InlineKeyboardButton(text=data["btname_2"], url=data['url_2']),
                 InlineKeyboardButton(text=data["btname_3"], url=data['url_3']),
                 InlineKeyboardButton(text=data["btname_4"], url=data['url_4']))
-        await bot.send_video(chat_id=ADMINS, video=video_file, caption=caption, reply_markup=keyboard)
-        await bot.send_message(chat_id=ADMINS,
+        await bot.send_video(chat_id=ADMINS[0], video=video_file, caption=caption, reply_markup=keyboard)
+        await bot.send_message(chat_id=ADMINS[0],
                                text="<b>Siz yubormoqchi bo'lgan xabar\nxuddi shu ko'rinishda bo'ladi!\n\n"
                                     "✅ Tastiqlash   |   🗑 Bekor qilish</b>", reply_markup=tasdiqlash)
         await SendVideo.send_all_4.set()
@@ -824,7 +880,7 @@ async def send_rek(call: types.CallbackQuery, state: FSMContext):
         await state.finish()
 
 
-@dp.callback_query_handler(state=SendVideo.send_all_4, chat_id=ADMINS)
+@dp.callback_query_handler(state=SendVideo.send_all_4, chat_id=ADMINS[0])
 async def send_rek(call: types.CallbackQuery, state: FSMContext):
     await bot.delete_message(call.message.chat.id, message_id=call.message.message_id)
     if call.data == 'send_message':
