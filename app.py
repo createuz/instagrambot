@@ -1,5 +1,3 @@
-from aiogram.utils import executor
-
 from handlers import *
 
 

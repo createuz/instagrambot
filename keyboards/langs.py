@@ -133,6 +133,165 @@ down_err = {
     "Indian": "🛑 <b>डाउनलोड की त्रुटि!</b>\n\n<a href='{}'><b>यह मीडिया फ़ाइल </b></a> डाउनलोड नहीं किया जा सकता है। \nकृपया बाद में पुन: प्रयास करें।"
 }
 
+select_lang_user_data = {
+    'Uzbek': {
+        'id': '<b>ID</b>:  {user_id}\n',
+        'username': '<b>Foydalanuvchi nomi:</b>  {username}\n',
+        'full_name': '<b>Toʻliq ismi:</b>  {full_name}\n',
+        'biography': '<b>Biografiyasi:</b>  {biography}\n',
+        'links': '<b>Havolalar:</b>  {links}\n',
+        'posts_count': '<b>Postlar soni:  {posts_count}\n',
+        'followers': '<b>Kuzatuvchilari:</b>  {followers}\n',
+        'following': '<b>Obuna boʻlganlar:</b>  {following}\n',
+        'total_likes_count': '<b>Yoqtirshlar:</b>  {total_likes_count}\n',
+        'total_comments_count': '<b>Izohlar:</b>  {total_comments_count}\n'
+    },
+    'English': {
+        'id': '<b>ID</b>:  {user_id}\n',
+        'username': '<b>Username:</b>  {username}\n',
+        'full_name': '<b>Full Name:</b>  {full_name}\n',
+        'biography': '<b>Biography:</b>  {biography}\n',
+        'links': '<b>Links:</b>  {links}\n',
+        'posts_count': '<b>Posts Count:</b>  {posts_count}\n',
+        'followers': '<b>Followers:</b>  {followers}\n',
+        'following': '<b>Following:</b>  {following}\n',
+        'total_likes_count': '<b>Total Likes:</b>  {total_likes_count}\n',
+        'total_comments_count': '<b>Total Comments:</b>  {total_comments_count}\n'
+    },
+    'Russian': {
+        'id': '<b>ID</b>:  {user_id}\n',
+        'username': '<b>Имя пользователя:</b>  {username}\n',
+        'full_name': '<b>Полное имя:</b>  {full_name}\n',
+        'biography': '<b>Биография:</b>  {biography}\n',
+        'links': '<b>Ссылки:</b>  {links}\n',
+        'posts_count': '<b>Количество постов:</b>  {posts_count}\n',
+        'followers': '<b>Подписчики:</b>  {followers}\n',
+        'following': '<b>Подписки:</b>  {following}\n',
+        'total_likes_count': '<b>Всего лайков:</b>  {total_likes_count}\n',
+        'total_comments_count': '<b>Всего комментариев:</b>  {total_comments_count}\n'
+    },
+    'Arabic': {
+        'id': '<b>الرقم التعريفي</b>:  {user_id}\n',
+        'username': '<b>اسم المستخدم:</b>  {username}\n',
+        'full_name': '<b>الاسم الكامل:</b>  {full_name}\n',
+        'biography': '<b>السيرة الذاتية:</b>  {biography}\n',
+        'links': '<b>روابط:</b>  {links}\n',
+        'posts_count': '<b>عدد المشاركات:</b>  {posts_count}\n',
+        'followers': '<b>المتابعون:</b>  {followers}\n',
+        'following': '<b>متابعة:</b>  {following}\n',
+        'total_likes_count': '<b>إجمالي الإعجابات:</b>  {total_likes_count}\n',
+        'total_comments_count': '<b>إجمالي التعليقات:</b>  {total_comments_count}\n'
+    },
+    'Turkey': {
+        'id': '<b>ID</b>  {user_id}\n',
+        'username': '<b>Kullanıcı Adı:</b>  {username}\n',
+        'full_name': '<b>Tam Adı:</b>  {full_name}\n',
+        'biography': '<b>Biyografi:</b>  {biography}\n',
+        'links': '<b>Bağlantılar:</b>  {links}\n',
+        'posts_count': '<b>Gönderi Sayısı:</b>  {posts_count}\n',
+        'followers': '<b>Takipçiler:</b>  {followers}\n',
+        'following': '<b>Takip Edilenler:</b>  {following}\n',
+        'total_likes_count': '<b>Toplam Beğeniler:</b>  {total_likes_count}\n',
+        'total_comments_count': '<b>Toplam Yorumlar:</b>  {total_comments_count}\n'
+    },
+    'Kazakh': {
+        'id': '<b>ID</b>:  {user_id}\n',
+        'username': '<b>Пайдаланушы аты:</b>  {username}\n',
+        'full_name': '<b>Толық аты:</b>  {full_name}\n',
+        'biography': '<b>Биография:</b>  {biography}\n',
+        'links': '<b>Сілтемелер:</b>  {links}\n',
+        'posts_count': '<b>Посттар саны:</b>  {posts_count}\n',
+        'followers': '<b>Көзделушілер:</b>  {followers}\n',
+        'following': '<b>Жазылушылар:</b>  {following}\n',
+        'total_likes_count': '<b>Барлық ұнатушылар:</b>  {total_likes_count}\n',
+        'total_comments_count': '<b>Барлық пікірлер:</b>  {total_comments_count}\n'
+    },
+    'Germany': {
+        'id': '<b>ID</b>:  {user_id}\n',
+        'username': '<b>Benutzername:</b>  {username}\n',
+        'full_name': '<b>Vollständiger Name:</b>  {full_name}\n',
+        'biography': '<b>Biografie:</b>  {biography}\n',
+        'links': '<b>Links:</b>  {links}\n',
+        'posts_count': '<b>Anzahl der Beiträge:</b>  {posts_count}\n',
+        'followers': '<b>Anhänger:</b>  {followers}\n',
+        'following': '<b>Folgende:</b>  {following}\n',
+        'total_likes_count': '<b>Gesamtzahl der Likes:</b>  {total_likes_count}\n',
+        'total_comments_count': '<b>Gesamtzahl der Kommentare:</b>  {total_comments_count}\n'
+    },
+    'France': {
+        'id': '<b>ID</b>:  {user_id}\n',
+        'username': '<b>Nom d\'utilisateur:</b>  {username}\n',
+        'full_name': '<b>Nom complet:</b>  {full_name}\n',
+        'biography': '<b>Biographie:</b>  {biography}\n',
+        'links': '<b>Liens:</b>  {links}\n',
+        'posts_count': '<b>Nombre de publications:</b>  {posts_count}\n',
+        'followers': '<b>Abonnés:</b>  {followers}\n',
+        'following': '<b>Abonnements:</b>  {following}\n',
+        'total_likes_count': '<b>Total des mentions J\'aime:</b>  {total_likes_count}\n',
+        'total_comments_count': '<b>Total des commentaires:</b>  {total_comments_count}\n'
+    },
+    'Spain': {
+        'id': '<b>ID</b>:  {user_id}\n',
+        'username': '<b>Nombre de usuario:</b>  {username}\n',
+        'full_name': '<b>Nombre completo:</b>  {full_name}\n',
+        'biography': '<b>Biografía:</b>  {biography}\n',
+        'links': '<b>Enlaces:</b>  {links}\n',
+        'posts_count': '<b>Cantidad de publicaciones:</b>  {posts_count}\n',
+        'followers': '<b>Seguidores:</b>  {followers}\n',
+        'following': '<b>Siguiendo:</b>  {following}\n',
+        'total_likes_count': '<b>Total de Me gusta:</b>  {total_likes_count}\n',
+        'total_comments_count': '<b>Total de comentarios:</b>  {total_comments_count}\n'
+    },
+    'Italy': {
+        'id': '<b>ID</b>:  {user_id}\n',
+        'username': '<b>Nome utente:</b>  {username}\n',
+        'full_name': '<b>Nome completo:</b>  {full_name}\n',
+        'biography': '<b>Biografia:</b>  {biography}\n',
+        'links': '<b>Collegamenti:</b>  {links}\n',
+        'posts_count': '<b>Numero di post:</b>  {posts_count}\n',
+        'followers': '<b>Followers:</b>  {followers}\n',
+        'following': '<b>Seguiti:</b>  {following}\n',
+        'total_likes_count': '<b>Mi piace totali:</b>  {total_likes_count}\n',
+        'total_comments_count': '<b>Commenti totali:</b>  {total_comments_count}\n'
+    },
+    'Ukraine': {
+        'id': '<b>ID</b>:  {user_id}\n',
+        'username': '<b>Ім\'я користувача:</b>  {username}\n',
+        'full_name': '<b>Повне ім</b>\'я:  {full_name}\n',
+        'biography': '<b>Біографія:</b>  {biography}\n',
+        'links': '<b>Посилання:</b>  {links}\n',
+        'posts_count': '<b>Кількість дописів:</b>  {posts_count}\n',
+        'followers': '<b>Читачі:</b>  {followers}\n',
+        'following': '<b>Читає:</b>  {following}\n',
+        'total_likes_count': '<b>Всього лайків:</b>  {total_likes_count}\n',
+        'total_comments_count': '<b>Всього коментарів:</b>  {total_comments_count}\n'
+    },
+    'Azerbaijan': {
+        'id': '<b>ID</b>:  {user_id}\n',
+        'username': '<b>İstifadəçi adı:</b>  {username}\n',
+        'full_name': '<b>Tam adı:</b>  {full_name}\n',
+        'biography': '<b>Bioqrafiya:</b>  {biography}\n',
+        'links': '<b>Bağlantılar:</b>  {links}\n',
+        'posts_count': '<b>Paylaşımların sayı:</b>  {posts_count}\n',
+        'followers': '<b>Takipçilər:</b>  {followers}\n',
+        'following': '<b>İzləyənlər:</b>  {following}\n',
+        'total_likes_count': '<b>Toplam bəyənmə sayı:</b>  {total_likes_count}\n',
+        'total_comments_count': '<b>Toplam rəy sayı:</b>  {total_comments_count}\n'
+    },
+    'Indian': {
+        'id': '<b>ID</b>:  {user_id}\n',
+        'username': '<b>उपयोगकर्ता नाम:</b>  {username}\n',
+        'full_name': '<b>पूरा नाम:</b>  {full_name}\n',
+        'biography': '<b>जीवनी:</b>  {biography}\n',
+        'links': '<b>लिंक:</b>  {links}\n',
+        'posts_count': '<b>पोस्ट की संख्या:</b>  {posts_count}\n',
+        'followers': '<b>फ़ॉलोअर्स:</b>  {followers}\n',
+        'following': '<b>फ़ॉलोइंग:</b>  {following}\n',
+        'total_likes_count': '<b>कुल पसंद:</b>  {total_likes_count}\n',
+        'total_comments_count': '<b>कुल टिप्पणियाँ:</b>  {total_comments_count}\n'
+    }
+}
+
 waiting_uz = "Yuklanmoqda, biroz kuting..."
 waiting_en = "Loading, please wait..."
 waiting_ru = "Загрузка, пожалуйста подождите..."

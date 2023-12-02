@@ -118,7 +118,6 @@ async def add_admin_save_handler(message: types.Message, state: FSMContext):
 
 @dp.callback_query_handler(text="bekor_qilish")
 async def admin_send_message_delete(call: types.CallbackQuery):
-    if call.message.chat.id in ADMINS:
         try:
             chat_id = call.message.chat.id
             callback_id = call.message.message_id
@@ -126,7 +125,6 @@ async def admin_send_message_delete(call: types.CallbackQuery):
             await bot.answer_callback_query(callback_query_id=call.id)
         except Exception as e:
             logging.exception("Xatolik: %s", e)
-    return
 
 
 @dp.callback_query_handler(text="send_all_msg")
