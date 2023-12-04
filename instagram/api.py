@@ -86,6 +86,6 @@ class InstagramAPI:
 
 
 # 'https://www.instagram.com/abdullaziz_mee/?e=0ddc5e7e-6c7a-4084-85e4-ca7c2eecebc5&g=5'
-#
-# tests = InstagramAPI()
-# print(asyncio.run(tests.instagram_user_data('Uzbek', 'sh.coder')))
+
+tests = InstagramAPI()
+print(asyncio.run(tests.instagram_downloader('Cy_KF13tkOB')))
