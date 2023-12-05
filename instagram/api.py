@@ -25,7 +25,8 @@ class InstagramAPI:
             logger.exception(f"• Download error: {e}")
             return None
 
-    async def counts(self, views):
+    @staticmethod
+    async def counts(views):
         views = int(views)
         if views >= 1000000:
             return f"{views / 1000000:.1f}M"
@@ -68,7 +69,7 @@ class InstagramAPI:
             user_data += f"👤  {language_dict.get('following', '').format(following=following)}" if following else ""
             user_data += f"❤  {language_dict.get('total_likes_count', '').format(total_likes_count=total_likes_count)}" if total_likes_count else ""
             user_data += f"💬  {language_dict.get('total_comments_count', '').format(total_comments_count=total_comments_count)}" if total_comments_count else ""
-            return user
+            return user.get('profile_pic_url_hd'), user_data
         except Exception as e:
             logger.exception(f"• User data error: {e}")
             return None
@@ -86,6 +87,6 @@ class InstagramAPI:
 
 
 # 'https://www.instagram.com/abdullaziz_mee/?e=0ddc5e7e-6c7a-4084-85e4-ca7c2eecebc5&g=5'
-
+#
 tests = InstagramAPI()
 print(asyncio.run(tests.instagram_downloader('Cy_KF13tkOB')))

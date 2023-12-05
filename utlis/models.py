@@ -196,7 +196,6 @@ class Statistics(Base):
             return await session.scalar(select(cls.media_count))
 
 
-
 class Channel(Base):
     __tablename__ = 'channels'
     id = Column(BigInteger, primary_key=True, autoincrement=True)

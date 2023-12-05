@@ -1,10 +1,7 @@
 import re
 import time
-
 from aiogram.dispatcher import FSMContext
 from aiogram.types import InputMediaPhoto, InputMediaVideo, InlineKeyboardButton, InlineKeyboardMarkup, ContentType
-
-from keyboards import bekor_qilish_kb
 from utlis.models import *
 import keyboards
 from data import *
