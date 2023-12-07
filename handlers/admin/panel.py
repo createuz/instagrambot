@@ -7,6 +7,7 @@ from data import *
 
 logging.basicConfig(format=u'%(filename)s [LINE:%(lineno)d] #%(levelname)-8s [%(asctime)s]  %(message)s',
                     level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 @dp.message_handler(commands=['admin'])
@@ -58,7 +59,7 @@ async def admin_send_message(call: types.CallbackQuery):
             return await bot.edit_message_text(chat_id=call.message.chat.id, message_id=callback_id,
                                                text=f'<b>🛑 Hozirda Admin malumotlari muvjud emas</b>')
         except Exception as e:
-            logging.exception("Xatolik: %s", e)
+            logger.exception("Xatolik: %s", e)
             return await bot.send_message(chat_id=call.message.chat.id,
                                           text=f'<b>🛑 Hozirda Admin malumotlari muvjud emas</b>')
     return
@@ -122,7 +123,7 @@ async def admin_send_message_delete(call: types.CallbackQuery):
         await bot.delete_message(chat_id, callback_id)
         await bot.answer_callback_query(callback_query_id=call.id)
     except Exception as e:
-        logging.exception("Xatolik: %s", e)
+        logger.exception("Xatolik: %s", e)
 
 
 @dp.callback_query_handler(text="send_all_msg")
@@ -152,7 +153,7 @@ async def chose_statistics(call: types.CallbackQuery):
             await bot.edit_message_text(chat_id=call.from_user.id, message_id=call.message.message_id,
                                         text='<b>📊 Chose Statistic</b>', reply_markup=chose_statistic_kb)
         except Exception as e:
-            logging.exception("Xatolik: %s", e)
+            logger.exception("Xatolik: %s", e)
     return
 
 
@@ -170,7 +171,7 @@ async def chose_statistics(call: types.CallbackQuery):
             await bot.edit_message_text(chat_id=call.from_user.id, message_id=call.message.message_id,
                                         text=f"<b>{msj}</b>", reply_markup=back_media_statistic)
         except Exception as e:
-            logging.exception("Xatolik: %s", e)
+            logger.exception("Xatolik: %s", e)
     return
 
 
@@ -200,7 +201,7 @@ async def user_language_statistics():
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━'''
         return user_statist
     except Exception as e:
-        logging.exception("Xatolik: %s", e)
+        logger.exception("Xatolik: %s", e)
         return None
 
 
@@ -228,7 +229,7 @@ async def group_language_statistics():
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━'''
         return group_statist
     except Exception as e:
-        logging.exception("Xatolik: %s", e)
+        logger.exception("Xatolik: %s", e)
         return None
 
 
@@ -243,7 +244,7 @@ async def total_user_statistics(call: types.CallbackQuery):
             await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text=f'<b>{user}</b>',
                                         reply_markup=update_user_statistic)
         except Exception as e:
-            logging.exception("Xatolik: %s", e)
+            logger.exception("Xatolik: %s", e)
     return
 
 
@@ -258,7 +259,7 @@ async def update_total_user_statistics(call: types.CallbackQuery):
             await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text=f'<b>{user}</b>',
                                         reply_markup=update_user_statistic_2x)
         except Exception as e:
-            logging.exception("Xatolik: %s", e)
+            logger.exception("Xatolik: %s", e)
     return
 
 
@@ -273,7 +274,7 @@ async def total_group_statistics(call: types.CallbackQuery):
             await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text=f'<b>{group}</b>',
                                         reply_markup=update_group_statistic)
         except Exception as e:
-            logging.exception("Xatolik: %s", e)
+            logger.exception("Xatolik: %s", e)
     return
 
 
@@ -288,5 +289,5 @@ async def update_total_group_statistics(call: types.CallbackQuery):
             await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text=f'<b>{group}</b>',
                                         reply_markup=update_group_statistic_2x)
         except Exception as e:
-            logging.exception("Xatolik: %s", e)
+            logger.exception("Xatolik: %s", e)
     return
