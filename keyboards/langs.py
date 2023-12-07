@@ -140,7 +140,7 @@ select_lang_user_data = {
         'full_name': '<b>Toʻliq ismi:</b>  {full_name}\n',
         'biography': '<b>Biografiyasi:</b>  {biography}\n',
         'links': '<b>Havolalar:</b>  {links}\n',
-        'posts_count': '<b>Postlar soni:  {posts_count}\n',
+        'posts_count': '<b>Postlar soni:</b>  {posts_count}\n',
         'followers': '<b>Kuzatuvchilari:</b>  {followers}\n',
         'following': '<b>Obuna boʻlganlar:</b>  {following}\n',
         'total_likes_count': '<b>Yoqtirshlar:</b>  {total_likes_count}\n',

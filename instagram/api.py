@@ -58,7 +58,7 @@ class InstagramAPI:
                     user.get('edge_owner_to_timeline_media', {}).get('edges', [])))
             language_dict = select_lang_user_data.get(language, {})
             username = f"<a href='https://www.instagram.com/{username}'><b>{username}</b></a>" if username else ""
-            user_data = f"🆔  {language_dict.get('id', '').format(user_id=user_id)}" if user_id else ""
+            user_data = f"🆔  {language_dict.get('id', '').format(user_id=str(user_id))}" if user_id else ""
             user_data += f"👤  {language_dict.get('username', '').format(username=username)}" if username else ""
             user_data += f"👤  {language_dict.get('full_name', '').format(full_name=full_name)}" if full_name else ""
             user_data += f"💬  {language_dict.get('biography', '').format(biography=biography)}" if biography else ""
