@@ -2,7 +2,6 @@ import time, re, asyncio, httpx
 from typing import Union, Tuple
 from data import headers, logger
 from keyboards import select_lang_user_data
-from useragent.user_agent import fake_agent
 
 
 class InstagramAPI:
@@ -84,7 +83,6 @@ class InstagramAPI:
         except Exception as e:
             logger.exception(f"• User stories error: {e}")
             return None
-
 
 # 'https://www.instagram.com/abdullaziz_mee/?e=0ddc5e7e-6c7a-4084-85e4-ca7c2eecebc5&g=5'
 #
