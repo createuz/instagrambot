@@ -15,7 +15,7 @@ async def start_handler_lang(message: types.Message):
     try:
         language = await User.get_language(message.chat.id)
         if language:
-            await bot.send_message(message.from_id, text=f"<b>{keyboards.select_dict[language]}</b>",
+            await bot.send_message(message.chat.id, text=f"<b>{keyboards.select_dict[language]}</b>",
                                    reply_markup=keyboards.keyboard_group[language],
                                    disable_web_page_preview=True, protect_content=True)
         else:

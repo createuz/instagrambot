@@ -9,9 +9,6 @@ from keyboards import *
 from data import *
 from utlis.models import User, Group
 
-logging.basicConfig(format=u'%(filename)s [LINE:%(lineno)d] #%(levelname)-8s [%(asctime)s]  %(message)s',
-                    level=logging.INFO)
-
 
 async def replace_text_with_links(text):
     def create_html_link(match):

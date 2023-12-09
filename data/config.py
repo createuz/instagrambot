@@ -24,7 +24,5 @@ logger = logging.getLogger(__name__)
 bot = Bot(token=BOT_TOKEN, parse_mode=types.ParseMode.HTML)
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
-time_now = datetime.now()
-current_time = time_now.strftime("%H:%M:%S")
 dp.middleware.setup(ThrottlingMiddleware())
 
