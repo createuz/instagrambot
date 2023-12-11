@@ -1,7 +1,8 @@
 import time, re, asyncio, httpx
 from typing import Union, Tuple
-from data import headers, logger
+from data import headers, logger, INSTA_API
 from keyboards import select_lang_user_data
+from useragent.user_agent import fake_agent
 
 
 class InstagramAPI:
@@ -82,6 +83,27 @@ class InstagramAPI:
                     for item in response.json().get('result', [{}])]
         except Exception as e:
             logger.exception(f"• User stories error: {e}")
+            return None
+
+    async def instagram_downloader_stories(self, link: str) -> Union[list, None]:
+        try:
+            response = await self.client.post(INSTA_API, data={'q': link, 't': 'media', 'lang': 'en'},
+                                              headers={'User-Agent': fake_agent.get_random_user_agent()})
+            content = response.json()
+            html = content.get('data')
+            urls = []
+            video_urls = re.findall(r'href="(https?://download[^"]+)"', html)
+            urls.extend(video_urls)
+            pattern = r'<div class="download-items__thumb">\s*<img src="([^"]+)"[^>]*>\s*<span class="format-icon"><i class="icon (icon-dlimage|icon-dlvideo)"></i></span>\s*</div>'
+            image_urls = [match.group(1) for match in re.finditer(pattern, html) if
+                          match.group(2) == 'icon-dlimage']
+            urls.extend(image_urls)
+            pattern = r'<img class="lazy" src="/imgs/loader.gif" data-src="([^"]+)"[^>]*>'
+            lazy_urls = re.findall(pattern, html)
+            urls.extend(lazy_urls)
+            return urls
+        except Exception as e:
+            logger.exception("Error while inserting video data: %s", e)
             return None
 
 # 'https://www.instagram.com/abdullaziz_mee/?e=0ddc5e7e-6c7a-4084-85e4-ca7c2eecebc5&g=5'

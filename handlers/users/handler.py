@@ -133,14 +133,14 @@ async def send_instagram_media(message: types.Message):
 @dp.message_handler(regexp=r'https?:\/\/(www\.)?instagram\.com\/(stories)', chat_type=types.ChatType.PRIVATE)
 async def send_instagram_media(message: types.Message):
     link = message.text
-    match = re.search(r'https?://(?:www\.)?instagram\.com/(?:stories/)?([a-zA-Z0-9_.]+)/?', link)
-    username = match.group(1) if match else None
+    # match = re.search(r'https?://(?:www\.)?instagram\.com/(?:stories/)?([a-zA-Z0-9_.]+)/?', link)
+    # username = match.group(1) if match else None
     await message.delete()
     language = await User.get_language(message.chat.id)
     waiting_msg = await bot.send_message(chat_id=message.chat.id,
                                          text=f"<b>📥 {keyboards.keyboard_waiting[language]}</b>", protect_content=True)
     try:
-        urls = await instagram_api.instagram_user_stories(username=username)
+        urls = await instagram_api.instagram_downloader_stories(link=link)
         if urls is None or not urls:
             await waiting_msg.delete()
             return await bot.send_message(message.chat.id, text=keyboards.down_err[language].format(link),
