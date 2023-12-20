@@ -14,7 +14,7 @@ class InstagramAPI:
 
     async def instagram_downloader(self, vid: str) -> Union[list, None]:
         try:
-            response = await self.client.get(f'https://www.instagram.com/p/{vid}/?__a=1&__d=dis', headers=self.headers)
+            response = await self.client.get(f'https://www.instagram.com/p/C0jqndJii3V/?__a=1&__d=dis', headers=self.headers)
             items = response.json().get('items', [{}])[0]
             is_carousel = items.get('product_type') == 'carousel_container'
             get_url = lambda item, key: next(iter(item.get(key, [{}])), {}).get('url')
@@ -106,7 +106,8 @@ class InstagramAPI:
             logger.exception("Error while inserting video data: %s", e)
             return None
 
+
 # 'https://www.instagram.com/abdullaziz_mee/?e=0ddc5e7e-6c7a-4084-85e4-ca7c2eecebc5&g=5'
-#
-# tests = InstagramAPI()
-# print(asyncio.run(tests.instagram_downloader('C0Zi0bBtFnp')))
+
+tests = InstagramAPI()
+print(asyncio.run(tests.instagram_downloader_stories('https://www.instagram.com/p/C0jqndJii3V')))
