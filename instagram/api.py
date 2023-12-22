@@ -1,6 +1,6 @@
 import time, re, asyncio, httpx
 from typing import Union, Tuple, List
-from data import headers, logger, INSTA_API
+from data import headers, logger, INSTA_API1, INSTA_API2
 from keyboards import select_lang_user_data
 from useragent.user_agent import fake_agent
 
@@ -11,12 +11,6 @@ class InstagramAPI:
         self.client = httpx.AsyncClient()
         self.headers = headers()
         self.cache = {}
-        self.url_patterns = {
-            'video': re.compile(r'href="(https?://download[^"]+)"'),
-            'image': re.compile(r'<div class="download-items__thumb">\s*<img src="([^"]+)"[^>]*>\s*<span '
-                                r'class="format-icon"><i class="icon (icon-dlimage|icon-dlvideo)"></i></span>\s*</div>'),
-            'lazy': re.compile(r'<img class="lazy" src="/imgs/loader.gif" data-src="([^"]+)"[^>]*>')
-        }
 
     async def close_session(self):
         await self.client.aclose()
@@ -95,43 +89,30 @@ class InstagramAPI:
             logger.exception(f"• User stories error: {e}")
             return None
 
-    async def instagram_downloader_stories(self, link: str) -> Union[List[str], None]:
+    async def get_instagram_data(self, api_url: str, link: str) -> List[str]:
         try:
-            response = await self.client.post(INSTA_API, data={'q': link, 't': 'media', 'lang': 'en'},
+            response = await self.client.post(api_url, data={'q': link, 't': 'media', 'lang': 'en'},
                                               headers={'User-Agent': fake_agent.get_random_user_agent()})
             content = response.json()
             html = content.get('data')
             if not html:
-                return None
-            urls = re.findall(r'https://(?:igcdn\.xyz|download)\S+', html)
-            res = [url.split('"')[0] for url in urls if 'jpg_e15' not in url]
-            print(len(res))
-            return res
+                return []
+            return re.findall(r'https://(?:igcdn\.xyz|download)\S+', html)
+        except Exception as e:
+            logger.exception("Unexpected error: %s", e)
+            return []
+
+    async def instagram_downloader_stories(self, link: str) -> Union[List[str], None]:
+        try:
+            urls = await self.get_instagram_data(INSTA_API1, link)
+            urls = [url.split('"')[0] for url in urls if 'jpg_e15' not in url]
+            if not urls:
+                urls = await self.get_instagram_data(INSTA_API2, link)
+                urls = [url.split('"')[0] for url in urls if 'jpg_e15' not in url]
+            return urls if urls else None
         except Exception as e:
             logger.exception("Unexpected error: %s", e)
             return None
 
-    # async def instagram_downloader_stories(self, link: str) -> Union[list, None]:
-    #     try:
-    #         response = await self.client.post(INSTA_API, data={'q': link, 't': 'media', 'lang': 'en'},
-    #                                           headers={'User-Agent': fake_agent.get_random_user_agent()})
-    #         content = response.json()
-    #         html = content.get('data')
-    #         urls = []
-    #         video_urls = re.findall(r'href="(https?://download[^"]+)"', html)
-    #         urls.extend(video_urls)
-    #         pattern = r'<div class="download-items__thumb">\s*<img src="([^"]+)"[^>]*>\s*<span class="format-icon"><i class="icon (icon-dlimage|icon-dlvideo)"></i></span>\s*</div>'
-    #         image_urls = [match.group(1) for match in re.finditer(pattern, html) if
-    #                       match.group(2) == 'icon-dlimage']
-    #         urls.extend(image_urls)
-    #         pattern = r'<img class="lazy" src="/imgs/loader.gif" data-src="([^"]+)"[^>]*>'
-    #         lazy_urls = re.findall(pattern, html)
-    #         urls.extend(lazy_urls)
-    #         return urls
-    #     except Exception as e:
-    #         logger.exception("Error while inserting video data: %s", e)
-    #         return None
-
-
-tests = InstagramAPI()
-print(asyncio.run(tests.instagram_downloader_stories('https://www.instagram.com/p/C0jqndJii3V')))
+# tests = InstagramAPI()
+# print(asyncio.run(tests.instagram_downloader_stories('https://www.instagram.com/p/C0jqndJii3V')))
