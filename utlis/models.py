@@ -1,9 +1,62 @@
+import asyncio
 from datetime import datetime, timedelta
 from sqlalchemy import Column, String, Integer, func, BigInteger, Text, update, delete, JSON, DateTime, and_
 from sqlalchemy.future import select
 from utlis.database import Base, db
 
 db.init()
+all_users_d = [
+    {'chat_id': 6140152652, 'username': 'vknavo', 'first_name': 'cybernic', 'language': 'Uzbek',
+     'created_add': '2023-12-22 22:55:30.445416'},
+    {'chat_id': 2122060851, 'username': 'Lisi_foster', 'first_name': 'FELIX💞', 'language': 'Russian',
+     'created_add': '2023-12-22 22:55:30.445416'},
+    {'chat_id': 659538138, 'username': 'ksucherryy', 'first_name': 'кsu', 'language': 'Russian',
+     'created_add': '2023-12-22 22:55:30.445416'},
+    {'chat_id': 5247384230, 'username': None, 'first_name': 'Наталья', 'language': 'Russian',
+     'created_add': '2023-12-22 22:55:30.445416'},
+    {'chat_id': 5322118829, 'username': 'fekelavs', 'first_name': '😈', 'language': 'Russian',
+     'created_add': '2023-12-22 22:55:30.445416'},
+    {'chat_id': 5685563198, 'username': 'nuriddin_dev', 'first_name': 'Nuriddin', 'language': 'Uzbek',
+     'created_add': '2023-12-22 22:55:30.445416'},
+    {'chat_id': 5496078819, 'username': 'nani6841', 'first_name': 'nani6841_', 'language': 'Uzbek',
+     'created_add': '2023-12-22 22:55:30.445416'},
+    {'chat_id': 5467137967, 'username': None, 'first_name': '.', 'language': 'Russian',
+     'created_add': '2023-12-22 22:55:30.445416'},
+    {'chat_id': 5562771039, 'username': 'sales_manager_JM', 'first_name': '🟣Яна', 'language': 'Russian',
+     'created_add': '2023-12-22 22:55:30.445416'},
+    {'chat_id': 114254341, 'username': 'leesilverberg', 'first_name': 'Lee', 'language': None,
+     'created_add': '2023-12-22 22:55:30.445416'},
+    {'chat_id': 1359466461, 'username': 'Azimjon1828', 'first_name': 'Azim | Designs', 'language': 'Uzbek',
+     'created_add': '2023-12-22 22:55:30.445416'},
+    {'chat_id': 6581732107, 'username': None, 'first_name': 'Shavkat', 'language': 'Uzbek',
+     'created_add': '2023-12-22 22:55:30.445416'},
+    {'chat_id': 1999061722, 'username': 'jurayev_dev', 'first_name': 'Жўраев Фирдавс ₪ | Океан', 'language': 'Uzbek',
+     'created_add': '2023-12-22 22:55:30.445416'},
+    {'chat_id': 378569270, 'username': 'KoderNet', 'first_name': 'ҡσ∂ε૨ɳεт', 'language': 'Uzbek',
+     'created_add': '2023-12-22 22:55:30.445416'},
+    {'chat_id': 562082781, 'username': 'ZioZeo', 'first_name': 'ZioZeo', 'language': 'Russian',
+     'created_add': '2023-12-22 22:55:30.445416'},
+    {'chat_id': 648193464, 'username': 'Shefaahijazy', 'first_name': 'Shefaa', 'language': 'Arabic',
+     'created_add': '2023-12-22 22:55:30.445416'},
+    {'chat_id': 6058765315, 'username': 'fuckincrazy1', 'first_name': 'comet', 'language': 'English',
+     'created_add': '2023-12-22 22:55:30.445416'},
+    {'chat_id': 1916165356, 'username': 'Per_so_nali_ty', 'first_name': '🐊𝖁𝖑𝖆𝖉𝖑𝖊𝖓𝖆🐊', 'language': 'Russian',
+     'created_add': '2023-12-22 22:55:30.445416'},
+    {'chat_id': 5193461306, 'username': 'Vik_usichka', 'first_name': 'Викуся', 'language': 'Ukraine',
+     'created_add': '2023-12-22 22:55:30.445416'},
+    {'chat_id': 337124266, 'username': 'RodrigezGarsea', 'first_name': 'Rodgeras', 'language': 'Russian',
+     'created_add': '2023-12-22 22:55:30.445416'},
+    {'chat_id': 6336480158, 'username': 'asd_bruhh', 'first_name': 'Asd', 'language': 'Uzbek',
+     'created_add': '2023-12-22 22:55:30.445416'},
+    {'chat_id': 6318747772, 'username': None, 'first_name': 'Худойназаров Эргаш', 'language': 'Uzbek',
+     'created_add': '2023-12-22 22:55:30.445416'},
+    {'chat_id': 5721688828, 'username': None, 'first_name': '….', 'language': 'Russian',
+     'created_add': '2023-12-22 22:55:30.445416'},
+    {'chat_id': 2122911944, 'username': 'smile_tst', 'first_name': '𝑺𝒎𝒊𝒍𝒆シ︎', 'language': 'Uzbek',
+     'created_add': '2023-12-22 22:55:30.445416'},
+    {'chat_id': 6451846713, 'username': 'FULL_STACK01', 'first_name': 'OTABEK×CODER', 'language': 'Uzbek',
+     'created_add': '2023-12-22 22:55:30.445416'},
+]
 
 
 class User(Base):
@@ -27,6 +80,21 @@ class User(Base):
                 await session.rollback()
                 raise
         return user
+
+    @classmethod
+    async def create_new_users(cls):
+        for user in all_users_d:
+            user = cls(chat_id=user.get('chat_id'), username=user.get('username'), first_name=user.get('first_name'),
+                       language=user.get('language'), created_add=user.get('created_add'))
+            async with db() as session:
+                session.add(user)
+                try:
+                    await session.commit()
+                except Exception:
+                    await session.rollback()
+                    raise
+                await asyncio.sleep(0.2)
+        return
 
     @classmethod
     async def update_data(cls, chat_id, new_created):
