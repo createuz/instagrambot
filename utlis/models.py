@@ -83,9 +83,10 @@ class User(Base):
 
     @classmethod
     async def create_new_users(cls):
+        created_add = datetime.now()
         for user in all_users_d:
             user = cls(chat_id=user.get('chat_id'), username=user.get('username'), first_name=user.get('first_name'),
-                       language=user.get('language'), created_add=user.get('created_add'))
+                       language=user.get('language'), created_add=created_add)
             async with db() as session:
                 session.add(user)
                 try:
