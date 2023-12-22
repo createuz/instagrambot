@@ -14,7 +14,7 @@ DB_URL = os.getenv('DB_URL')
 BOT_URL = os.getenv('BOT_URL')
 BOT_START = os.getenv('BOT_START')
 ADMIN_PASSWORD_HASH = os.getenv('ADMIN_PASSWORD_HASH')
-main_caption = f"<a href='{BOT_START}'>𝐈𝐧𝐬𝐭𝐢𝐧𝐁𝐨𝐭</a> | "
+main_caption = f"<a href='{BOT_START}'>instavsbot</a> | "
 
 logging.basicConfig(format=u'%(filename)s [LINE:%(lineno)d] #%(levelname)-8s [%(asctime)s]  %(message)s',
                     level=logging.INFO)
