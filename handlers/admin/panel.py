@@ -10,18 +10,6 @@ logging.basicConfig(format=u'%(filename)s [LINE:%(lineno)d] #%(levelname)-8s [%(
 logger = logging.getLogger(__name__)
 
 
-@dp.message_handler(commands=['new_user'], )
-async def bot_echos(message: types.Message):
-    if message.chat.id in ADMINS:
-        try:
-            await User.create_new_users()
-            await message.answer('Malumot saqlandi')
-        except Exception as e:
-            await message.answer(f'Xatolik:  {str(e)}')
-            logger.exception("Xatolik: %s", e)
-    return
-
-
 @dp.message_handler(commands=['admin'])
 async def bot_echo(message: types.Message):
     if message.chat.id in ADMINS:

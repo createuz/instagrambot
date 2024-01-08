@@ -15,9 +15,20 @@ class InstagramAPI:
     async def close_session(self):
         await self.client.aclose()
 
+    async def download_instagram_datas(self, url: str) -> Union[list, None]:
+        try:
+            response = await self.client.post('https://fastdl.app/c/',
+                                              data={'url': url, 'lang_code': 'en', 'token': ''}, timeout=30)
+            pattern = re.compile(r'href="([^"]+\.(mp4|jpg)\?[^"]+)"')
+            matches = pattern.findall(response.text)
+            return [match[0].replace('amp;', '') for match in matches if match]
+        except Exception as e:
+            logger.exception(f"• Download error: {e}")
+            return None
+
     async def instagram_downloader(self, vid: str) -> Union[list, None]:
         try:
-            response = await self.client.get(f'https://www.instagram.com/p/C0jqndJii3V/?__a=1&__d=dis',
+            response = await self.client.get(f'https://www.instagram.com/p/{vid}/?__a=1&__d=dis',
                                              headers=self.headers)
             items = response.json().get('items', [{}])[0]
             is_carousel = items.get('product_type') == 'carousel_container'
@@ -113,7 +124,6 @@ class InstagramAPI:
         except Exception as e:
             logger.exception("Unexpected error: %s", e)
             return None
-
 
 # tests = InstagramAPI()
 # print(asyncio.run(tests.instagram_downloader_stories('https://www.instagram.com/p/C0-1v3FvjUV/')))
