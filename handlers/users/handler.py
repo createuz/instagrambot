@@ -7,18 +7,6 @@ from data import *
 from instagram.api import InstagramAPI
 
 instagram_api = InstagramAPI()
-'''
-📹 Инстаграм бот активно работает, приносим извинения за неудобства! /start
-
-Новые боты:
-
-• (Buddy Music Bot)[https://t.me/BuddymBot?start=True]
-• (🎵 VK Navo Bot)[https://t.me/VkNavoBot?start=True]
-• (Скачать видео из Инстаграм)[https://t.me/instavsbot?start=True]
-• (Скачать видео из ТикTок)[https://t.me/ttokinbot?start=True]
-• (Скачать видео из Пинтерест)[https://t.me/PinterestinBot?start=True]
-
-'''
 
 
 @dp.message_handler(commands=['start'], chat_type=types.ChatType.PRIVATE)

@@ -125,5 +125,7 @@ class InstagramAPI:
             logger.exception("Unexpected error: %s", e)
             return None
 
+
 # tests = InstagramAPI()
+# # print(asyncio.run(tests.download_instagram_datas('https://www.instagram.com/p/C0-1v3FvjUV/')))
 # print(asyncio.run(tests.instagram_downloader_stories('https://www.instagram.com/p/C0-1v3FvjUV/')))

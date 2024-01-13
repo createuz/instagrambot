@@ -18,6 +18,22 @@ async def bot_echo(message: types.Message):
     return
 
 
+@dp.callback_query_handler(text="chat_ids_doc")
+async def add_admin_handler(call: types.CallbackQuery):
+    if call.message.chat.id in ADMINS:
+        chat_ids = await User.get_all_users_id()
+        file_path = 'chat_ids.txt'
+        count_users = len(chat_ids)
+        with open(file_path, 'w') as file:
+            for chat_id in chat_ids:
+                file.write(f"{chat_id}\n")
+        msg = f"<b>👤 All users count:  {count_users}</b>"
+        with open(file_path, 'rb') as doc_file:
+            await bot.send_document(chat_id=call.message.chat.id, document=types.InputFile(doc_file), caption=msg)
+        os.remove(file_path)
+    return
+
+
 @dp.callback_query_handler(text="menu_kb")
 async def add_admin_handler(call: types.CallbackQuery):
     if call.message.chat.id in ADMINS:

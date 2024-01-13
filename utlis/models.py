@@ -65,8 +65,14 @@ class User(Base):
     @classmethod
     async def get_all_user(cls, admin_language):
         query = (cls.language == admin_language) if admin_language == 'Uzbek' else (cls.language != 'Uzbek')
-        async with db() as session:
+        async with (db() as session):
             result = await session.execute(select(cls.chat_id).where(query))
+            return [row[0] for row in result.all()]
+
+    @classmethod
+    async def get_all_users_id(cls):
+        async with db() as session:
+            result = await session.execute(select(cls.chat_id))
             return [row[0] for row in result.all()]
 
     @classmethod

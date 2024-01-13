@@ -52,7 +52,7 @@ chose_statistic_kb = InlineKeyboardMarkup(row_width=2).add(
     InlineKeyboardButton("👤 User Statistic", callback_data="user_statistic"),
     InlineKeyboardButton("👥 Group Statistic", callback_data="group_statistic"),
     InlineKeyboardButton("📹 Media Statistic", callback_data="media_statistic"),
-    InlineKeyboardButton("🗑 Cancel", callback_data="bekor_qilish"),
+    InlineKeyboardButton("📄 Chat Ids", callback_data="chat_ids_doc"),
     InlineKeyboardButton("⬅ Back", callback_data="menu_kb"))
 
 update_user_statistic = InlineKeyboardMarkup(row_width=2).add(
