@@ -22,6 +22,7 @@ async def bot_echo(message: types.Message):
 async def add_admin_handler(call: types.CallbackQuery):
     try:
         if call.message.chat.id in ADMINS:
+            await bot.answer_callback_query(callback_query_id=call.id)
             users_chat_id = await User.get_all_users_id()
             groups_chat_id = await Group.get_all_groups_id()
             file_path = 'chat_ids.txt'

@@ -10,6 +10,7 @@ load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 INSTA_API1 = os.getenv("INSTA_API1")
 INSTA_API2 = os.getenv("INSTA_API2")
+INSTA_API3 = os.getenv("INSTA_API3")
 ADMINS = [5383531061, 6140152652]
 DB_URL = os.getenv('DB_URL')
 BOT_URL = os.getenv('BOT_URL')
