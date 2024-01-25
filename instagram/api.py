@@ -116,19 +116,19 @@ class InstagramAPI:
     async def instagram_downloader_stories(self, link: str) -> Union[List[str], None]:
         try:
             urls = await self.get_instagram_data(INSTA_API1, link)
-            urls = [url.split('"')[0] for url in urls if 'jpg_e15%' not in url]
+            urls = [url.split('"')[0] for url in urls if 'jpg_e15' not in url]
             if not urls:
                 urls = await self.get_instagram_data(INSTA_API2, link)
-                urls = [url.split('"')[0] for url in urls if 'jpg_e15%' not in url]
+                urls = [url.split('"')[0] for url in urls if 'jpg_e15' not in url]
             if not urls:
                 urls = await self.get_instagram_data(INSTA_API3, link)
-                urls = [url.split('"')[0] for url in urls if 'jpg_e15%' not in url]
+                urls = [url.split('"')[0] for url in urls if 'jpg_e15' not in url]
             return urls if urls else None
         except Exception as e:
             logger.exception("Unexpected error: %s", e)
             return None
 
-
+#
 # tests = InstagramAPI()
-# # print(asyncio.run(tests.download_instagram_datas('https://www.instagram.com/p/C0-1v3FvjUV/')))
-# print(asyncio.run(tests.instagram_downloader_stories('https://www.instagram.com/p/C0-1v3FvjUV/')))
+# print(asyncio.run(tests.instagram_downloader_stories('https://www.instagram.com/p/Cz1cPF8t8C7/')))
+# print(asyncio.run(tests.instagram_downloader_stories('https://www.instagram.com/p/C2eZHc9v7C3')))
