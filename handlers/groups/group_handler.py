@@ -70,17 +70,18 @@ async def send_instagram_media(message: types.Message):
     link = message.text
     language = await Group.get_language(message.chat.id)
     await message.delete()
-    match = re.search(r'https://www.instagram.com/(?:p|reel)/([-_a-zA-Z0-9]{11})', link)
-    vid = match.group(1) if match else None
+    # match = re.search(r'https://www.instagram.com/(?:p|reel)/([-_a-zA-Z0-9]{11})', link)
+    # vid = match.group(1) if match else None
     try:
-        cached_data = instagram_api.cache.get(vid, {})
+        cached_data = instagram_api.cache.get(link, {})
         if cached_data.get('timestamp', 0) >= time.time() - 2629746:
             media = cached_data.get('result')
             return await bot.send_media_group(chat_id=message.chat.id, media=media)
         waiting_msg = await bot.send_message(chat_id=message.chat.id,
                                              text=f"<b>📥 {keyboards.keyboard_waiting[language]}</b>",
                                              protect_content=True)
-        urls = await instagram_api.instagram_downloader(vid=vid)
+        # urls = await instagram_api.instagram_downloader(vid=vid)
+        urls = await instagram_api.instagram_downloader_stories(link=link)
         if urls is None or not urls:
             await waiting_msg.delete()
             return await bot.send_message(message.chat.id, text=keyboards.down_err[language].format(link),
@@ -89,7 +90,7 @@ async def send_instagram_media(message: types.Message):
         media[-1].caption = f"<b>📥 {main_caption}{keyboards.keyboard_saver[language]}</b>"
         await bot.send_media_group(chat_id=message.chat.id, media=media)
         await waiting_msg.delete()
-        instagram_api.cache[vid] = {'result': media, 'timestamp': time.time()}
+        instagram_api.cache[link] = {'result': media, 'timestamp': time.time()}
     except Exception as e:
         await waiting_msg.delete()
         logger.exception("Error while sending Instagram photo: %s", e)
@@ -97,7 +98,7 @@ async def send_instagram_media(message: types.Message):
                                       disable_web_page_preview=True, protect_content=True)
 
 
-@dp.message_handler(regexp=r'https?:\/\/(www\.)?instagram\.com\/(stories)', chat_type=types.ChatType.PRIVATE)
+@dp.message_handler(regexp=r'https?:\/\/(www\.)?instagram\.com\/(stories)')
 async def send_instagram_media(message: types.Message):
     link = message.text
     # match = re.search(r'https?://(?:www\.)?instagram\.com/(?:stories/)?([a-zA-Z0-9_.]+)/?', link)
@@ -124,26 +125,25 @@ async def send_instagram_media(message: types.Message):
         return await bot.send_message(message.chat.id, text=keyboards.down_err[language].format(link),
                                       disable_web_page_preview=True, protect_content=True)
 
-
-@dp.message_handler(lambda message: message.text.startswith('@'))
-async def insta_user_handler(message: types.Message):
-    await message.delete()
-    language = await Group.get_language(message.chat.id)
-    try:
-        image, user = await instagram_api.instagram_user_data(language=language, link=message.text)
-        if not image or not user:
-            return await bot.send_message(message.chat.id, '🛑 Instagram foydalanuvchisi mavjuda emas!')
-        delete_kb = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='🔻', callback_data=f"bekor_qilish"))
-        await bot.send_photo(message.chat.id, photo=image, caption=user, reply_markup=delete_kb)
-    except Exception as e:
-        logger.exception("Error while processing start command: %s", e)
-
-
-@dp.message_handler(commands=['username'])
-async def insta_user_handler(message: types.Message):
-    await message.delete()
-    try:
-        await bot.send_message(message.chat.id,
-                               text=f"<b>Instagram waww haqida kuproq malumot olishni istasangiz foydalanuvchi @username'ni yuboring.</b>")
-    except Exception as e:
-        logger.exception("Error while processing start command: %s", e)
+# @dp.message_handler(lambda message: message.text.startswith('@'))
+# async def insta_user_handler(message: types.Message):
+#     await message.delete()
+#     language = await Group.get_language(message.chat.id)
+#     try:
+#         image, user = await instagram_api.instagram_user_data(language=language, link=message.text)
+#         if not image or not user:
+#             return await bot.send_message(message.chat.id, '🛑 Instagram foydalanuvchisi mavjuda emas!')
+#         delete_kb = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='🔻', callback_data=f"bekor_qilish"))
+#         await bot.send_photo(message.chat.id, photo=image, caption=user, reply_markup=delete_kb)
+#     except Exception as e:
+#         logger.exception("Error while processing start command: %s", e)
+#
+#
+# @dp.message_handler(commands=['username'])
+# async def insta_user_handler(message: types.Message):
+#     await message.delete()
+#     try:
+#         await bot.send_message(message.chat.id,
+#                                text=f"<b>Instagram waww haqida kuproq malumot olishni istasangiz foydalanuvchi @username'ni yuboring.</b>")
+#     except Exception as e:
+#         logger.exception("Error while processing start command: %s", e)

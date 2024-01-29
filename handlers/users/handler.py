@@ -158,26 +158,25 @@ async def send_instagram_media(message: types.Message):
         return await bot.send_message(message.chat.id, text=keyboards.down_err[language].format(link),
                                       disable_web_page_preview=True, protect_content=True)
 
-
-@dp.message_handler(lambda message: message.text.startswith('@'))
-async def insta_user_handler(message: types.Message):
-    await message.delete()
-    language = await User.get_language(message.chat.id)
-    try:
-        image, user = await instagram_api.instagram_user_data(language=language, link=message.text)
-        if not image or not user:
-            return await bot.send_message(message.chat.id, '🛑 Instagram foydalanuvchisi mavjuda emas!')
-        delete_kb = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='🔻', callback_data=f"bekor_qilish"))
-        await bot.send_photo(message.chat.id, photo=image, caption=user, reply_markup=delete_kb)
-    except Exception as e:
-        logger.exception("Error while processing start command: %s", e)
-
-
-@dp.message_handler(commands=['username'])
-async def insta_user_handler(message: types.Message):
-    await message.delete()
-    try:
-        await bot.send_message(message.chat.id,
-                               text=f"<b>Instagram user haqida kuproq malumot olishni istasangiz foydalanuvchi @username'ni yuboring.</b>")
-    except Exception as e:
-        logger.exception("Error while processing start command: %s", e)
+# @dp.message_handler(lambda message: message.text.startswith('@'))
+# async def insta_user_handler(message: types.Message):
+#     await message.delete()
+#     language = await User.get_language(message.chat.id)
+#     try:
+#         image, user = await instagram_api.instagram_user_data(language=language, link=message.text)
+#         if not image or not user:
+#             return await bot.send_message(message.chat.id, '🛑 Instagram foydalanuvchisi mavjuda emas!')
+#         delete_kb = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='🔻', callback_data=f"bekor_qilish"))
+#         await bot.send_photo(message.chat.id, photo=image, caption=user, reply_markup=delete_kb)
+#     except Exception as e:
+#         logger.exception("Error while processing start command: %s", e)
+#
+#
+# @dp.message_handler(commands=['username'])
+# async def insta_user_handler(message: types.Message):
+#     await message.delete()
+#     try:
+#         await bot.send_message(message.chat.id,
+#                                text=f"<b>Instagram user haqida kuproq malumot olishni istasangiz foydalanuvchi @username'ni yuboring.</b>")
+#     except Exception as e:
+#         logger.exception("Error while processing start command: %s", e)
