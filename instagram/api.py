@@ -1,6 +1,6 @@
 import time, re, asyncio, httpx
 from typing import Union, Tuple, List
-from data import headers, logger, INSTA_API1, INSTA_API2, INSTA_API3
+from data import headers, logger, INSTA_API1, INSTA_API2, INSTA_API3, INSTA_API4
 from keyboards import select_lang_user_data
 from useragent.user_agent import fake_agent
 
@@ -14,6 +14,7 @@ class InstagramAPI:
 
     async def close_session(self):
         await self.client.aclose()
+
     #
     # async def download_instagram_datas(self, url: str) -> Union[list, None]:
     #     try:
@@ -122,6 +123,9 @@ class InstagramAPI:
                 urls = [url.split('"')[0] for url in urls if 'jpg_e15' not in url]
             if not urls:
                 urls = await self.get_instagram_data(INSTA_API3, link)
+                urls = [url.split('"')[0] for url in urls if 'jpg_e15' not in url]
+            if not urls:
+                urls = await self.get_instagram_data(INSTA_API4, link)
                 urls = [url.split('"')[0] for url in urls if 'jpg_e15' not in url]
             return urls if urls else None
         except Exception as e:
