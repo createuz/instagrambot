@@ -25,7 +25,7 @@ class InstagramAPI:
             logger.exception(f"• User stories error: {e}")
             return None
 
-    async def get_data_insta(self, api_url: str, link: str) -> Union[List[str, Any], None]:
+    async def get_data_insta(self, api_url: str, link: str) -> Union[list, None]:
         try:
             response = await self.client.post(api_url, data={'q': link, 't': 'media', 'lang': 'en'},
                                               headers={'User-Agent': fake_agent.get_random_user_agent()})
@@ -37,7 +37,7 @@ class InstagramAPI:
         except Exception as e:
             return None
 
-    async def instagram_downloader(self, link: str) -> Union[List[str, Any], None]:
+    async def instagram_downloader(self, link: str) -> Union[list, None]:
         try:
             for api_url in INSTA_API_LIST:
                 results = await self.get_data_insta(api_url, link)
