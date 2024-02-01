@@ -1,4 +1,4 @@
-import re, time
+import time
 from aiogram.dispatcher import FSMContext
 from aiogram.types import InputMediaPhoto, InputMediaVideo, InlineKeyboardButton, InlineKeyboardMarkup, ContentType
 from utlis.models import *
@@ -114,7 +114,7 @@ async def send_instagram_media(message: types.Message):
                                              text=f"<b>📥 {keyboards.keyboard_waiting[language]}</b>",
                                              protect_content=True)
         # urls = await instagram_api.instagram_downloader(vid=vid)
-        urls = await instagram_api.instagram_downloader_stories(link=link)
+        urls = await instagram_api.instagram_downloader(link=link)
         if urls is None or not urls:
             await waiting_msg.delete()
             return await bot.send_message(message.chat.id, text=keyboards.down_err[language].format(link),
@@ -141,7 +141,7 @@ async def send_instagram_media(message: types.Message):
     waiting_msg = await bot.send_message(chat_id=message.chat.id,
                                          text=f"<b>📥 {keyboards.keyboard_waiting[language]}</b>", protect_content=True)
     try:
-        urls = await instagram_api.instagram_downloader_stories(link=link)
+        urls = await instagram_api.instagram_downloader(link=link)
         if urls is None or not urls:
             await waiting_msg.delete()
             return await bot.send_message(message.chat.id, text=keyboards.down_err[language].format(link),
