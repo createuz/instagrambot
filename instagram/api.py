@@ -1,7 +1,7 @@
-import time, re, asyncio, httpx
-from typing import Union, Tuple, List, Any
+import re
+from typing import Union
 from data import *
-from useragent.user_agent import fake_agent
+from data.user_agent import fake_agent
 
 
 class InstagramAPI:
@@ -46,3 +46,6 @@ class InstagramAPI:
             return None
         except Exception as e:
             return None
+
+
+instagram_api = InstagramAPI()

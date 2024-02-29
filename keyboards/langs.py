@@ -1,51 +1,53 @@
+from data import BOT_USERNAME
+
 choose_button = "🌐 Choose language"
 
-select_uz = f"👋🏻 Salom! @InstinBot botimizga xush kelibsiz!\n\n" \
+select_uz = f"👋🏻 Salom! {BOT_USERNAME} botimizga xush kelibsiz!\n\n" \
             f"🤖 Bot orqali <a href='{'https://www.instagram.com'}'>Instagram</a> - Stories, Reels, IGTV va Rasmlarni tezkor va sifatli tarzda yuklab olishingiz mumkin.\n\n" \
             "🔗 Botga murojat qilish uchun ushbu havolani yuboring.\n\n" \
             "👥 Bot guruhlarda ham ishlaydi. Botni guruhga qo'shing, xabar yuborish uchun ruxsat bering va havolani yuboring. Bot ushbu guruhga kontentingizni yuklab beradi."
 
-select_ru = f"👋 Привет! Добро пожаловать в нашего бота @InstinBot!\n\n" \
+select_ru = f"👋 Привет! Добро пожаловать в нашего бота {BOT_USERNAME}!\n\n" \
             f"🤖 С помощью бота вы можете легко загружать истории, реелсы, IGTV и фотографии с <a href='{'https://www.instagram.com'}'>Instagram</a> в быстром и качественном формате.\n\n" \
             "🔗 Чтобы связаться с ботом, отправьте ему эту ссылку.\n\n" \
             "👥 Бот также работает в группах. Просто добавьте его в группу, дайте разрешение на отправку сообщений и отправьте ссылку на видео. Бот загрузит ваш контент в эту группу."
 
-select_ar = f"👋 مرحبًا! مرحبًا بك في بوتنا @InstinBot!\n\n" \
+select_ar = f"👋 مرحبًا! مرحبًا بك في بوتنا{BOT_USERNAME} !\n\n" \
             f"🤖 يمكنك استخدام البوت لتنزيل قصص <a href='{'https://www.instagram.com'}'>Instagram</a> ومقاطع الفيديو وIGTV والصور بسرعة وبجودة عالية.\n\n" \
             "🔗 للاتصال بالبوت، قم بإرسال هذا الرابط له.\n\n" \
             "👥 البوت يعمل أيضًا في المجموعات. فقط أضفه إلى المجموعة، ومنحه إذنًا لإرسال الرسائل، ثم أرسل رابط الفيديو. سيقوم البوت بتنزيل المحتوى الخاص بك في هذه المجموعة."
 
-select_tr = f"👋 Merhaba! @InstinBot botumuza hoş geldiniz!\n\n" \
+select_tr = f"👋 Merhaba! {BOT_USERNAME} botumuza hoş geldiniz!\n\n" \
             f"🤖 Bot aracılığıyla <a href='{'https://www.instagram.com'}'>Instagram</a> - Hikayeler, Reels, IGTV ve Gönderileri hızlı ve kaliteli bir şekilde indirebilirsiniz.\n\n" \
             "🔗 Bot ile iletişim kurmak için bu bağlantıyı gönderin.\n\n" \
             "👥 Bot aynı zamanda gruplarda da çalışır. Botu bir gruba ekleyin, mesaj gönderme izni verin ve ardından video bağlantısını gönderin. Bot içeriğinizi bu gruba indirecektir."
 
-select_nm = f"👋 Hallo! Herzlich willkommen bei unserem Bot @InstinBot!\n\n" \
+select_nm = f"👋 Hallo! Herzlich willkommen bei unserem Bot {BOT_USERNAME}!\n\n" \
             f"🤖 Mit dem Bot können Sie Stories, Reels, IGTV und Bilder von <a href='{'https://www.instagram.com'}'>Instagram</a> in schneller und hochwertiger Art und Weise herunterladen.\n\n" \
             "🔗 Senden Sie diesem Link, um Kontakt mit dem Bot aufzunehmen.\n\n" \
             "👥 Der Bot funktioniert auch in Gruppen. Fügen Sie ihn einfach einer Gruppe hinzu, geben Sie ihm die Berechtigung zum Senden von Nachrichten und senden Sie dann den Videolink. Der Bot lädt Ihren Inhalt in diese Gruppe herunter."
 
-select_fr = f"👋 Bonjour! Bienvenue dans notre bot @InstinBot!\n\n" \
+select_fr = f"👋 Bonjour! Bienvenue dans notre bot {BOT_USERNAME}!\n\n" \
             f"🤖 Avec le bot, vous pouvez télécharger rapidement et facilement des Stories, Reels, IGTV et des photos depuis <a href='{'https://www.instagram.com'}'>Instagram</a>.\n\n" \
             "🔗 Envoyez ce lien pour contacter le bot.\n\n" \
             "👥 Le bot fonctionne également dans les groupes. Ajoutez-le simplement à un groupe, donnez-lui l'autorisation d'envoyer des messages, puis envoyez le lien de la vidéo. Le bot téléchargera votre contenu dans ce groupe."
 
-select_es = f"👋 ¡Hola! ¡Bienvenido a nuestro bot @InstinBot!\n\n" \
+select_es = f"👋 ¡Hola! ¡Bienvenido a nuestro bot {BOT_USERNAME}!\n\n" \
             f"🤖 Con el bot, puedes descargar Stories, Reels, IGTV y fotos de <a href='{'https://www.instagram.com'}'>Instagram</a> de manera rápida y sencilla.\n\n" \
             "🔗 Envía este enlace para comunicarte con el bot.\n\n" \
             "👥 El bot también funciona en grupos. Solo agrégalo a un grupo, otórgale permiso para enviar mensajes y luego envía el enlace del video. El bot descargará tu contenido en ese grupo."
 
-select_it = f"👋 Ciao! Benvenuto nel nostro bot @InstinBot!\n\n" \
+select_it = f"👋 Ciao! Benvenuto nel nostro bot {BOT_USERNAME}!\n\n" \
             f"🤖 Con il bot puoi scaricare storie, Reels, IGTV e foto da <a href='{'https://www.instagram.com'}'>Instagram</a> in modo rapido e semplice.\n\n" \
             "🔗 Invia questo link per contattare il bot.\n\n" \
             "👥 Il bot funziona anche nei gruppi. Basta aggiungerlo a un gruppo, concedergli il permesso di inviare messaggi e inviare il link del video. Il bot scaricherà il tuo contenuto in quel gruppo."
 
-select_en = f"👋 Hello! Welcome to our bot @InstinBot!\n\n" \
+select_en = f"👋 Hello! Welcome to our bot {BOT_USERNAME}!\n\n" \
             f"🤖 With the bot, you can easily download Stories, Reels, IGTV, and photos from <a href='{'https://www.instagram.com'}'>Instagram</a> in a fast and quality manner.\n\n" \
             "🔗 Send this link to contact the bot.\n\n" \
             "👥 The bot also works in groups. Just add it to a group, grant it permission to send messages, and then send the video link. The bot will download your content to that group."
 
-select_qz = f"👋 Сәлем! @InstinBot ботына қош келдіңіз!\n\n" \
+select_qz = f"👋 Сәлем! {BOT_USERNAME} ботына қош келдіңіз!\n\n" \
             f"🤖 Бот арқылы <a href='{'https://www.instagram.com'}'>Instagram</a> - Stories, Reels, IGTV және Суреттерді тез жана сапалы түрде жүктеу мүмкін.\n\n" \
             "🔗 Ботпен байланысу үшін осы сілтемені жіберіңіз.\n\n" \
             "👥 Бот жиынталарда да жұмыс істейді. Онды жиынтқа қосып, хабарлама жіберу құқығын беріңіз, онда бейненің сілтемесін жіберіңіз. Бот сізге осы жиынтқа контентті жүктеуін береді."
@@ -59,11 +61,6 @@ select_az = f"👋 Salam! @InstinBot botumuza xoş gəlmisiniz!\n\n" \
             f"🤖 Bot vasitəsilə <a href='{'https://www.instagram.com'}'>Instagram</a> - Stories, Reels, IGTV və Şəkilləri sürətli və keyfiyyətli şəkildə yükləyə bilərsiniz.\n\n" \
             "🔗 Botla əlaqə qurmaq üçün bu linki göndərin.\n\n" \
             "👥 Bot həm də qruplarda işləyir. Onu sadəcə bir qrupa əlavə edin, mesaj göndərmə icazəsi verin və sonra video linkini göndərin. Bot məzmununuzu bu qrupa yükləyəcəkdir."
-
-select_hn = f"👋 नमस्ते! हमारे बॉट @InstinBot में आपका स्वागत है!\n\n" \
-            f"🤖 इस बॉट के साथ, आप <a href='{'https://www.instagram.com'}'>Instagram</a> से स्टोरीज़, रील्स, आईजीटीवी और फ़ोटोज़ को तेज़ और गुणवत्ता वाले तरीके से डाउनलोड कर सकते हैं।\n\n" \
-            "🔗 बॉट से संपर्क करने के लिए इस लिंक को भेजें।\n\n" \
-            "👥 बॉट समूहों में भी काम करता है। इसे एक समूह में जोड़ें, संदेश भेजने की अनुमति दें, और फिर वीडियो लिंक भेजें। बॉट आपकी सामग्री को उस समूह में डाउनलोड करेगा।"
 
 help_uz = "Botning operatsion tizimi bilan tanishish uchun quyidagi buyruqlardan foydalanishingiz mumkin:\n\n/start - Botni ishga tushirish uchun ushbu buyruqdan foydalaning.\n\n/help - Botdan foydalanish ko'rsatmalari va buyruqlari haqida ma'lumot olish uchun ushbu buyruqdan foydalaning.\n\n/lang - bot tilini o'zgartirish uchun ushbu buyruqdan foydalaning.\n\nO'zingiz xohlagan media bilan bog'liq havolani yuborish orqali bot avtomatik ravishda uni siz uchun yuklab olishni amalga oshiradi. Bot guruhlarida ham ishlash imkoniyati mavjud.\n\nIltimos, agar bot bilan bog'liq biror xato va kamchilikga duch kelsangiz yoki qo‘shimcha fikr va takliflaringiz bo‘lsa, quyidagi manzillar orqali biz bilan bog‘laning:  " \
           f"<a href='{'https://t.me/tmcode'}'><b> Bot Manager </b></a>\n" \
@@ -109,10 +106,6 @@ help_az = "Siz botun əməliyyat sistemi ilə tanış olmaq üçün aşağıdak�
           f"<a href='{'https://t.me/tmcode'}'><b> Bot Meneceri </b></a>\n" \
           f"Fikirləriniz bizim üçün önəmlidir."
 
-help_hn = "बॉट के ऑपरेटिंग सिस्टम से परिचित होने के लिए आप निम्नलिखित कमांड का उपयोग कर सकते हैं:\n\n/start - बॉट को शुरू करने के लिए इस कमांड का उपयोग करें।\n\n/help - इस कमांड का उपयोग उपयोग करने के लिए निर्देशों और कमांड के बारे में जानकारी प्राप्त करने के लिए करें बॉट। \n\n/lang- बॉट की भाषा बदलने के लिए इस आदेश का उपयोग करें।\n\nआप जो मीडिया चाहते हैं उससे संबंधित लिंक सबमिट करके, बॉट स्वचालित रूप से इसे आपके लिए डाउनलोड कर देगा। बॉट समूहों में काम करना भी संभव है।\n\nकृपया, यदि आपको बॉट के साथ कोई त्रुटि या समस्या आती है या यदि आपके पास कोई अतिरिक्त प्रतिक्रिया या सुझाव हैं, तो आप निम्नलिखित पतों के माध्यम से हमसे संपर्क कर सकते हैं:  " \
-          f"<a href='{'https://t.me/tmcode'}'><b> बॉट मैनेजर </b></a>\n" \
-          f"आपकी राय हमारे लिए महत्वपूर्ण है।"
-
 help_it = "È possibile utilizzare i seguenti comandi per familiarizzare con il sistema operativo del bot:\n\n/start - Utilizzare questo comando per avviare il bot.\n\n/help - Utilizzare questo comando per ottenere informazioni su istruzioni e comandi per l'utilizzo del bot. \n\n/lang - Usa questo comando per cambiare la lingua del bot.\n\nInviando un link relativo al media che desideri, il bot lo scaricherà automaticamente per te. È anche possibile lavorare in gruppi di bot.\n\nPer favore, se riscontri errori o problemi con il bot o se hai ulteriori feedback o suggerimenti, puoi contattarci attraverso i seguenti indirizzi:  " \
           f"<a href='{'https://t.me/tmcode'}'><b> Gestore bot </b></a>\n" \
           f"La tua opinione è importante per noi."
@@ -130,7 +123,6 @@ down_err = {
     "Kazakh": "🛑 <b>Жүктеу кезінде қате!</b>\n\n<a href='{}'><b>Бұл медиа файл </b></a> жүктелмейді. \nКейінірек көріңіз.",
     "Ukraine": "🛑 <b>Помилка завантаження!</b>\n\n<a href='{}'><b>Цей медіа файл </b></a> не може бути завантажено. \nБудь ласка, спробуйте пізніше.",
     "Azerbaijan": "🛑 <b>Yükləmə xətası!</b>\n\n<a href='{}'><b>Bu media faylı </b></a> yüklənə bilmir. \nXahiş edirəm daha sonra cəhd edin.",
-    "Indian": "🛑 <b>डाउनलोड की त्रुटि!</b>\n\n<a href='{}'><b>यह मीडिया फ़ाइल </b></a> डाउनलोड नहीं किया जा सकता है। \nकृपया बाद में पुन: प्रयास करें।"
 }
 
 select_lang_user_data = {
@@ -277,18 +269,6 @@ select_lang_user_data = {
         'following': '<b>İzləyənlər:</b>  {following}\n',
         'total_likes_count': '<b>Toplam bəyənmə sayı:</b>  {total_likes_count}\n',
         'total_comments_count': '<b>Toplam rəy sayı:</b>  {total_comments_count}\n'
-    },
-    'Indian': {
-        'id': '<b>ID</b>:  {user_id}\n',
-        'username': '<b>उपयोगकर्ता नाम:</b>  {username}\n',
-        'full_name': '<b>पूरा नाम:</b>  {full_name}\n',
-        'biography': '<b>जीवनी:</b>  {biography}\n',
-        'links': '<b>लिंक:</b>  {links}\n',
-        'posts_count': '<b>पोस्ट की संख्या:</b>  {posts_count}\n',
-        'followers': '<b>फ़ॉलोअर्स:</b>  {followers}\n',
-        'following': '<b>फ़ॉलोइंग:</b>  {following}\n',
-        'total_likes_count': '<b>कुल पसंद:</b>  {total_likes_count}\n',
-        'total_comments_count': '<b>कुल टिप्पणियाँ:</b>  {total_comments_count}\n'
     }
 }
 
@@ -301,7 +281,6 @@ waiting_es = "Cargando por favor espere..."
 waiting_it = "Attendere il caricamento prego..."
 waiting_fr = "Chargement, veuillez patienter..."
 waiting_nm = "Laden, bitte warten..."
-waiting_hn = "लोड हो रहा है कृपया प्रतीक्षा करें..."
 waiting_az = "Yüklənir Zəhmət olmasa gözləyin..."
 waiting_uk = "Завантаження, будь ласка, зачекайте..."
 waiting_qz = "Жүктелуде, күте тұрыңыз..."
@@ -315,7 +294,6 @@ saver_es = "descargado"
 saver_it = "scaricato"
 saver_fr = "téléchargé"
 saver_nm = "heruntergeladen"
-saver_hn = "डाउनलोड"
 saver_az = "endirilib"
 saver_uk = "завантажено"
 saver_qz = "жүктелді"
@@ -333,7 +311,6 @@ languages = {
     "it": "Italy",
     "uk": "Ukraine",
     "az": "Azerbaijan",
-    "hn": "Indian",
 }
 
 select_dict = {
@@ -349,7 +326,6 @@ select_dict = {
     "Kazakh": select_qz,
     "Ukraine": select_uk,
     "Azerbaijan": select_az,
-    "Indian": select_hn
 }
 
 keyboard_saver = {
@@ -365,7 +341,6 @@ keyboard_saver = {
     "Kazakh": saver_qz,
     "Ukraine": saver_uk,
     "Azerbaijan": saver_az,
-    "Indian": saver_hn
 }
 
 keyboard_waiting = {
@@ -381,7 +356,6 @@ keyboard_waiting = {
     "Kazakh": waiting_qz,
     "Ukraine": waiting_uk,
     "Azerbaijan": waiting_az,
-    "Indian": waiting_hn
 }
 
 help_dict = {
@@ -397,7 +371,6 @@ help_dict = {
     "Kazakh": help_qz,
     "Ukraine": help_uk,
     "Azerbaijan": help_az,
-    "Indian": help_hn
 }
 
 statistic_lang = {
@@ -411,7 +384,6 @@ statistic_lang = {
     'Spain': "🇪🇸 Spain ",
     'Italy': "🇮🇹 Italy ",
     'Kazakh': "🇰🇿 Kazakh ",
-    'Indian': "🇮🇳 Indian ",
     'Ukraine': "🇺🇦 Ukraine ",
     'Azerbaijan': "🇦🇿 Azerbaijan ",
 }

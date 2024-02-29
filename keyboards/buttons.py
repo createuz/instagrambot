@@ -2,22 +2,20 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from data.config import BOT_URL
 
 language_keyboard = InlineKeyboardMarkup(row_width=2)
-uz = InlineKeyboardButton(text="🇺🇿O'zbekcha", callback_data="uz")
-en = InlineKeyboardButton(text="🇬🇧English", callback_data="en")
-ru = InlineKeyboardButton(text="🇷🇺Русский", callback_data="ru")
-ar = InlineKeyboardButton(text="العربية🇸🇦", callback_data="ar")
-tr = InlineKeyboardButton(text="🇹🇷Türkçe", callback_data="tr")
-nm = InlineKeyboardButton(text="🇩🇪Deutsch", callback_data="nm")
-fr = InlineKeyboardButton(text="🇫🇷Français", callback_data="fr")
-es = InlineKeyboardButton(text="🇪🇸Español", callback_data="es")
-it = InlineKeyboardButton(text="🇮🇹Italiano", callback_data="it")
-qz = InlineKeyboardButton(text="🇰🇿Қазақ", callback_data="qz")
-hn = InlineKeyboardButton(text="🇮🇳भारतीय", callback_data="hn")
-uk = InlineKeyboardButton(text="🇺🇦Український", callback_data="uk")
-az = InlineKeyboardButton(text="🇦🇿Azərbaycanca", callback_data="az")
+uz = InlineKeyboardButton(text="🇺🇿 O'zbekcha", callback_data="uz")
+en = InlineKeyboardButton(text="🇬🇧 English", callback_data="en")
+ru = InlineKeyboardButton(text="🇷🇺 Русский", callback_data="ru")
+ar = InlineKeyboardButton(text="العربية 🇸🇦", callback_data="ar")
+tr = InlineKeyboardButton(text="🇹🇷 Türkçe", callback_data="tr")
+nm = InlineKeyboardButton(text="🇩🇪 Deutsch", callback_data="nm")
+fr = InlineKeyboardButton(text="🇫🇷 Français", callback_data="fr")
+es = InlineKeyboardButton(text="🇪🇸 Español", callback_data="es")
+it = InlineKeyboardButton(text="🇮🇹 Italiano", callback_data="it")
+qz = InlineKeyboardButton(text="🇰🇿 Қазақ", callback_data="qz")
+uk = InlineKeyboardButton(text="🇺🇦 Український", callback_data="uk")
+az = InlineKeyboardButton(text="🇦🇿 Azərbaycanca", callback_data="az")
 
-language_keyboard.add(uz)
-language_keyboard.add(en, ru, tr, uk, qz, az, nm, fr, es, it, ar, hn)
+language_keyboard.add(uz, en, ru, tr, uk, qz, az, nm, fr, es, it, ar)
 
 keyboard_uz = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Guruhga Qushish', url=BOT_URL))
 keyboard_en = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Add to group', url=BOT_URL))
@@ -28,7 +26,6 @@ keyboard_nm = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='�
 keyboard_fr = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Ajouter au groupe', url=BOT_URL))
 keyboard_es = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Añadir al grupo', url=BOT_URL))
 keyboard_it = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Aggiungi al gruppo', url=BOT_URL))
-keyboard_hn = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ समूह में जोड़ें', url=BOT_URL))
 keyboard_uk = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Додати до групи', url=BOT_URL))
 keyboard_az = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Qrupa əlavə edin', url=BOT_URL))
 keyboard_qz = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Топқа қосу', url=BOT_URL))
@@ -125,5 +122,4 @@ keyboard_group = {
     "Kazakh": keyboard_qz,
     "Ukraine": keyboard_uk,
     "Azerbaijan": keyboard_az,
-    "Indian": keyboard_hn
 }
