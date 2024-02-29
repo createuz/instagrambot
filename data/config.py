@@ -19,7 +19,7 @@ BOT_URL = os.getenv('BOT_URL')
 BOT_START = os.getenv('BOT_START')
 INSTA_API_LIST = [INSTA_API1, INSTA_API2, INSTA_API3, INSTA_API4]
 ADMINS = [5383531061, 6140152652]
-main_caption = f"<a href='{BOT_START}'>instavsbot</a> l "
+main_caption = f"<a href='{BOT_START}'>{BOT_USERNAME.split('@')[1]}</a> l "
 bot = Bot(token=BOT_TOKEN, parse_mode=types.ParseMode.HTML)
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
