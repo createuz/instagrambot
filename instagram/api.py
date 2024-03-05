@@ -1,7 +1,6 @@
 import re
 from typing import Union
 from data import *
-from data.user_agent import fake_agent
 
 
 class InstagramAPI:

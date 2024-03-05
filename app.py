@@ -4,7 +4,6 @@ from handlers import *
 async def main():
     db.init()
     logger.info("""
-
                 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
                 ┃      Starting bot polling...        ┃
                 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛

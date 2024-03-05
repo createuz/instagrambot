@@ -158,7 +158,7 @@ async def admin_send_message(call: types.CallbackQuery):
                                 reply_markup=send_message_kb)
 
 
-@dp.message_handler(commands=['break'])
+@dp.message_handler(commands=['break'], state='*')
 async def add_admin_handler(message: types.Message, state: FSMContext):
     if message.chat.id in ADMINS:
         try:
@@ -194,6 +194,44 @@ async def chose_statistics(call: types.CallbackQuery):
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━'''
             await bot.edit_message_text(chat_id=call.from_user.id, message_id=call.message.message_id,
                                         text=f"<b>{msj}</b>", reply_markup=back_media_statistic)
+        except Exception as e:
+            logger.exception("Xatolik: %s", e)
+    return
+
+
+@dp.callback_query_handler(text="all_statistics")
+async def total_user_statistics(call: types.CallbackQuery):
+    if call.message.chat.id in ADMINS:
+        try:
+            async with db() as session:
+                users = await session.execute(select(User.language))
+                groups = await session.execute(select(Group.language))
+                group_members = await session.execute(select(Group.group_members))
+                media_count = await session.scalar(select(Statistics.get_media_count))
+            lang_count_user = Counter([language for language, in users])
+            total_users = sum(lang_count_user.values())
+            lang_count_group = Counter([language for language, in groups])
+            total_members = sum(row[0] for row in group_members)
+            total_groups = sum(lang_count_group.values())
+            statists = f'''
+┏━━━━━━━━━━━━━━━━━━━━━━━━━
+┃ 📊 All Statistics
+┣━━━━━━━━━━━━━━━━━━━━━━━━━
+┃ 👤 Users count :   {total_users}
+┣━━━━━━━━━━━━━━━━━━━━━━━━━
+┃ 👤 Groups count :   {total_groups}
+┣━━━━━━━━━━━━━━━━━━━━━━━━━
+┃ 👥 Groups members:  {total_members}
+┣━━━━━━━━━━━━━━━━━━━━━━━━━
+┃ 📥 Media Count:  {media_count}
+┗━━━━━━━━━━━━━━━━━━━━━━━━━'''
+            await bot.answer_callback_query(callback_query_id=call.id, text="📊 All Statistics")
+            await bot.edit_message_text(
+                chat_id=call.message.chat.id,
+                message_id=call.message.message_id,
+                text=f'<b>{statists}</b>',
+                reply_markup=update_user_statistic
+            )
         except Exception as e:
             logger.exception("Xatolik: %s", e)
     return
