@@ -15,7 +15,7 @@ async def start_handler_lang(message: types.Message):
         if language:
             await bot.send_message(
                 chat_id=message.chat.id,
-                text=f"<b>{langs_text.get(language).get('start')}</b>",
+                text=langs_text.get(language).get('start'),
                 reply_markup=add_group.get(language),
                 disable_web_page_preview=True,
                 protect_content=True
@@ -49,7 +49,7 @@ async def process_language_selection(call: types.CallbackQuery, state: FSMContex
         await bot.edit_message_text(
             chat_id=call.message.chat.id,
             message_id=call.message.message_id,
-            text=f"<b>{langs_text.get(language).get('start')}</b>",
+            text=langs_text.get(language).get('start'),
             reply_markup=add_group.get(language),
             disable_web_page_preview=True
         )
@@ -87,7 +87,7 @@ async def process_change_language(call: types.CallbackQuery, state: FSMContext):
         await bot.edit_message_text(
             chat_id=call.message.chat.id,
             message_id=call.message.message_id,
-            text=f"<b>{langs_text.get(language).get('start')}</b>",
+            text=langs_text.get(language).get('start'),
             reply_markup=add_group.get(language),
             disable_web_page_preview=True
         )
