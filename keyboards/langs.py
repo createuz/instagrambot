@@ -1,13 +1,13 @@
 choose_button = "🌐 Choose language"
-
+send_message_type = "<b>Siz yubormoqchi bo'lgan xabar turi shu ko'rinishda bo'ladi!\n\n✅ Tastiqlash   |   🗑 Bekor qilish</b>"
 languages = {
     "uz": "Uzbek",
     "en": "English",
     "ru": "Russian",
     "ar": "Arabic",
     "tr": "Turkey",
-    "qz": "Kazakh",
-    "nm": "Germany",
+    "kz": "Kazakh",
+    "de": "Germany",
     "fr": "France",
     "es": "Spain",
     "it": "Italy",
