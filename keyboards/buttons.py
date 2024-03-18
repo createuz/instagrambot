@@ -31,7 +31,7 @@ add_group = {
     "Azerbaijan": InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Qrupa əlavə edin', url=BOT_URL))
 }
 
-bekor_qilish_kb = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text="🗑 Cancel", callback_data="bekor_qilish"))
+bekor_qilish_kb = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text="🔻", callback_data="bekor_qilish"))
 del_help = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='🔻', callback_data=f"bekor_qilish"))
 back_media_statistic = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text="⬅ Back", callback_data="statistic"))
 

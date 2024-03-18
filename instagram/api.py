@@ -1,13 +1,13 @@
 import re
 from typing import Union
 from data import *
+import httpx
 
 
 class InstagramAPI:
 
     def __init__(self):
         self.client = httpx.AsyncClient()
-        self.headers = headers()
         self.cache = {}
 
     async def close_session(self):

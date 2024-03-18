@@ -2,7 +2,6 @@ from aiogram.dispatcher import FSMContext
 from aiogram.types import ContentType
 from keyboards import *
 from .send_all import *
-from .send_admin import *
 
 
 # =========================================📄 SEND TEXT =============================================
@@ -39,7 +38,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'add_kb':
             await bot.send_message(chat_id=call.message.chat.id, text='<b>Iltimos, 1 - tugma nomini kiriting!</b>')
-            await SendText.waiting_for_button_name_1.set()
+            await SendText.waiting_kb_1.set()
         elif call.data == 'send_message':
             async with state.proxy() as data:
                 text = data.get('text')
@@ -68,18 +67,18 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         return await state.finish()
 
 
-@dp.message_handler(state=SendText.waiting_for_button_name_1, content_types=ContentType.TEXT)
+@dp.message_handler(state=SendText.waiting_kb_1, content_types=ContentType.TEXT)
 async def bot_echo(message: types.Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data["kb_1"] = message.text
         await bot.send_message(chat_id=message.chat.id, text="Iltimos, 1 - tugma uchun URL manzilini kiriting.")
-        await SendText.waiting_for_button_url_1.set()
+        await SendText.waiting_url_1.set()
     except Exception as e:
         return await state.finish()
 
 
-@dp.message_handler(state=SendText.waiting_for_button_url_1, content_types=ContentType.TEXT)
+@dp.message_handler(state=SendText.waiting_url_1, content_types=ContentType.TEXT)
 async def photo_button_url(message: types.Message, state: FSMContext):
     try:
         async with state.proxy() as data:
@@ -94,13 +93,13 @@ async def photo_button_url(message: types.Message, state: FSMContext):
         return await state.finish()
 
 
-@dp.callback_query_handler(state=SendText.next_call_2, chat_id=ADMINS[0])
+@dp.callback_query_handler(state=SendText.next_call_2)
 async def send_ads(call: types.CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'kb_2':
             await bot.send_message(chat_id=call.message.chat.id, text='Iltimos, 2 - tugma nomini kiriting.')
-            await SendText.waiting_for_button_name_2.set()
+            await SendText.waiting_kb_2.set()
         elif call.data == 'send_message':
             async with state.proxy() as data:
                 text = data.get('text')
@@ -114,7 +113,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         return await state.finish()
 
 
-@dp.callback_query_handler(state=SendText.send_all_1, chat_id=ADMINS[0])
+@dp.callback_query_handler(state=SendText.send_all_1)
 async def send_ads(call: types.CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
@@ -131,18 +130,18 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         return await state.finish()
 
 
-@dp.message_handler(state=SendText.waiting_for_button_name_2, content_types=ContentType.TEXT)
+@dp.message_handler(state=SendText.waiting_kb_2, content_types=ContentType.TEXT)
 async def photo_button_name(message: types.Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data["kb_2"] = message.text
         await bot.send_message(chat_id=message.chat.id, text="Iltimos, 2 - tugma uchun URL manzilini kiriting.")
-        await SendText.waiting_for_button_url_2.set()
+        await SendText.waiting_url_2.set()
     except Exception as e:
         return await state.finish()
 
 
-@dp.message_handler(state=SendText.waiting_for_button_url_2, content_types=ContentType.TEXT)
+@dp.message_handler(state=SendText.waiting_url_2, content_types=ContentType.TEXT)
 async def photo_button_url(message: types.Message, state: FSMContext):
     try:
         async with state.proxy() as data:
@@ -157,7 +156,7 @@ async def photo_button_url(message: types.Message, state: FSMContext):
         return await state.finish()
 
 
-@dp.callback_query_handler(state=SendText.next_call_3, chat_id=ADMINS[0])
+@dp.callback_query_handler(state=SendText.next_call_3)
 async def send_ads(call: types.CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
@@ -236,7 +235,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'add_kb':
             await bot.send_message(chat_id=call.message.chat.id, text='Iltimos, 1 - tugma nomini kiriting.')
-            await SendPhoto.waiting_for_button_name_1.set()
+            await SendPhoto.waiting_kb_1.set()
         elif call.data == 'send_message':
             async with state.proxy() as data:
                 photo = data["photo"]
@@ -267,18 +266,18 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         return await state.finish()
 
 
-@dp.message_handler(state=SendPhoto.waiting_for_button_name_1, content_types=ContentType.TEXT)
+@dp.message_handler(state=SendPhoto.waiting_kb_1, content_types=ContentType.TEXT)
 async def photo_button_name(message: types.Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data["kb_1"] = message.text
         await bot.send_message(chat_id=message.chat.id, text="Iltimos, 1 - tugma uchun URL manzilini kiriting.")
-        await SendPhoto.waiting_for_button_url_1.set()
+        await SendPhoto.waiting_url_1.set()
     except Exception as e:
         return await state.finish()
 
 
-@dp.message_handler(state=SendPhoto.waiting_for_button_url_1, content_types=ContentType.TEXT)
+@dp.message_handler(state=SendPhoto.waiting_url_1, content_types=ContentType.TEXT)
 async def photo_button_url(message: types.Message, state: FSMContext):
     try:
         async with state.proxy() as data:
@@ -299,7 +298,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'kb_2':
             await bot.send_message(chat_id=call.message.chat.id, text='Iltimos, 2 - tugma nomini kiriting.')
-            await SendPhoto.waiting_for_button_name_2.set()
+            await SendPhoto.waiting_kb_2.set()
         elif call.data == 'send_message':
             async with state.proxy() as data:
                 photo = data["photo"]
@@ -332,18 +331,18 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         return await state.finish()
 
 
-@dp.message_handler(state=SendPhoto.waiting_for_button_name_2, content_types=ContentType.TEXT)
+@dp.message_handler(state=SendPhoto.waiting_kb_2, content_types=ContentType.TEXT)
 async def photo_button_name(message: types.Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data["kb_2"] = message.text
         await bot.send_message(hat_id=message.chat.id, text="Iltimos, 2 - tugma uchun URL manzilini kiriting.")
-        await SendPhoto.waiting_for_button_url_2.set()
+        await SendPhoto.waiting_url_2.set()
     except Exception as e:
         return await state.finish()
 
 
-@dp.message_handler(state=SendPhoto.waiting_for_button_url_2, content_types=ContentType.TEXT)
+@dp.message_handler(state=SendPhoto.waiting_url_2, content_types=ContentType.TEXT)
 async def photo_button_url(message: types.Message, state: FSMContext):
     try:
         async with state.proxy() as data:
@@ -364,7 +363,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'kb_3':
             await bot.send_message(chat_id=call.message.chat.id, text='Iltimos, 3 - tugma nomini kiriting.')
-            await SendPhoto.waiting_for_button_name_3.set()
+            await SendPhoto.waiting_kb_3.set()
         elif call.data == 'send_message':
             async with state.proxy() as data:
                 photo = data["photo"]
@@ -401,18 +400,18 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         return await state.finish()
 
 
-@dp.message_handler(state=SendPhoto.waiting_for_button_name_3, content_types=ContentType.TEXT)
+@dp.message_handler(state=SendPhoto.waiting_kb_3, content_types=ContentType.TEXT)
 async def photo_button_name(message: types.Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data["kb_3"] = message.text
         await bot.send_message(chat_id=message.chat.id, text="Iltimos, 3 - tugma uchun URL manzilini kiriting.")
-        await SendPhoto.waiting_for_button_url_3.set()
+        await SendPhoto.waiting_url_3.set()
     except Exception as e:
         return await state.finish()
 
 
-@dp.message_handler(state=SendPhoto.waiting_for_button_url_3, content_types=ContentType.TEXT)
+@dp.message_handler(state=SendPhoto.waiting_url_3, content_types=ContentType.TEXT)
 async def photo_button_url(message: types.Message, state: FSMContext):
     try:
         async with state.proxy() as data:
@@ -436,7 +435,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
                 chat_id=call.message.chat.id,
                 text="Iltimos, 4 - tugma nomini kiriting."
             )
-            await SendPhoto.waiting_for_button_name_4.set()
+            await SendPhoto.waiting_kb_4.set()
         elif call.data == 'send_message':
             async with state.proxy() as data:
                 photo = data["photo"]
@@ -475,18 +474,18 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         return await state.finish()
 
 
-@dp.message_handler(state=SendPhoto.waiting_for_button_name_4, content_types=ContentType.TEXT)
+@dp.message_handler(state=SendPhoto.waiting_kb_4, content_types=ContentType.TEXT)
 async def photo_button_name(message: types.Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data["kb_4"] = message.text
         await bot.send_message(chat_id=message.chat.id, text="Iltimos, 3 - tugma uchun URL manzilini kiriting.")
-        await SendPhoto.waiting_for_button_url_4.set()
+        await SendPhoto.waiting_url_4.set()
     except Exception as e:
         return await state.finish()
 
 
-@dp.message_handler(state=SendPhoto.waiting_for_button_url_4, content_types=ContentType.TEXT)
+@dp.message_handler(state=SendPhoto.waiting_url_4, content_types=ContentType.TEXT)
 async def photo_button_url(message: types.Message, state: FSMContext):
     try:
         async with state.proxy() as data:
@@ -586,7 +585,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'add_kb':
             await bot.send_message(chat_id=call.message.chat.id, text='Iltimos, 1 - tugma nomini kiriting.')
-            await SendVideo.waiting_for_button_name_1.set()
+            await SendVideo.waiting_kb_1.set()
         elif call.data == 'send_message':
             async with state.proxy() as data:
                 video = data["video"]
@@ -617,18 +616,18 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         return await state.finish()
 
 
-@dp.message_handler(state=SendVideo.waiting_for_button_name_1, content_types=ContentType.TEXT)
+@dp.message_handler(state=SendVideo.waiting_kb_1, content_types=ContentType.TEXT)
 async def video_button_name(message: types.Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data["kb_1"] = message.text
         await bot.send_message(chat_id=message.chat.id, text="Iltimos, 1 - tugma uchun URL manzilini kiriting.")
-        await SendVideo.waiting_for_button_url_1.set()
+        await SendVideo.waiting_url_1.set()
     except Exception as e:
         return await state.finish()
 
 
-@dp.message_handler(state=SendVideo.waiting_for_button_url_1, content_types=ContentType.TEXT)
+@dp.message_handler(state=SendVideo.waiting_url_1, content_types=ContentType.TEXT)
 async def video_button_url(message: types.Message, state: FSMContext):
     try:
         async with state.proxy() as data:
@@ -649,7 +648,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'kb_2':
             await bot.send_message(chat_id=call.message.chat.id, text='Iltimos, 2 - tugma nomini kiriting.')
-            await SendVideo.waiting_for_button_name_2.set()
+            await SendVideo.waiting_kb_2.set()
         elif call.data == 'send_message':
             async with state.proxy() as data:
                 video = data["video"]
@@ -682,18 +681,18 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         return await state.finish()
 
 
-@dp.message_handler(state=SendVideo.waiting_for_button_name_2, content_types=ContentType.TEXT)
+@dp.message_handler(state=SendVideo.waiting_kb_2, content_types=ContentType.TEXT)
 async def video_button_name(message: types.Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data["kb_2"] = message.text
         await bot.send_message(chat_id=message.chat.id, text="Iltimos, 2 - tugma uchun URL manzilini kiriting.")
-        await SendVideo.waiting_for_button_url_2.set()
+        await SendVideo.waiting_url_2.set()
     except Exception as e:
         return await state.finish()
 
 
-@dp.message_handler(state=SendVideo.waiting_for_button_url_2, content_types=ContentType.TEXT)
+@dp.message_handler(state=SendVideo.waiting_url_2, content_types=ContentType.TEXT)
 async def video_button_url(message: types.Message, state: FSMContext):
     try:
         async with state.proxy() as data:
@@ -714,7 +713,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'kb_3':
             await bot.send_message(chat_id=call.message.chat.id, text='Iltimos, 3 - tugma nomini kiriting.')
-            await SendVideo.waiting_for_button_name_3.set()
+            await SendVideo.waiting_kb_3.set()
         elif call.data == 'send_message':
             async with state.proxy() as data:
                 video = data["video"]
@@ -751,18 +750,18 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         return await state.finish()
 
 
-@dp.message_handler(state=SendVideo.waiting_for_button_name_3, content_types=ContentType.TEXT)
+@dp.message_handler(state=SendVideo.waiting_kb_3, content_types=ContentType.TEXT)
 async def video_button_name(message: types.Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data["kb_3"] = message.text
         await bot.send_message(chat_id=message.chat.id, text="Iltimos, 3 - tugma uchun URL manzilini kiriting.")
-        await SendVideo.waiting_for_button_url_3.set()
+        await SendVideo.waiting_url_3.set()
     except Exception as e:
         return await state.finish()
 
 
-@dp.message_handler(state=SendVideo.waiting_for_button_url_3, content_types=ContentType.TEXT)
+@dp.message_handler(state=SendVideo.waiting_url_3, content_types=ContentType.TEXT)
 async def video_button_url(message: types.Message, state: FSMContext):
     try:
         async with state.proxy() as data:
@@ -783,7 +782,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'kb_4':
             await bot.send_message(chat_id=call.message.chat.id, text="Iltimos, 4 - tugma nomini kiriting.")
-            await SendVideo.waiting_for_button_name_4.set()
+            await SendVideo.waiting_kb_4.set()
         elif call.data == 'send_message':
             async with state.proxy() as data:
                 video = data["video"]
@@ -822,18 +821,18 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         return await state.finish()
 
 
-@dp.message_handler(state=SendVideo.waiting_for_button_name_4, content_types=ContentType.TEXT)
+@dp.message_handler(state=SendVideo.waiting_kb_4, content_types=ContentType.TEXT)
 async def video_button_name(message: types.Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data["kb_4"] = message.text
         await bot.send_message(chat_id=message.chat.id, text="Iltimos, 3 - tugma uchun URL manzil kiriting.")
-        await SendVideo.waiting_for_button_url_4.set()
+        await SendVideo.waiting_url_4.set()
     except Exception as e:
         return await state.finish()
 
 
-@dp.message_handler(state=SendVideo.waiting_for_button_url_4, content_types=ContentType.TEXT)
+@dp.message_handler(state=SendVideo.waiting_url_4, content_types=ContentType.TEXT)
 async def video_button_url(message: types.Message, state: FSMContext):
     try:
         async with state.proxy() as data:
