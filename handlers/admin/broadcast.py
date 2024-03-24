@@ -2,12 +2,12 @@ from aiogram.dispatcher import FSMContext
 from aiogram.types import ContentType
 from keyboards import *
 from .send_all import *
-
+from data import *
 
 # =========================================📄 SEND TEXT =============================================
 
 
-@dp.callback_query_handler(text="text", chat_id=ADMINS[0])
+@dp.callback_query_handler(text="text")
 async def send_voice_to_all(call: types.CallbackQuery):
     await bot.edit_message_text(
         chat_id=call.message.chat.id,
@@ -32,7 +32,7 @@ async def video_caption(message: types.Message, state: FSMContext):
         return await state.finish()
 
 
-@dp.callback_query_handler(state=SendText.waiting_for_new_btn, chat_id=ADMINS[0])
+@dp.callback_query_handler(state=SendText.waiting_for_new_btn)
 async def send_ads(call: types.CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
@@ -43,6 +43,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
             async with state.proxy() as data:
                 text = data.get('text')
             await send_message_admin(text=text)
+            await bot.send_message(chat_id=ADMINS[0], text=send_message_type, reply_markup=tasdiqlash)
             await SendText.waiting_for_is_not_btn.set()
         else:
             await call.message.delete()
@@ -51,7 +52,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         return await state.finish()
 
 
-@dp.callback_query_handler(state=SendText.waiting_for_is_not_btn, chat_id=ADMINS[0])
+@dp.callback_query_handler(state=SendText.waiting_for_is_not_btn)
 async def send_ads(call: types.CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
@@ -105,6 +106,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
                 text = data.get('text')
             keyboard = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text=data["kb_1"], url=data['url_1']))
             await send_message_admin(text=text, keyboard=keyboard)
+            await bot.send_message(chat_id=ADMINS[0], text=send_message_type, reply_markup=tasdiqlash)
             await SendText.send_all_1.set()
         else:
             await call.message.delete()
@@ -167,6 +169,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
                 InlineKeyboardButton(text=data["kb_1"], url=data['url_1']),
                 InlineKeyboardButton(text=data["kb_2"], url=data['url_2']))
             await send_message_admin(text=text, keyboard=keyboard)
+            await bot.send_message(chat_id=ADMINS[0], text=send_message_type, reply_markup=tasdiqlash)
             await SendText.send_all_2.set()
         else:
             await call.message.delete()
@@ -175,7 +178,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         return await state.finish()
 
 
-@dp.callback_query_handler(state=SendText.send_all_2, chat_id=ADMINS[0])
+@dp.callback_query_handler(state=SendText.send_all_2)
 async def send_ads(call: types.CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
@@ -197,7 +200,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
 ## =============================== SEND A PHOTO ===================================
 
 
-@dp.callback_query_handler(text="photo", chat_id=ADMINS[0])
+@dp.callback_query_handler(text="photo")
 async def send_photo_to_all(call: types.CallbackQuery):
     await bot.edit_message_text(chat_id=call.from_user.id, message_id=call.message.message_id, text="🖼 SEND PHOTO")
     await SendPhoto.photo.set()
@@ -229,7 +232,7 @@ async def video_caption(message: types.Message, state: FSMContext):
         return await state.finish()
 
 
-@dp.callback_query_handler(state=SendPhoto.waiting_for_new_btn, chat_id=ADMINS[0])
+@dp.callback_query_handler(state=SendPhoto.waiting_for_new_btn)
 async def send_ads(call: types.CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
@@ -241,6 +244,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
                 photo = data["photo"]
                 caption = data['caption']
             await send_message_admin(photo=photo, caption=caption)
+            await bot.send_message(chat_id=ADMINS[0], text=send_message_type, reply_markup=tasdiqlash)
             await SendPhoto.waiting_for_is_not_btn.set()
         else:
             await call.message.delete()
@@ -249,7 +253,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         return await state.finish()
 
 
-@dp.callback_query_handler(state=SendPhoto.waiting_for_is_not_btn, chat_id=ADMINS[0])
+@dp.callback_query_handler(state=SendPhoto.waiting_for_is_not_btn)
 async def send_ads(call: types.CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
@@ -292,7 +296,7 @@ async def photo_button_url(message: types.Message, state: FSMContext):
         return await state.finish()
 
 
-@dp.callback_query_handler(state=SendPhoto.next_call_2, chat_id=ADMINS[0])
+@dp.callback_query_handler(state=SendPhoto.next_call_2)
 async def send_ads(call: types.CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
@@ -305,6 +309,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
                 caption = data['caption']
             keyboard = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text=data["kb_1"], url=data['url_1']))
             await send_message_admin(photo=photo, caption=caption, keyboard=keyboard)
+            await bot.send_message(chat_id=ADMINS[0], text=send_message_type, reply_markup=tasdiqlash)
             await SendPhoto.send_all_1.set()
         else:
             await call.message.delete()
@@ -313,7 +318,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         return await state.finish()
 
 
-@dp.callback_query_handler(state=SendPhoto.send_all_1, chat_id=ADMINS[0])
+@dp.callback_query_handler(state=SendPhoto.send_all_1)
 async def send_ads(call: types.CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
@@ -336,7 +341,7 @@ async def photo_button_name(message: types.Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data["kb_2"] = message.text
-        await bot.send_message(hat_id=message.chat.id, text="Iltimos, 2 - tugma uchun URL manzilini kiriting.")
+        await bot.send_message(chat_id=message.chat.id, text="Iltimos, 2 - tugma uchun URL manzilini kiriting.")
         await SendPhoto.waiting_url_2.set()
     except Exception as e:
         return await state.finish()
@@ -357,7 +362,7 @@ async def photo_button_url(message: types.Message, state: FSMContext):
         return await state.finish()
 
 
-@dp.callback_query_handler(state=SendPhoto.next_call_3, chat_id=ADMINS[0])
+@dp.callback_query_handler(state=SendPhoto.next_call_3)
 async def send_ads(call: types.CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
@@ -372,6 +377,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
                 InlineKeyboardButton(text=data["kb_1"], url=data['url_1']),
                 InlineKeyboardButton(text=data["kb_2"], url=data['url_2']))
             await send_message_admin(photo=photo, caption=caption, keyboard=keyboard)
+            await bot.send_message(chat_id=ADMINS[0], text=send_message_type, reply_markup=tasdiqlash)
             await SendPhoto.send_all_2.set()
         else:
             await call.message.delete()
@@ -380,7 +386,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         return await state.finish()
 
 
-@dp.callback_query_handler(state=SendPhoto.send_all_2, chat_id=ADMINS[0])
+@dp.callback_query_handler(state=SendPhoto.send_all_2)
 async def send_ads(call: types.CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
@@ -426,7 +432,7 @@ async def photo_button_url(message: types.Message, state: FSMContext):
         return await state.finish()
 
 
-@dp.callback_query_handler(state=SendPhoto.next_call_4, chat_id=ADMINS[0])
+@dp.callback_query_handler(state=SendPhoto.next_call_4)
 async def send_ads(call: types.CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
@@ -445,6 +451,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
                 InlineKeyboardButton(text=data["kb_2"], url=data['url_2']),
                 InlineKeyboardButton(text=data["kb_3"], url=data['url_3']))
             await send_message_admin(photo=photo, caption=caption, keyboard=keyboard)
+            await bot.send_message(chat_id=ADMINS[0], text=send_message_type, reply_markup=tasdiqlash)
             await SendPhoto.send_all_3.set()
         else:
             await call.message.delete()
@@ -453,7 +460,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         return await state.finish()
 
 
-@dp.callback_query_handler(state=SendPhoto.send_all_3, chat_id=ADMINS[0])
+@dp.callback_query_handler(state=SendPhoto.send_all_3)
 async def send_ads(call: types.CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
@@ -500,7 +507,7 @@ async def photo_button_url(message: types.Message, state: FSMContext):
         return await state.finish()
 
 
-@dp.callback_query_handler(state=SendPhoto.next_call_5, chat_id=ADMINS[0])
+@dp.callback_query_handler(state=SendPhoto.next_call_5)
 async def send_ads(call: types.CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
@@ -514,6 +521,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
                 InlineKeyboardButton(text=data["kb_3"], url=data['url_3']),
                 InlineKeyboardButton(text=data["kb_4"], url=data['url_4']))
             await send_message_admin(photo=photo, caption=caption, keyboard=keyboard)
+            await bot.send_message(chat_id=ADMINS[0], text=send_message_type, reply_markup=tasdiqlash)
             await SendPhoto.send_all_4.set()
         else:
             await call.message.delete()
@@ -522,7 +530,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         return await state.finish()
 
 
-@dp.callback_query_handler(state=SendPhoto.send_all_4, chat_id=ADMINS[0])
+@dp.callback_query_handler(state=SendPhoto.send_all_4)
 async def send_ads(call: types.CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
@@ -547,7 +555,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
 ## =============================== SEND A VIDEO ===================================
 
 
-@dp.callback_query_handler(text="video", chat_id=ADMINS[0])
+@dp.callback_query_handler(text="video")
 async def send_video_to_all(call: types.CallbackQuery):
     await bot.edit_message_text(chat_id=call.from_user.id, message_id=call.message.message_id, text="📽️ SEND VIDEO")
     await SendVideo.video.set()
@@ -579,7 +587,7 @@ async def video_caption(message: types.Message, state: FSMContext):
         return await state.finish()
 
 
-@dp.callback_query_handler(state=SendVideo.waiting_for_new_btn, chat_id=ADMINS[0])
+@dp.callback_query_handler(state=SendVideo.waiting_for_new_btn)
 async def send_ads(call: types.CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
@@ -591,6 +599,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
                 video = data["video"]
                 caption = data['caption']
             await send_message_admin(video=video, caption=caption)
+            await bot.send_message(chat_id=ADMINS[0], text=send_message_type, reply_markup=tasdiqlash)
             await SendPhoto.waiting_for_is_not_btn.set()
         else:
             await call.message.delete()
@@ -599,7 +608,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         return await state.finish()
 
 
-@dp.callback_query_handler(state=SendPhoto.waiting_for_is_not_btn, chat_id=ADMINS[0])
+@dp.callback_query_handler(state=SendPhoto.waiting_for_is_not_btn)
 async def send_ads(call: types.CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
@@ -642,7 +651,7 @@ async def video_button_url(message: types.Message, state: FSMContext):
         return await state.finish()
 
 
-@dp.callback_query_handler(state=SendVideo.next_call_2, chat_id=ADMINS[0])
+@dp.callback_query_handler(state=SendVideo.next_call_2)
 async def send_ads(call: types.CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
@@ -655,6 +664,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
                 caption = data['caption']
             keyboard = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text=data["kb_1"], url=data['url_1']))
             await send_message_admin(video=video, caption=caption, keyboard=keyboard)
+            await bot.send_message(chat_id=ADMINS[0], text=send_message_type, reply_markup=tasdiqlash)
             await SendVideo.send_all_1.set()
         else:
             await call.message.delete()
@@ -663,7 +673,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         return await state.finish()
 
 
-@dp.callback_query_handler(state=SendVideo.send_all_1, chat_id=ADMINS[0])
+@dp.callback_query_handler(state=SendVideo.send_all_1)
 async def send_ads(call: types.CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
@@ -707,7 +717,7 @@ async def video_button_url(message: types.Message, state: FSMContext):
         return await state.finish()
 
 
-@dp.callback_query_handler(state=SendVideo.next_call_3, chat_id=ADMINS[0])
+@dp.callback_query_handler(state=SendVideo.next_call_3)
 async def send_ads(call: types.CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
@@ -722,6 +732,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
                 InlineKeyboardButton(text=data["kb_1"], url=data['url_1']),
                 InlineKeyboardButton(text=data["kb_2"], url=data['url_2']))
             await send_message_admin(video=video, caption=caption, keyboard=keyboard)
+            await bot.send_message(chat_id=ADMINS[0], text=send_message_type, reply_markup=tasdiqlash)
             await SendVideo.send_all_2.set()
         else:
             await call.message.delete()
@@ -730,7 +741,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         return await state.finish()
 
 
-@dp.callback_query_handler(state=SendVideo.send_all_2, chat_id=ADMINS[0])
+@dp.callback_query_handler(state=SendVideo.send_all_2)
 async def send_ads(call: types.CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
@@ -776,7 +787,7 @@ async def video_button_url(message: types.Message, state: FSMContext):
         return await state.finish()
 
 
-@dp.callback_query_handler(state=SendVideo.next_call_4, chat_id=ADMINS[0])
+@dp.callback_query_handler(state=SendVideo.next_call_4)
 async def send_ads(call: types.CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
@@ -792,6 +803,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
                 InlineKeyboardButton(text=data["kb_2"], url=data['url_2']),
                 InlineKeyboardButton(text=data["kb_3"], url=data['url_3']))
             await send_message_admin(video=video, caption=caption, keyboard=keyboard)
+            await bot.send_message(chat_id=ADMINS[0], text=send_message_type, reply_markup=tasdiqlash)
             await SendVideo.send_all_3.set()
         else:
             await call.message.delete()
@@ -800,7 +812,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         return await state.finish()
 
 
-@dp.callback_query_handler(state=SendVideo.send_all_3, chat_id=ADMINS[0])
+@dp.callback_query_handler(state=SendVideo.send_all_3)
 async def send_ads(call: types.CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
@@ -847,7 +859,7 @@ async def video_button_url(message: types.Message, state: FSMContext):
         return await state.finish()
 
 
-@dp.callback_query_handler(state=SendVideo.next_call_5, chat_id=ADMINS[0])
+@dp.callback_query_handler(state=SendVideo.next_call_5)
 async def send_ads(call: types.CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
@@ -861,6 +873,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
                 InlineKeyboardButton(text=data["kb_3"], url=data['url_3']),
                 InlineKeyboardButton(text=data["kb_4"], url=data['url_4']))
             await send_message_admin(video=video, caption=caption, keyboard=keyboard)
+            await bot.send_message(chat_id=ADMINS[0], text=send_message_type, reply_markup=tasdiqlash)
             await SendVideo.send_all_4.set()
         else:
             await call.message.delete()
@@ -869,7 +882,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         return await state.finish()
 
 
-@dp.callback_query_handler(state=SendVideo.send_all_4, chat_id=ADMINS[0])
+@dp.callback_query_handler(state=SendVideo.send_all_4)
 async def send_ads(call: types.CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
