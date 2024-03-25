@@ -1,7 +1,7 @@
 from collections import Counter
 from aiogram.dispatcher import FSMContext
 from aiogram.types import ContentType
-from utlis.models import *
+from db.models import *
 from keyboards import *
 from data import *
 
@@ -10,7 +10,7 @@ logging.basicConfig(format=u'%(filename)s [LINE:%(lineno)d] #%(levelname)-8s [%(
 logger = logging.getLogger(__name__)
 
 
-@dp.message_handler(commands=['admin'])
+@dp.message_handler(commands=['admins'])
 async def bot_echo(message: types.Message):
     if message.chat.id in ADMINS:
         await message.delete()

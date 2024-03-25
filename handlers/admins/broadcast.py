@@ -1,10 +1,8 @@
-from aiogram.dispatcher import FSMContext
-from aiogram.types import ContentType
 from keyboards import *
 from .send_all import *
 from data import *
 
-# =========================================📄 SEND TEXT =============================================
+# 🟢 =========================================📄 SEND TEXT =============================================
 
 
 @dp.callback_query_handler(text="text")
@@ -197,7 +195,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         return await state.finish()
 
 
-## =============================== SEND A PHOTO ===================================
+# 🟢 ===============================🖼️ SEND PHOTO ===================================
 
 
 @dp.callback_query_handler(text="photo")
@@ -552,7 +550,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
         return await state.finish()
 
 
-## =============================== SEND A VIDEO ===================================
+# 🟢 ===============================📹 SEND VIDEO ===================================
 
 
 @dp.callback_query_handler(text="video")

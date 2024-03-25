@@ -2,7 +2,7 @@ import asyncio
 from datetime import datetime, timedelta
 from sqlalchemy import Column, String, Integer, func, BigInteger, Text, update, delete, JSON, DateTime, and_
 from sqlalchemy.future import select
-from utlis.database import Base, db
+from db.database import Base, db
 
 db.init()
 

@@ -8,8 +8,12 @@ async def main():
                 ┃      Starting bot polling...        ┃
                 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
     """)
-    del_help = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='🔻', callback_data=f"bekor_qilish"))
-    await dp.bot.send_message(ADMINS[0], f"<b>⚡️ Bot ishga tushdi!</b>", reply_markup=del_help)
+    await dp.bot.send_message(
+        chat_id=ADMINS[0],
+        text=f"<b>⚡️ Bot ishga tushdi!</b>",
+        reply_markup=InlineKeyboardMarkup(row_width=1).add(
+            InlineKeyboardButton(text='🔻', callback_data=f"bekor_qilish"))
+    )
     await db.create_all()
     await dp.start_polling()
 

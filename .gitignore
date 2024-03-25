@@ -117,4 +117,4 @@ dmypy.json
 .pytype/
 cython_debug/
 .idea
-useragent/user_agents.jl!/handlers/admin/panel.py
+data/user_agents.jl

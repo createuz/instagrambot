@@ -1,5 +1,5 @@
 # from states import LanguageSelection
-# from utlis import *
+# from db import *
 # from keyboards import *
 # from aiogram.utils import exceptions
 #

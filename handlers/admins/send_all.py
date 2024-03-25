@@ -1,7 +1,7 @@
 import asyncio
 import time
 from data import *
-from utlis.models import User, Group
+from db.models import User, Group
 
 
 async def send_message_all(chat_id: int, text=None, video=None, photo=None, caption=None, keyboard=None):

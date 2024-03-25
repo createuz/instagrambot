@@ -5,7 +5,7 @@ from data import *
 from aiogram import types
 from handlers import instagram_api
 from keyboards import *
-from utlis.models import *
+from db.models import *
 
 
 @dp.message_handler(commands=['start'])

@@ -2,7 +2,7 @@ import time
 from aiogram.dispatcher import FSMContext
 from aiogram.types import InputMediaPhoto, InputMediaVideo
 from instagram import instagram_api
-from utlis.models import *
+from db.models import *
 from data import *
 from keyboards import *
 
