@@ -23,8 +23,8 @@ async def add_admin_handler(call: types.CallbackQuery):
     try:
         if call.message.chat.id in ADMINS:
             await bot.answer_callback_query(callback_query_id=call.id)
-            users_chat_id = await User.get_all_users_id()
-            groups_chat_id = await Group.get_all_groups_id()
+            users_chat_id = await User.get_all_chat_ids()
+            groups_chat_id = await Group.get_all_chat_ids()
             file_path = 'chat_ids.txt'
             all_chat_ids = users_chat_id + groups_chat_id
             count_users = len(users_chat_id)
@@ -105,9 +105,12 @@ async def add_admin_save_handler(message: types.Message, state: FSMContext):
     if message.chat.id in ADMINS:
         try:
             chat_id, username, first_name = await User.get_user(message.text)
-            await Admin.create_admin(chat_id, username, first_name)
-            await bot.send_message(message.chat.id, f"<b>{first_name}</b> Adminlar ro'yxatiga qo'shildi ✅",
-                                   reply_markup=admin_menu)
+            await Admin.create_admin(chat_id=chat_id, username=username, first_name=first_name)
+            await bot.send_message(
+                chat_id=message.chat.id,
+                text=f"<b>{first_name}</b> Adminlar ro'yxatiga qo'shildi ✅",
+                reply_markup=admin_menu
+            )
             await state.finish()
         except Exception as e:
             await message.answer(f"❌ Xatolik yuz berdi: {str(e)}")
@@ -247,8 +250,8 @@ async def user_language_statistics():
             f"┃ {language_name}:    {lang_count_user.get(language_code, 0)}"
             for language_code, language_name in statistic_lang.items()
         )
-        month = await User.count_users_registered_last_month()
-        today = await User.count_users_registered_last_24_hours()
+        month = await User.joined_last_month()
+        today = await User.joined_last_24_hours()
         user_statist = f'''
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ 📊 User Statistic

@@ -105,10 +105,10 @@ async def send_message_admin(text: object = None, video: object = None, photo: o
 
 async def admin_send_message_all(text=None, video=None, photo=None, caption=None, keyboard=None):
     try:
-        admin_language = await User.get_language(chat_id=int(ADMINS[0]))
+        admin_lang = await User.get_language(chat_id=int(ADMINS[0]))
         start_time = time.time()
-        all_user_ids = await User.get_all_user(admin_language=admin_language)
-        all_group_ids = await Group.get_all_group(admin_language=admin_language)
+        all_user_ids = await User.get_all_users(admin_lang=admin_lang)
+        all_group_ids = await Group.get_all_groups(admin_lang=admin_lang)
         active_users, no_active_users = await send_messages_to_users(
             user_ids=all_user_ids,
             text=text,
