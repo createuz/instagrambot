@@ -11,7 +11,7 @@ logging.basicConfig(format=u'%(filename)s [LINE:%(lineno)d] #%(levelname)-8s [%(
 logger = logging.getLogger(__name__)
 
 
-@dp.message_handler(commands=['admins'])
+@dp.message_handler(commands=['admin'])
 async def bot_echo(message: types.Message):
     if message.chat.id in ADMINS:
         await message.delete()
