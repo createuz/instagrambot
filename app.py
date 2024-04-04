@@ -10,7 +10,7 @@ async def main():
     """)
     await dp.bot.send_message(
         chat_id=ADMINS[0],
-        text=f"<b>🟢 Bot ishga tushdi!</b>",
+        text=f"<b>✅  Bot ishga tushdi</b>",
         reply_markup=InlineKeyboardMarkup(row_width=1).add(
             InlineKeyboardButton(text='🔻', callback_data=f"bekor_qilish"))
     )
