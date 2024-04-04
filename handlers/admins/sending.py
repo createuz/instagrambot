@@ -127,6 +127,7 @@ async def admin_send_message_all(text=None, video=None, photo=None, caption=None
         )
         elapsed_time = time.time() - start_time
         date = format_time(elapsed_time=elapsed_time)
+        # date = time.strftime("%H:%M:%S", time.gmtime(elapsed_time))
         msg = f'''
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ 📊  Sent message Statistic

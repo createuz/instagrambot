@@ -31,9 +31,9 @@ class User(Base):
         return user
 
     @classmethod
-    async def update_language(cls, chat_id: int, update_lang: str):
+    async def update_language(cls, chat_id: int, language: str):
         async with db() as session:
-            await session.execute(update(cls).where(cls.chat_id == chat_id).values(language=update_lang))
+            await session.execute(update(cls).where(cls.chat_id == chat_id).values(language=language))
             try:
                 await session.commit()
             except Exception:
@@ -82,14 +82,14 @@ class User(Base):
 
 class Group(Base):
     __tablename__ = "groups"
-    id = Column(BigInteger, primary_key=True, autoincrement=True)
-    chat_id = Column(BigInteger, nullable=True, unique=True)
-    group_name = Column(String)
-    group_username = Column(String)
-    group_type = Column(String)
-    group_members = Column(BigInteger)
-    language = Column(String)
-    created_add = Column(DateTime)
+    id: BigInteger = Column(BigInteger, primary_key=True, autoincrement=True)
+    chat_id: BigInteger = Column(BigInteger, nullable=True, unique=True)
+    group_name: String = Column(String)
+    group_username: String = Column(String)
+    group_type: String = Column(String)
+    group_members: String = Column(BigInteger)
+    language: String = Column(String)
+    created_add: DateTime = Column(DateTime)
 
     @classmethod
     async def create_group(cls, chat_id: int, group_name: str, group_username: str,
@@ -106,9 +106,9 @@ class Group(Base):
         return group
 
     @classmethod
-    async def update_language(cls, chat_id: int, update_lang: str):
+    async def update_language(cls, chat_id: int, language: str):
         async with db() as session:
-            await session.execute(update(cls).where(cls.chat_id == chat_id).values(language=update_lang))
+            await session.execute(update(cls).where(cls.chat_id == chat_id).values(language=language))
             try:
                 await session.commit()
             except Exception:
@@ -149,10 +149,10 @@ class Group(Base):
 
 class Admin(Base):
     __tablename__ = 'admins'
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    chat_id = Column(BigInteger, unique=True)
-    username = Column(String)
-    first_name = Column(String)
+    id: Integer = Column(Integer, primary_key=True, autoincrement=True)
+    chat_id: BigInteger = Column(BigInteger, unique=True)
+    username: String = Column(String)
+    first_name: String = Column(String)
 
     @classmethod
     async def create_admin(cls, chat_id, username, first_name):
@@ -195,8 +195,8 @@ class Admin(Base):
 
 class Statistics(Base):
     __tablename__ = 'statistics'
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    media_count = Column(BigInteger, default=1)
+    id: Integer = Column(Integer, primary_key=True, autoincrement=True)
+    media_count: BigInteger = Column(BigInteger, default=1)
 
     @classmethod
     async def add_media(cls, count: int):

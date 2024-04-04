@@ -1,1 +1,1 @@
-from .group_handler import *
+from .group import *

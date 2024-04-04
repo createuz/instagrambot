@@ -56,7 +56,7 @@ async def process_language_selection(call: types.CallbackQuery, state: FSMContex
         language = languages.get(call.data)
         group_lang = await Group.get_language(chat_id=call.message.chat.id)
         if group_lang:
-            await Group.update_language(chat_id=call.message.chat.id, new_language=language)
+            await Group.update_language(chat_id=call.message.chat.id, language=language)
             await state.finish()
             await bot.answer_callback_query(callback_query_id=call.id)
             await bot.edit_message_text(
@@ -73,7 +73,8 @@ async def process_language_selection(call: types.CallbackQuery, state: FSMContex
                 group_name=call.message.chat.title,
                 group_username=call.message.chat.username,
                 group_members=chat_members,
-                language=language
+                language=language,
+                created_add=datetime.now()
             )
             await bot.answer_callback_query(callback_query_id=call.id)
             await state.finish()

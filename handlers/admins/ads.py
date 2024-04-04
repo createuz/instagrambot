@@ -1,11 +1,12 @@
 from aiogram.dispatcher import FSMContext
 from aiogram.types import ContentType
-
 from keyboards import *
-from .send_all import *
+from .sending import *
 from data import *
+from .kbs import *
 
-# 🟢 =========================================📄 SEND TEXT =============================================
+
+# 🟢 ========================================= 📄 SEND TEXT =============================================
 
 
 @dp.callback_query_handler(text="text")
