@@ -9,7 +9,7 @@ db.init()
 class User(Base):
     __tablename__ = "users"
     id: BigInteger = Column(BigInteger, primary_key=True, autoincrement=True)
-    chat_id: BigInteger = Column(BigInteger, unique=True)
+    chat_id: BigInteger = Column(BigInteger, unique=True, index=True)
     username: String = Column(String)
     first_name: String = Column(String)
     language: String = Column(String)
@@ -83,7 +83,7 @@ class User(Base):
 class Group(Base):
     __tablename__ = "groups"
     id: BigInteger = Column(BigInteger, primary_key=True, autoincrement=True)
-    chat_id: BigInteger = Column(BigInteger, nullable=True, unique=True)
+    chat_id: BigInteger = Column(BigInteger, unique=True)
     group_name: String = Column(String)
     group_username: String = Column(String)
     group_type: String = Column(String)

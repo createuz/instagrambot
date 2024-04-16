@@ -105,7 +105,7 @@ async def add_admin_handler(call: types.CallbackQuery):
 async def add_admin_save_handler(message: types.Message, state: FSMContext):
     if message.chat.id in ADMINS:
         try:
-            chat_id, username, first_name = await User.get_user(message.text)
+            chat_id, username, first_name = await User.get_user_data(message.text)
             await Admin.create_admin(chat_id=chat_id, username=username, first_name=first_name)
             await bot.send_message(
                 chat_id=message.chat.id,

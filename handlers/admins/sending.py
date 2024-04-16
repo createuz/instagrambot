@@ -76,7 +76,8 @@ async def send_messages_to_groups(group_ids: list, text=None, video=None, photo=
         return None
 
 
-async def send_message_admin(text: object = None, video: object = None, photo: object = None, caption: object = None, keyboard: object = None) -> object:
+async def send_message_admin(text: object = None, video: object = None, photo: object = None, caption: object = None,
+                             keyboard: object = None) -> object:
     try:
         if text:
             return await bot.send_message(
@@ -145,7 +146,11 @@ async def admin_send_message_all(text=None, video=None, photo=None, caption=None
 ┃ •  No active groups:  {no_active_groups}
 ┣━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ •  Total time:  {date}
+┣━━━━━━━━━━━━━━━━━━━━━━━━━
+┃ • ▪️Powered by:  {BOT_USERNAME}
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━'''
         await bot.send_message(chat_id=ADMINS[0], text=f"<b>{msg}</b>")
+        await bot.send_message(chat_id=-1002073628577, text=f"<b>{msg}</b>")
+        await bot.send_photo(chat_id=ADMINS[0], photo='C:/Users/creat/Desktop/Bot/InstagramBot/data/img.png')
     except Exception as e:
         await bot.send_message(chat_id=ADMINS[0], text=f"Xatolik yuz berdi: {str(e)}")

@@ -19,7 +19,7 @@ class AsyncDatabaseSession:
 
     def init(self):
         self._engine = create_async_engine(DB_URL, future=True, echo=True)
-        self._session = async_sessionmaker(self._engine, expire_on_commit=False, class_=AsyncSession)()
+        self._session = async_sessionmaker(self._engine, expire_on_commit=False, future=True, class_=AsyncSession)()
 
     async def create_all(self):
         async with self._engine.begin() as conn:
