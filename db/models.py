@@ -8,19 +8,18 @@ db.init()
 
 class User(Base):
     __tablename__ = "users"
-    id: BigInteger = Column(BigInteger, primary_key=True, autoincrement=True)
+    id: Integer = Column(Integer, primary_key=True, autoincrement=True)
     chat_id: BigInteger = Column(BigInteger, unique=True, index=True)
     username: String = Column(String)
     first_name: String = Column(String)
     language: String = Column(String)
     added_by: String = Column(String)
-    created_add: DateTime = Column(DateTime)
+    created_add: DateTime = Column(DateTime, default=datetime.now())
 
     @classmethod
-    async def create_user(cls, chat_id: int, username: str, first_name: str, language: str, added_by: str,
-                          created_add: datetime):
+    async def create_user(cls, chat_id: int, username: str, first_name: str, language: str, added_by: str):
         user = cls(chat_id=chat_id, username=username, first_name=first_name,
-                   language=language, added_by=added_by, created_add=created_add)
+                   language=language, added_by=added_by)
         async with db() as session:
             session.add(user)
             try:
@@ -82,20 +81,18 @@ class User(Base):
 
 class Group(Base):
     __tablename__ = "groups"
-    id: BigInteger = Column(BigInteger, primary_key=True, autoincrement=True)
-    chat_id: BigInteger = Column(BigInteger, unique=True)
-    group_name: String = Column(String)
-    group_username: String = Column(String)
-    group_type: String = Column(String)
-    group_members: String = Column(BigInteger)
+    id: Integer = Column(Integer, primary_key=True, autoincrement=True)
+    chat_id: BigInteger = Column(BigInteger, unique=True, index=True)
+    name: String = Column(String)
+    username: String = Column(String)
+    type: String = Column(String)
+    members: Integer = Column(Integer)
     language: String = Column(String)
-    created_add: DateTime = Column(DateTime)
+    created_add: DateTime = Column(DateTime, default=datetime.now())
 
     @classmethod
-    async def create_group(cls, chat_id: int, group_name: str, group_username: str,
-                           group_members: int, language: str, created_add: datetime):
-        group = cls(chat_id=chat_id, group_name=group_name, group_username=group_username,
-                    group_members=group_members, language=language, created_add=created_add)
+    async def create_group(cls, chat_id: int, name: str, username: str, members: int, language: str):
+        group = cls(chat_id=chat_id, name=name, username=username, members=members, language=language)
         async with db() as session:
             session.add(group)
             try:
@@ -191,25 +188,3 @@ class Admin(Base):
                 await session.rollback()
                 raise
             return True
-
-
-class Statistics(Base):
-    __tablename__ = 'statistics'
-    id: Integer = Column(Integer, primary_key=True, autoincrement=True)
-    media_count: BigInteger = Column(BigInteger, default=1)
-
-    @classmethod
-    async def add_media(cls, count: int):
-        async with db() as session:
-            await session.execute(
-                update(cls).values(media_count=cls.media_count + count))
-            try:
-                await session.commit()
-            except Exception:
-                await session.rollback()
-                raise
-
-    @classmethod
-    async def get_media_count(cls):
-        async with db() as session:
-            return await session.scalar(select(cls.media_count))
