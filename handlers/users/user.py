@@ -46,8 +46,7 @@ async def process_language_selection(call: types.CallbackQuery, state: FSMContex
                 username=call.message.chat.username,
                 first_name=call.message.chat.first_name,
                 language=language,
-                added_by=added_by,
-                created_add=datetime.now()
+                added_by=added_by
             )
             await state.finish()
             await bot.answer_callback_query(callback_query_id=call.id)

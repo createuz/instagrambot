@@ -70,11 +70,10 @@ async def process_language_selection(call: types.CallbackQuery, state: FSMContex
             chat_members = await bot.get_chat_members_count(chat_id=call.message.chat.id)
             await Group.create_group(
                 chat_id=call.message.chat.id,
-                group_name=call.message.chat.title,
-                group_username=call.message.chat.username,
-                group_members=chat_members,
+                name=call.message.chat.title,
+                username=call.message.chat.username,
+                members=chat_members,
                 language=language,
-                created_add=datetime.now()
             )
             await bot.answer_callback_query(callback_query_id=call.id)
             await state.finish()
@@ -89,7 +88,7 @@ async def process_language_selection(call: types.CallbackQuery, state: FSMContex
         logger.exception("Error while processing language selection: %s", e)
 
 
-@dp.message_handler(regexp=r'https?:\/\/(www\.)?instagram\.com\/(reel|p)\/([-_a-zA-Z0-9]{11})')
+@dp.message_handler(regexp=r'https?:\/\/(www\.)?api\.com\/(reel|p)\/([-_a-zA-Z0-9]{11})')
 async def send_instagram_media(message: types.Message):
     await message.delete()
     global wait_msg
@@ -127,7 +126,7 @@ async def send_instagram_media(message: types.Message):
         )
 
 
-@dp.message_handler(regexp=r'https?:\/\/(www\.)?instagram\.com\/(stories)')
+@dp.message_handler(regexp=r'https?:\/\/(www\.)?api\.com\/(stories)')
 async def send_instagram_media(message: types.Message):
     await message.delete()
     global wait_msg
