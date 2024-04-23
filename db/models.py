@@ -8,18 +8,18 @@ db.init()
 
 class User(Base):
     __tablename__ = "users"
-    id: Integer = Column(Integer, primary_key=True, autoincrement=True)
-    chat_id: BigInteger = Column(BigInteger, unique=True, index=True)
-    username: String = Column(String)
-    first_name: String = Column(String)
-    language: String = Column(String)
-    added_by: String = Column(String)
-    created_add: DateTime = Column(DateTime, default=datetime.now())
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    chat_id = Column(BigInteger, unique=True, index=True)
+    username = Column(String)
+    first_name = Column(String)
+    language = Column(String)
+    added_by = Column(String)
+    created_add = Column(DateTime, default=datetime.now())
 
     @classmethod
     async def create_user(cls, chat_id: int, username: str, first_name: str, language: str, added_by: str):
-        user = cls(chat_id=chat_id, username=username, first_name=first_name,
-                   language=language, added_by=added_by)
+        user = cls(chat_id=chat_id, username=username,
+                   first_name=first_name, language=language, added_by=added_by)
         async with db() as session:
             session.add(user)
             try:
@@ -81,14 +81,13 @@ class User(Base):
 
 class Group(Base):
     __tablename__ = "groups"
-    id: Integer = Column(Integer, primary_key=True, autoincrement=True)
-    chat_id: BigInteger = Column(BigInteger, unique=True, index=True)
-    name: String = Column(String)
-    username: String = Column(String)
-    type: String = Column(String)
-    members: Integer = Column(Integer)
-    language: String = Column(String)
-    created_add: DateTime = Column(DateTime, default=datetime.now())
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    chat_id = Column(BigInteger, unique=True, index=True)
+    name = Column(String)
+    username = Column(String)
+    members = Column(Integer)
+    language = Column(String)
+    created_add = Column(DateTime, default=datetime.now())
 
     @classmethod
     async def create_group(cls, chat_id: int, name: str, username: str, members: int, language: str):
@@ -146,10 +145,10 @@ class Group(Base):
 
 class Admin(Base):
     __tablename__ = 'admins'
-    id: Integer = Column(Integer, primary_key=True, autoincrement=True)
-    chat_id: BigInteger = Column(BigInteger, unique=True)
-    username: String = Column(String)
-    first_name: String = Column(String)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    chat_id = Column(BigInteger, unique=True)
+    username = Column(String)
+    first_name = Column(String)
 
     @classmethod
     async def create_admin(cls, chat_id, username, first_name):
