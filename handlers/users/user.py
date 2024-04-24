@@ -48,8 +48,8 @@ async def process_language_selection(call: types.CallbackQuery, state: FSMContex
                 language=language,
                 added_by=added_by
             )
+            await bot.answer_callback_query(callback_query_id=call.id, text=f"✅ {language_changed.get(call.data)}")
             await state.finish()
-            await bot.answer_callback_query(callback_query_id=call.id)
             await bot.edit_message_text(
                 chat_id=call.message.chat.id,
                 message_id=call.message.message_id,
@@ -57,7 +57,6 @@ async def process_language_selection(call: types.CallbackQuery, state: FSMContex
                 reply_markup=add_group.get(language),
                 disable_web_page_preview=True
             )
-        return await call.message.delete()
     except Exception as e:
         logger.exception("Error while processing language selection: %s", e)
 
@@ -88,7 +87,7 @@ async def process_change_language(call: types.CallbackQuery, state: FSMContext):
         language = languages.get(call.data)
         await User.update_language(chat_id=call.message.chat.id, language=language)
         await state.finish()
-        await bot.answer_callback_query(callback_query_id=call.id)
+        await bot.answer_callback_query(callback_query_id=call.id, text=f"✅  {language_changed.get(call.data)}")
         await bot.edit_message_text(
             chat_id=call.message.chat.id,
             message_id=call.message.message_id,

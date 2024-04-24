@@ -14,12 +14,12 @@ class User(Base):
     first_name = Column(String)
     language = Column(String)
     added_by = Column(String)
-    created_add = Column(DateTime, default=datetime.now())
+    created_add = Column(DateTime)
 
     @classmethod
     async def create_user(cls, chat_id: int, username: str, first_name: str, language: str, added_by: str):
         user = cls(chat_id=chat_id, username=username,
-                   first_name=first_name, language=language, added_by=added_by)
+                   first_name=first_name, language=language, added_by=added_by, created_add=datetime.now())
         async with db() as session:
             session.add(user)
             try:

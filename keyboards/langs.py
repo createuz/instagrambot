@@ -1,3 +1,5 @@
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+
 choose_button = "<b>🌐 Choose language</b>"
 send_message_type = "<b>Siz yubormoqchi bo'lgan xabar turi shu ko'rinishda bo'ladi!\n\n✅ Tastiqlash   |   🗑 Bekor qilish</b>"
 languages = {
@@ -14,6 +16,22 @@ languages = {
     "uk": "Ukraine",
     "az": "Azerbaijan",
 }
+
+language_changed = {
+    "uz": "🇺🇿 O'zbekcha",
+    "en": "🇬🇧 English",
+    "ru": "🇷🇺 Русский",
+    "ar": "عربي 🇸🇦",
+    "tr": "🇹🇷 Türkçe",
+    "kz": "🇰🇿 Қазақ",
+    "de": "🇩🇪 Deutsch",
+    "fr": "🇫🇷 Français",
+    "es": "🇪🇸 Español",
+    "it": "🇮🇹 Italiano",
+    "uk": "🇺🇦 Український",
+    "az": "🇦🇿 Azərbaycanca",
+}
+
 statistic_lang = {
     'Uzbek': "🇺🇿 Uzbek ",
     'English': "🇬🇧 English ",
@@ -198,7 +216,6 @@ Botu istifadə etmə qaydaları ilə tanış olmaq üçün aşağıdakı əmr is
 Əgər botla bağlı hər hansı bir səhv və çətinliklərə düşərsinizsə və ya əlavə fikirləriniz varsa, zəhmət olmasa, bizimlə aşağıdakı ünvanlar vasitəsilə əlaqə saxlayın: @Tmcode
 Sizin fikriniz bizim üçün vacibdir.
 """
-
 
 langs_text = {
     'Uzbek': {
