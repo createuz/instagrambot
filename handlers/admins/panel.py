@@ -24,8 +24,8 @@ async def add_admin_handler(call: types.CallbackQuery):
     try:
         if call.message.chat.id in ADMINS:
             await bot.answer_callback_query(callback_query_id=call.id)
-            users_chat_id = await User.get_all_chat_ids()
-            groups_chat_id = await Group.get_all_chat_ids()
+            users_chat_id = await User.get_all_users()
+            groups_chat_id = await Group.get_all_groups()
             file_path = 'chat_ids.txt'
             all_chat_ids = users_chat_id + groups_chat_id
             count_users = len(users_chat_id)
@@ -105,7 +105,7 @@ async def add_admin_handler(call: types.CallbackQuery):
 async def add_admin_save_handler(message: types.Message, state: FSMContext):
     if message.chat.id in ADMINS:
         try:
-            chat_id, username, first_name = await User.get_user_data(message.text)
+            chat_id, username, first_name = await User.get_user(message.chat.id)
             await Admin.create_admin(chat_id=chat_id, username=username, first_name=first_name)
             await bot.send_message(
                 chat_id=message.chat.id,

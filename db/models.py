@@ -45,24 +45,22 @@ class User(Base):
             return await session.scalar(select(cls.language).where(cls.chat_id == chat_id))
 
     @classmethod
-    async def get_user_data(cls, chat_id: int):
+    async def get_user(cls, chat_id: int):
         async with db() as session:
             user = await session.scalar(select(cls).where(cls.chat_id == chat_id))
             if user:
                 return user.chat_id, user.username, user.first_name
-        return None, None, None
+            return None, None, None
 
     @classmethod
-    async def get_all_users(cls, admin_lang: str):
-        query = (cls.language == admin_lang) if admin_lang == 'Uzbek' else (cls.language != 'Uzbek')
+    async def get_all_users(cls, admin_lang: str = None):
         async with db() as session:
-            result = await session.execute(select(cls.chat_id).where(query))
-            return [row[0] for row in result.all()]
-
-    @classmethod
-    async def get_all_chat_ids(cls):
-        async with db() as session:
-            result = await session.execute(select(cls.chat_id))
+            if admin_lang is None:
+                query = select(cls.chat_id)
+            else:
+                query = select(cls.chat_id).where(
+                    (cls.language == admin_lang) if admin_lang == 'Uzbek' else (cls.language != 'Uzbek'))
+            result = await session.execute(query)
             return [row[0] for row in result.all()]
 
     @classmethod
@@ -117,16 +115,14 @@ class Group(Base):
             return await session.scalar(select(cls.language).where(cls.chat_id == chat_id))
 
     @classmethod
-    async def get_all_groups(cls, admin_lang: str):
-        query = (cls.language == admin_lang) if admin_lang == 'Uzbek' else (cls.language != 'Uzbek')
+    async def get_all_groups(cls, admin_lang: str = None):
         async with db() as session:
-            result = await session.execute(select(cls.chat_id).where(query))
-            return [row[0] for row in result.all()]
-
-    @classmethod
-    async def get_all_chat_ids(cls):
-        async with db() as session:
-            result = await session.execute(select(cls.chat_id))
+            if admin_lang is None:
+                query = select(cls.chat_id)
+            else:
+                query = select(cls.chat_id).where(
+                    (cls.language == admin_lang) if admin_lang == 'Uzbek' else (cls.language != 'Uzbek'))
+            result = await session.execute(query)
             return [row[0] for row in result.all()]
 
     @classmethod
