@@ -1,5 +1,3 @@
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-
 choose_button = "<b>🌐 Choose language</b>"
 send_message_type = "<b>Siz yubormoqchi bo'lgan xabar turi shu ko'rinishda bo'ladi!\n\n✅ Tastiqlash   |   🗑 Bekor qilish</b>"
 languages = {

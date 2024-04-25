@@ -13,7 +13,7 @@ language_keyboard = InlineKeyboardMarkup(row_width=2).add(
     InlineKeyboardButton(text="🇪🇸 Español", callback_data="es"),
     InlineKeyboardButton(text="🇮🇹 Italiano", callback_data="it"),
     InlineKeyboardButton(text="🇦🇿 Azərbaycanca", callback_data="az"),
-    InlineKeyboardButton(text="العربية 🇸🇦", callback_data="ar")
+    InlineKeyboardButton(text="عربي 🇸🇦", callback_data="ar")
 )
 
 add_group = {
