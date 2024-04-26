@@ -128,29 +128,31 @@ async def admin_send_message_all(text=None, video=None, photo=None, caption=None
         )
         elapsed_time = time.time() - start_time
         date = format_time(elapsed_time=elapsed_time)
-        # date = time.strftime("%H:%M:%S", time.gmtime(elapsed_time))
-        msg = f'''
-┏━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ 📊  Sent message Statistic
-┣━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ •  All users:  {len(all_user_ids)}
-┣━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ •  Active users:  {active_users}
-┣━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ •  No active users:  {no_active_users}
-┣━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ •  All groups:  {len(all_group_ids)}
-┣━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ •  Active groups:  {active_groups}
-┣━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ •  No active groups:  {no_active_groups}
-┣━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ •  Total time:  {date}
-┣━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ • ▪️Powered by:  {BOT_USERNAME}
-┗━━━━━━━━━━━━━━━━━━━━━━━━━'''
+        date2 = time.strftime("%H:%M:%S", time.gmtime(elapsed_time))
+        msg = f'''┏━━━━━━━━━━━━━━━━━━━━━━━━
+┃  📊  Sent message Statistic
+┣━━━━━━━━━━━━━━━━━━━━━━━━
+┃
+┃  •  All users:  {len(all_user_ids)}
+┃
+┃  •  Active users:  {active_users}
+┃
+┃  •  No active users:  {no_active_users}
+┃
+┃  •  All groups:  {len(all_group_ids)}
+┃
+┃  •  Active groups:  {active_groups}
+┃
+┃  •  No active groups:  {no_active_groups}
+┃
+┃  •  Total time1:  {date}
+┃
+┃  •  Total time2:  {date2}
+┃
+┃  •  Powered by:  {BOT_USERNAME}
+┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━'''
         await bot.send_message(chat_id=ADMINS[0], text=f"<b>{msg}</b>")
-        await bot.send_message(chat_id=-1002073628577, text=f"<b>{msg}</b>")
-        await bot.send_photo(chat_id=ADMINS[0], photo='C:/Users/creat/Desktop/Bot/InstagramBot/data/img.png')
+        await bot.send_message(chat_id='-1002073628577', text=f"<b>{msg}</b>")
     except Exception as e:
         await bot.send_message(chat_id=ADMINS[0], text=f"Xatolik yuz berdi: {str(e)}")

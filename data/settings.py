@@ -13,4 +13,4 @@ async def replace_text_to_links(text):
 def format_time(elapsed_time):
     hours, rem = divmod(elapsed_time, 3600)
     minutes, seconds = divmod(rem, 60)
-    return f"{int(hours):02d} : {int(minutes):02d} : {int(seconds):02d}"
+    return f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
