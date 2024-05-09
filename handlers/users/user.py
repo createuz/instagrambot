@@ -48,8 +48,8 @@ async def process_language_selection(call: types.CallbackQuery, state: FSMContex
                 language=language,
                 added_by=added_by
             )
-            await bot.answer_callback_query(callback_query_id=call.id, text=f"✅ {language_changed.get(call.data)}")
             await state.finish()
+            await bot.answer_callback_query(callback_query_id=call.id, text=f"✅ {language_changed.get(call.data)}")
             await bot.edit_message_text(
                 chat_id=call.message.chat.id,
                 message_id=call.message.message_id,
