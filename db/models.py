@@ -14,12 +14,11 @@ class User(Base):
     first_name = Column(String)
     language = Column(String)
     added_by = Column(String)
-    created_add = Column(DateTime)
+    created_add = Column(DateTime, default=datetime.now)
 
     @classmethod
     async def create_user(cls, chat_id: int, username: str, first_name: str, language: str, added_by: str):
-        user = cls(chat_id=chat_id, username=username,
-                   first_name=first_name, language=language, added_by=added_by, created_add=datetime.now())
+        user = cls(chat_id=chat_id, username=username, first_name=first_name, language=language, added_by=added_by)
         async with db() as session:
             session.add(user)
             try:
@@ -85,7 +84,7 @@ class Group(Base):
     username = Column(String)
     members = Column(Integer)
     language = Column(String)
-    created_add = Column(DateTime, default=datetime.now())
+    created_add = Column(DateTime, default=datetime.now)
 
     @classmethod
     async def create_group(cls, chat_id: int, name: str, username: str, members: int, language: str):
