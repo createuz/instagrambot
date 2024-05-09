@@ -6,7 +6,7 @@ from data import *
 from keyboards import *
 
 
-@dp.message_handler(regexp=r'https?:\/\/(www\.)?api\.com\/(reel|p)\/([-_a-zA-Z0-9]{11})',
+@dp.message_handler(regexp=r'https?:\/\/(www\.)?instagram\.com\/(reel|p)\/([-_a-zA-Z0-9]{11})',
                     chat_type=types.ChatType.PRIVATE)
 async def send_instagram_media(message: types.Message):
     await message.delete()
