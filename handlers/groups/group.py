@@ -10,7 +10,6 @@ from db.models import *
 
 @dp.message_handler(commands=['start'])
 async def start_handler_lang(message: types.Message):
-    await message.delete()
     try:
         language = await Group.get_language(message.chat.id)
         if language:
@@ -28,7 +27,6 @@ async def start_handler_lang(message: types.Message):
                 reply_markup=language_keyboard,
                 protect_content=True
             )
-            await LanguageSelection.select_language.set()
     except Exception as e:
         logger.exception("Error while processing start command: %s", e)
 

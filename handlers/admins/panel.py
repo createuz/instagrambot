@@ -219,7 +219,7 @@ async def group_language_statistics():
     try:
         async with db() as session:
             groups = await session.execute(select(Group.language))
-            group_members = await session.execute(select(Group.group_members))
+            group_members = await session.execute(select(Group.members))
         lang_count_group = Counter([language for language, in groups])
         total_members = sum(row[0] for row in group_members)
         total_groups = sum(lang_count_group.values())

@@ -99,3 +99,7 @@ class SendVideo(StatesGroup):
     waiting_url_2 = State()
     waiting_url_3 = State()
     waiting_url_4 = State()
+
+
+class Backup(StatesGroup):
+    wait_txt_file = State()
