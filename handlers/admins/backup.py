@@ -30,7 +30,8 @@ async def download_file(file_id, doc_path):
 
 
 async def handle_get_chat_ids(message: types.Message):
-    doc_path = f"C:/Users/creat/Desktop/Bot/InstagramBot/data/{message.document.file_id}"
+    doc_path = f"/var/www/instagrambot/data/{message.document.file_id}"
+    # doc_path = f"C:/Users/creat/Desktop/Bot/InstagramBot/data/{message.document.file_id}"
     try:
         await download_file(message.document.file_id, doc_path)
         if os.path.exists(doc_path):
