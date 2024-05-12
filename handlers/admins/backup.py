@@ -30,7 +30,7 @@ async def download_file(file_id, doc_path):
 
 
 async def handle_get_chat_ids(message: types.Message):
-    doc_path = f"C:/Users/creat/Desktop/Bot/InstagramBot/backup/{message.document.file_id}"
+    doc_path = f"C:/Users/creat/Desktop/Bot/InstagramBot/data/{message.document.file_id}"
     try:
         await download_file(message.document.file_id, doc_path)
         if os.path.exists(doc_path):
@@ -57,7 +57,7 @@ async def process_chat_id(chat_id):
                     chat_id=chat_id,
                     username=user.username,
                     first_name=user.first_name,
-                    language='None',
+                    language='Russian',
                     added_by='true'
                 )
         else:
@@ -69,7 +69,7 @@ async def process_chat_id(chat_id):
                     name=group.title,
                     username=group.username,
                     members=members,
-                    language='None'
+                    language='Uzbek'
                 )
         return success
     except Exception as e:
