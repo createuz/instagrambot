@@ -187,17 +187,17 @@ async def chose_statistics(call: types.CallbackQuery):
 
 async def user_language_statistics():
     try:
-        async with db() as session:
+        async for session in db.get_session():
             users = await session.execute(select(User.language))
-        lang_count_user = Counter([language for language, in users])
-        total_users = sum(lang_count_user.values())
-        user_data = '\n'.join(
-            f"┃ {language_name}:    {lang_count_user.get(language_code, 0)}"
-            for language_code, language_name in statistic_lang.items()
-        )
-        month = await User.joined_last_month()
-        today = await User.joined_last_24_hours()
-        user_statist = f'''
+            lang_count_user = Counter([language for language, in users])
+            total_users = sum(lang_count_user.values())
+            user_data = '\n'.join(
+                f"┃ {language_name}:    {lang_count_user.get(language_code, 0)}"
+                for language_code, language_name in statistic_lang.items()
+            )
+            month = await User.joined_last_month()
+            today = await User.joined_last_24_hours()
+            user_statist = f'''
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ 📊 User Statistic
 ┣━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -209,7 +209,7 @@ async def user_language_statistics():
 ┣━━━━━━━━━━━━━━━━━━━━━━━━━
 {user_data}
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━'''
-        return user_statist
+            return user_statist
     except Exception as e:
         logger.exception("Xatolik: %s", e)
         return None
@@ -217,17 +217,17 @@ async def user_language_statistics():
 
 async def group_language_statistics():
     try:
-        async with db() as session:
+        async for session in db.get_session():
             groups = await session.execute(select(Group.language))
             group_members = await session.execute(select(Group.members))
-        lang_count_group = Counter([language for language, in groups])
-        total_members = sum(row[0] for row in group_members)
-        total_groups = sum(lang_count_group.values())
-        group_data = '\n'.join(
-            f"┃ {language_name}:    {lang_count_group.get(language_code, 0)}"
-            for language_code, language_name in statistic_lang.items()
-        )
-        group_statist = f'''
+            lang_count_group = Counter([language for language, in groups])
+            total_members = sum(row[0] for row in group_members)
+            total_groups = sum(lang_count_group.values())
+            group_data = '\n'.join(
+                f"┃ {language_name}:    {lang_count_group.get(language_code, 0)}"
+                for language_code, language_name in statistic_lang.items()
+            )
+            group_statist = f'''
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ 📊 Group Statistic
 ┣━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -237,7 +237,7 @@ async def group_language_statistics():
 ┣━━━━━━━━━━━━━━━━━━━━━━━━━
 {group_data}
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━'''
-        return group_statist
+            return group_statist
     except Exception as e:
         logger.exception("Xatolik: %s", e)
         return None
