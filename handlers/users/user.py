@@ -28,9 +28,9 @@ async def start_handler_lang(message: types.Message):
             added_by = 'true' if message.text == '/start' else message.text.split(' ')[-1]
             waiting_msg_data[message.chat.id] = {'added_by': added_by}
             await LanguageSelection.select_language.set()
-        await message.delete()
     except Exception as e:
         logger.exception("Error while processing start command: %s", e)
+    await message.delete()
 
 
 @dp.callback_query_handler(lambda c: c.data in languages.keys(), state=LanguageSelection.select_language,
@@ -64,7 +64,6 @@ async def process_language_selection(call: types.CallbackQuery, state: FSMContex
 @dp.message_handler(commands=['lang'], chat_type=types.ChatType.PRIVATE)
 async def change_language_handler(message: types.Message):
     try:
-        await message.delete()
         await bot.send_message(
             chat_id=message.chat.id,
             text=choose_button,
@@ -78,6 +77,7 @@ async def change_language_handler(message: types.Message):
             text="You haven't selected a language yet. Please use the /start command to select a language.",
             protect_content=True
         )
+    await message.delete()
 
 
 @dp.callback_query_handler(lambda c: c.data in languages.keys(), state=LanguageChange.select_language,
@@ -87,7 +87,7 @@ async def process_change_language(call: types.CallbackQuery, state: FSMContext):
         language = languages.get(call.data)
         await User.update_language(chat_id=call.message.chat.id, language=language)
         await state.finish()
-        await bot.answer_callback_query(callback_query_id=call.id, text=f"✅  {language_changed.get(call.data)}")
+        await bot.answer_callback_query(callback_query_id=call.id)
         await bot.edit_message_text(
             chat_id=call.message.chat.id,
             message_id=call.message.message_id,
@@ -120,6 +120,6 @@ async def help_handler(message: types.Message):
                 disable_web_page_preview=True,
                 protect_content=True
             )
-        await message.delete()
     except Exception as e:
         logger.exception("Error while processing start command: %s", e)
+    await message.delete()
