@@ -8,7 +8,6 @@ waiting_msg_data = {}
 
 @dp.message_handler(commands=['start'], chat_type=types.ChatType.PRIVATE)
 async def start_handler_lang(message: types.Message):
-    await message.delete()
     try:
         language = await User.get_language(chat_id=message.chat.id)
         if language:
@@ -29,6 +28,7 @@ async def start_handler_lang(message: types.Message):
             added_by = 'true' if message.text == '/start' else message.text.split(' ')[-1]
             waiting_msg_data[message.chat.id] = {'added_by': added_by}
             await LanguageSelection.select_language.set()
+        await message.delete()
     except Exception as e:
         logger.exception("Error while processing start command: %s", e)
 
@@ -102,7 +102,6 @@ async def process_change_language(call: types.CallbackQuery, state: FSMContext):
 @dp.message_handler(commands=['help'])
 async def help_handler(message: types.Message):
     try:
-        await message.delete()
         if message.chat.type != types.ChatType.PRIVATE:
             language = await Group.get_language(chat_id=message.chat.id)
             await bot.send_message(
@@ -121,5 +120,6 @@ async def help_handler(message: types.Message):
                 disable_web_page_preview=True,
                 protect_content=True
             )
+        await message.delete()
     except Exception as e:
         logger.exception("Error while processing start command: %s", e)

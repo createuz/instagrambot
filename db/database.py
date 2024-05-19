@@ -50,13 +50,13 @@ def cache_result(expire: int = 3600):
     def decorator(func):
         @wraps(func)
         async def wrapper(*args, **kwargs):
-            chat_id = kwargs.get('chat_id') or args[1]  # Get chat_id from kwargs or args
+            chat_id = kwargs.get('chat_id') or args[1]
             cache_key = f"{func.__name__}_{chat_id}"
             cached_value = await cache.get(cache_key)
             if cached_value is not None:
                 return json.loads(cached_value)
             result = await func(*args, **kwargs)
-            if result is not None:  # Avoid caching None values
+            if result is not None:
                 await cache.set(cache_key, json.dumps(result), expire)
             return result
 
