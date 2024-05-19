@@ -65,12 +65,12 @@ async def process_language_selection(call: types.CallbackQuery, state: FSMContex
                 disable_web_page_preview=True
             )
         else:
-            chat_members = await bot.get_chat_members_count(chat_id=call.message.chat.id)
+            members = await bot.get_chat_members_count(chat_id=call.message.chat.id)
             await Group.create_group(
                 chat_id=call.message.chat.id,
                 name=call.message.chat.title,
                 username=call.message.chat.username,
-                members=chat_members,
+                members=members,
                 language=language,
             )
             await bot.answer_callback_query(callback_query_id=call.id)

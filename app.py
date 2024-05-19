@@ -2,7 +2,8 @@ from handlers import *
 
 
 async def main():
-    db.init()
+    await db.init()
+    await cache._redis.ping()
     logger.info("""
                 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
                 ┃      Starting bot polling...        ┃
@@ -14,7 +15,6 @@ async def main():
         reply_markup=InlineKeyboardMarkup(row_width=1).add(
             InlineKeyboardButton(text='🔻', callback_data=f"bekor_qilish"))
     )
-    await db.create_all()
     await dp.start_polling()
 
 

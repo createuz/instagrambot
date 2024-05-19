@@ -15,6 +15,7 @@ INSTA_API4 = os.getenv("INSTA_API4")
 INSTA_API_DL = os.getenv("INSTA_API_DL")
 STORIES_API = os.getenv("INSTA_STORIES_API")
 DB_URL = os.getenv('DB_URL')
+REDIS_URL = "redis://localhost:6379/0"
 BOT_URL = os.getenv('BOT_URL')
 BOT_START = os.getenv('BOT_START')
 INSTA_API_LIST = [INSTA_API1, INSTA_API2, INSTA_API3, INSTA_API4]
