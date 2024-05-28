@@ -63,7 +63,7 @@ class User(Base):
                 query = select(cls.chat_id).where(
                     admin_lang == cls.language if admin_lang == 'Uzbek' else cls.language != 'Uzbek')
             result = await session.execute(query)
-            return [row[0] for row in result.scalars().all()]
+            return [row[0] for row in result.all()]
 
     @classmethod
     async def joined_last_month(cls):
@@ -129,7 +129,7 @@ class Group(Base):
                 query = select(cls.chat_id).where(
                     admin_lang == cls.language if admin_lang == 'Uzbek' else cls.language != 'Uzbek')
             result = await session.execute(query)
-            return [row[0] for row in result.scalars().all()]
+            return [row[0] for row in result.all()]
 
     @classmethod
     async def joined_last_month(cls):
@@ -168,13 +168,13 @@ class Admin(Base):
     async def get_admins_data(cls):
         async for session in db.get_session():
             result = await session.execute(select(cls.chat_id, cls.first_name))
-            return [row[0] for row in result.scalars().all()]
+            return [row[0] for row in result.all()]
 
     @classmethod
     async def get_all_admin(cls):
         async for session in db.get_session():
             result = await session.execute(select(cls.chat_id))
-            return [row[0] for row in result.scalars().all()]
+            return [row[0] for row in result.all()]
 
     @classmethod
     async def delete_admin(cls, chat_id):
