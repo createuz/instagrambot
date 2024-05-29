@@ -127,8 +127,7 @@ async def admin_send_message_all(text=None, video=None, photo=None, caption=None
             keyboard=keyboard
         )
         elapsed_time = time.time() - start_time
-        date = format_time(elapsed_time=elapsed_time)
-        date2 = time.strftime("%H:%M:%S", time.gmtime(elapsed_time))
+        date = time.strftime("%H:%M:%S", time.gmtime(elapsed_time))
         msg = f'''┏━━━━━━━━━━━━━━━━━━━━━━━━
 ┃  📊  Sent message Statistic
 ┣━━━━━━━━━━━━━━━━━━━━━━━━
@@ -145,14 +144,11 @@ async def admin_send_message_all(text=None, video=None, photo=None, caption=None
 ┃
 ┃  •  No active groups:  {no_active_groups}
 ┃
-┃  •  Total time1:  {date}
-┃
-┃  •  Total time2:  {date2}
+┃  •  Total time:  {date}
 ┃
 ┃  •  Powered by:  @{BOT_USERNAME}
 ┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━'''
         await bot.send_message(chat_id=ADMINS[0], text=f"<b>{msg}</b>")
-        await bot.send_message(chat_id='-1002073628577', text=f"<b>{msg}</b>")
     except Exception as e:
         await bot.send_message(chat_id=ADMINS[0], text=f"Xatolik yuz berdi: {str(e)}")
