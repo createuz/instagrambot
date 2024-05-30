@@ -3,14 +3,24 @@ from db.models import *
 from data import *
 from keyboards import *
 
-waiting_msg_data = {}
-
 
 @dp.message_handler(commands=['start'], chat_type=types.ChatType.PRIVATE)
-async def start_handler_lang(message: types.Message):
+async def start_handler(message: types.Message, state: FSMContext):
+    await message.delete()
+    parts = message.text.split()
+    identifier = parts[1] if len(parts) > 1 else None
     try:
         language = await User.get_language(chat_id=message.chat.id)
-        if language:
+        if not language:
+            await bot.send_message(
+                chat_id=message.chat.id,
+                text=choose_button,
+                reply_markup=language_keyboard,
+                protect_content=True
+            )
+            await state.update_data(added_by=identifier or 'true')
+            return await LanguageSelection.select_language.set()
+        else:
             await bot.send_message(
                 chat_id=message.chat.id,
                 text=langs_text.get(language).get('start'),
@@ -18,51 +28,40 @@ async def start_handler_lang(message: types.Message):
                 disable_web_page_preview=True,
                 protect_content=True
             )
-        else:
-            await bot.send_message(
-                chat_id=message.chat.id,
-                text=choose_button,
-                reply_markup=language_keyboard,
-                protect_content=True
-            )
-            added_by = 'true' if message.text == '/start' else message.text.split(' ')[-1]
-            waiting_msg_data[message.chat.id] = {'added_by': added_by}
-            await LanguageSelection.select_language.set()
     except Exception as e:
         logger.exception("Error while processing start command: %s", e)
-    await message.delete()
 
 
-@dp.callback_query_handler(lambda c: c.data in languages.keys(), state=LanguageSelection.select_language,
+@dp.callback_query_handler(lambda c: c.data in languages, state=LanguageSelection.select_language,
                            chat_type=types.ChatType.PRIVATE)
-async def process_language_selection(call: types.CallbackQuery, state: FSMContext):
+async def create_user_handler(call: types.CallbackQuery, state: FSMContext):
+    chat_id = call.message.chat.id
+    language = languages.get(call.data)
     try:
-        if call.message.chat.id in waiting_msg_data:
-            user_data = waiting_msg_data.pop(call.message.chat.id)
-            added_by = user_data['added_by']
-            language = languages.get(call.data)
-            await User.create_user(
-                chat_id=call.message.chat.id,
-                username=call.message.chat.username,
-                first_name=call.message.chat.first_name,
-                language=language,
-                added_by=added_by
-            )
-            await state.finish()
-            await bot.answer_callback_query(callback_query_id=call.id, text=f"✅ {language_changed.get(call.data)}")
-            await bot.edit_message_text(
-                chat_id=call.message.chat.id,
-                message_id=call.message.message_id,
-                text=langs_text.get(language).get('start'),
-                reply_markup=add_group.get(language),
-                disable_web_page_preview=True
-            )
+        data = await state.get_data()
+        await User.create_user(
+            chat_id=chat_id,
+            username=call.message.chat.username,
+            first_name=call.message.chat.first_name,
+            language=language,
+            added_by=data.get('added_by')
+        )
+        await state.finish()
+        await bot.answer_callback_query(callback_query_id=call.id, text=f"✅ {language_changed.get(call.data)}")
+        await bot.edit_message_text(
+            chat_id=call.message.chat.id,
+            message_id=call.message.message_id,
+            text=langs_text.get(language).get('start'),
+            reply_markup=add_group.get(language),
+            disable_web_page_preview=True
+        )
     except Exception as e:
         logger.exception("Error while processing language selection: %s", e)
 
 
 @dp.message_handler(commands=['lang'], chat_type=types.ChatType.PRIVATE)
 async def change_language_handler(message: types.Message):
+    await message.delete()
     try:
         await bot.send_message(
             chat_id=message.chat.id,
@@ -77,7 +76,6 @@ async def change_language_handler(message: types.Message):
             text="You haven't selected a language yet. Please use the /start command to select a language.",
             protect_content=True
         )
-    await message.delete()
 
 
 @dp.callback_query_handler(lambda c: c.data in languages.keys(), state=LanguageChange.select_language,

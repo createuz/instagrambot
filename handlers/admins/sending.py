@@ -146,8 +146,6 @@ async def admin_send_message_all(text=None, video=None, photo=None, caption=None
 ┃
 ┃  •  Total time:  {date}
 ┃
-┃  •  Powered by:  @{BOT_USERNAME}
-┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━'''
         await bot.send_message(chat_id=ADMINS[0], text=f"<b>{msg}</b>")
     except Exception as e:
