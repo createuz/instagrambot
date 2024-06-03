@@ -85,7 +85,7 @@ async def process_change_language(call: types.CallbackQuery, state: FSMContext):
         language = languages.get(call.data)
         await User.update_language(chat_id=call.message.chat.id, language=language)
         await state.finish()
-        await bot.answer_callback_query(callback_query_id=call.id)
+        await bot.answer_callback_query(callback_query_id=call.id, text=f"✅ {language_changed.get(call.data)}")
         await bot.edit_message_text(
             chat_id=call.message.chat.id,
             message_id=call.message.message_id,
