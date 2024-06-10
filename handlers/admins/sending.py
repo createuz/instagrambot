@@ -1,6 +1,6 @@
 import asyncio
 import time
-from data import *
+from data import bot, ADMINS
 from db.models import User, Group
 
 

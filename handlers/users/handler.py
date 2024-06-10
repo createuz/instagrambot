@@ -1,14 +1,14 @@
 import time
-from aiogram.types import InputMediaPhoto, InputMediaVideo
+from aiogram.types import InputMediaPhoto, InputMediaVideo, ChatType, Message
 from api import instagram_api
-from db.models import *
-from data import *
-from keyboards import *
+from data import dp, bot, main_caption, logger
+from db import User
+from keyboards import langs_text
 
 
 @dp.message_handler(regexp=r'https?:\/\/(www\.)?instagram\.com\/(reel|p)\/([-_a-zA-Z0-9]{11})',
-                    chat_type=types.ChatType.PRIVATE)
-async def send_instagram_media(message: types.Message):
+                    chat_type=ChatType.PRIVATE)
+async def send_instagram_media(message: Message):
     await message.delete()
     global wait_msg
     language = await User.get_language(chat_id=message.chat.id)
@@ -45,8 +45,8 @@ async def send_instagram_media(message: types.Message):
         )
 
 
-@dp.message_handler(regexp=r'https?:\/\/(www\.)?api\.com\/(stories)', chat_type=types.ChatType.PRIVATE)
-async def send_instagram_media(message: types.Message):
+@dp.message_handler(regexp=r'https?:\/\/(www\.)?api\.com\/(stories)', chat_type=ChatType.PRIVATE)
+async def send_instagram_media(message: Message):
     await message.delete()
     global wait_msg
     language = await User.get_language(chat_id=message.chat.id)

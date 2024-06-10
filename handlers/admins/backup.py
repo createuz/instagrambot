@@ -1,13 +1,14 @@
+import os
 import aiofiles
 import aiohttp
-from aiogram.types import ContentType
+from aiogram.types import ContentType, Message
 from aiogram.utils.exceptions import BadRequest
-from db.models import *
-from data import *
+from data import dp, bot, Backup, logger, BOT_TOKEN, ADMINS
+from db import Group, User
 
 
 @dp.message_handler(commands=['backup'])
-async def bot_echo(message: types.Message):
+async def bot_echo(message: Message):
     if message.chat.id in ADMINS:
         await message.delete()
         await bot.send_message(
@@ -29,7 +30,7 @@ async def download_file(file_id, doc_path):
         logger.exception(e)
 
 
-async def handle_get_chat_ids(message: types.Message):
+async def handle_get_chat_ids(message: Message):
     doc_path = f"/var/www/instagrambot/data/{message.document.file_id}"
     # doc_path = f"C:/Users/creat/Desktop/Bot/InstagramBot/data/{message.document.file_id}"
     try:
@@ -90,7 +91,7 @@ async def process_chat_ids(chat_ids: list):
 
 
 @dp.message_handler(content_types=ContentType.DOCUMENT, state=Backup.wait_txt_file)
-async def handle_media(message: types.Message):
+async def handle_media(message: Message):
     chat_ids = await handle_get_chat_ids(message=message)
     if chat_ids is None:
         return await bot.send_message(message.chat.id, "Faylni olishda xatolik yuz berdi.")

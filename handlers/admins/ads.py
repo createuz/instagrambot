@@ -1,16 +1,15 @@
 from aiogram.dispatcher import FSMContext
-from aiogram.types import ContentType
-from keyboards import *
-from .sending import *
-from data import *
-from .kbs import *
+from aiogram.types import ContentType, CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, Message
+from data import SendVideo, bot, ADMINS, SendText, replace_text_to_links, dp, SendPhoto
+from handlers import kb_5, send_message_admin, tasdiqlash, admin_send_message_all, add_kb, kb_2, kb_3, kb_4
+from keyboards import send_message_type
 
 
 # 🟢 ========================================= 📄 SEND TEXT =============================================
 
 
 @dp.callback_query_handler(text="text")
-async def send_voice_to_all(call: types.CallbackQuery):
+async def send_voice_to_all(call: CallbackQuery):
     await bot.edit_message_text(
         chat_id=call.message.chat.id,
         message_id=call.message.message_id,
@@ -20,7 +19,7 @@ async def send_voice_to_all(call: types.CallbackQuery):
 
 
 @dp.message_handler(state=SendText.text, content_types=ContentType.TEXT)
-async def video_caption(message: types.Message, state: FSMContext):
+async def video_caption(message: Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data['text'] = await replace_text_to_links(text=message.text)
@@ -35,7 +34,7 @@ async def video_caption(message: types.Message, state: FSMContext):
 
 
 @dp.callback_query_handler(state=SendText.waiting_for_new_btn)
-async def send_ads(call: types.CallbackQuery, state: FSMContext):
+async def send_ads(call: CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'add_kb':
@@ -55,7 +54,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
 
 
 @dp.callback_query_handler(state=SendText.waiting_for_is_not_btn)
-async def send_ads(call: types.CallbackQuery, state: FSMContext):
+async def send_ads(call: CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'send_message':
@@ -71,7 +70,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
 
 
 @dp.message_handler(state=SendText.waiting_kb_1, content_types=ContentType.TEXT)
-async def bot_echo(message: types.Message, state: FSMContext):
+async def bot_echo(message: Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data["kb_1"] = message.text
@@ -82,7 +81,7 @@ async def bot_echo(message: types.Message, state: FSMContext):
 
 
 @dp.message_handler(state=SendText.waiting_url_1, content_types=ContentType.TEXT)
-async def photo_button_url(message: types.Message, state: FSMContext):
+async def photo_button_url(message: Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data['url_1'] = message.text
@@ -97,7 +96,7 @@ async def photo_button_url(message: types.Message, state: FSMContext):
 
 
 @dp.callback_query_handler(state=SendText.next_call_2)
-async def send_ads(call: types.CallbackQuery, state: FSMContext):
+async def send_ads(call: CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'kb_2':
@@ -118,7 +117,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
 
 
 @dp.callback_query_handler(state=SendText.send_all_1)
-async def send_ads(call: types.CallbackQuery, state: FSMContext):
+async def send_ads(call: CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'send_message':
@@ -135,7 +134,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
 
 
 @dp.message_handler(state=SendText.waiting_kb_2, content_types=ContentType.TEXT)
-async def photo_button_name(message: types.Message, state: FSMContext):
+async def photo_button_name(message: Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data["kb_2"] = message.text
@@ -146,7 +145,7 @@ async def photo_button_name(message: types.Message, state: FSMContext):
 
 
 @dp.message_handler(state=SendText.waiting_url_2, content_types=ContentType.TEXT)
-async def photo_button_url(message: types.Message, state: FSMContext):
+async def photo_button_url(message: Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data['url_2'] = message.text
@@ -161,7 +160,7 @@ async def photo_button_url(message: types.Message, state: FSMContext):
 
 
 @dp.callback_query_handler(state=SendText.next_call_3)
-async def send_ads(call: types.CallbackQuery, state: FSMContext):
+async def send_ads(call: CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'send_message':
@@ -181,7 +180,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
 
 
 @dp.callback_query_handler(state=SendText.send_all_2)
-async def send_ads(call: types.CallbackQuery, state: FSMContext):
+async def send_ads(call: CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'send_message':
@@ -203,13 +202,13 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
 
 
 @dp.callback_query_handler(text="photo")
-async def send_photo_to_all(call: types.CallbackQuery):
+async def send_photo_to_all(call: CallbackQuery):
     await bot.edit_message_text(chat_id=call.from_user.id, message_id=call.message.message_id, text="🖼 SEND PHOTO")
     await SendPhoto.photo.set()
 
 
 @dp.message_handler(state=SendPhoto.photo, content_types=ContentType.PHOTO)
-async def send_photo_to_all(message: types.Message, state: FSMContext):
+async def send_photo_to_all(message: Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data["photo"] = message.photo[-1].file_id
@@ -220,7 +219,7 @@ async def send_photo_to_all(message: types.Message, state: FSMContext):
 
 
 @dp.message_handler(state=SendPhoto.waiting_for_caption, content_types=ContentType.TEXT)
-async def video_caption(message: types.Message, state: FSMContext):
+async def video_caption(message: Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data['caption'] = await replace_text_to_links(text=message.text)
@@ -235,7 +234,7 @@ async def video_caption(message: types.Message, state: FSMContext):
 
 
 @dp.callback_query_handler(state=SendPhoto.waiting_for_new_btn)
-async def send_ads(call: types.CallbackQuery, state: FSMContext):
+async def send_ads(call: CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'add_kb':
@@ -256,7 +255,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
 
 
 @dp.callback_query_handler(state=SendPhoto.waiting_for_is_not_btn)
-async def send_ads(call: types.CallbackQuery, state: FSMContext):
+async def send_ads(call: CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'send_message':
@@ -273,7 +272,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
 
 
 @dp.message_handler(state=SendPhoto.waiting_kb_1, content_types=ContentType.TEXT)
-async def photo_button_name(message: types.Message, state: FSMContext):
+async def photo_button_name(message: Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data["kb_1"] = message.text
@@ -284,7 +283,7 @@ async def photo_button_name(message: types.Message, state: FSMContext):
 
 
 @dp.message_handler(state=SendPhoto.waiting_url_1, content_types=ContentType.TEXT)
-async def photo_button_url(message: types.Message, state: FSMContext):
+async def photo_button_url(message: Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data['url_1'] = message.text
@@ -299,7 +298,7 @@ async def photo_button_url(message: types.Message, state: FSMContext):
 
 
 @dp.callback_query_handler(state=SendPhoto.next_call_2)
-async def send_ads(call: types.CallbackQuery, state: FSMContext):
+async def send_ads(call: CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'kb_2':
@@ -321,7 +320,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
 
 
 @dp.callback_query_handler(state=SendPhoto.send_all_1)
-async def send_ads(call: types.CallbackQuery, state: FSMContext):
+async def send_ads(call: CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'send_message':
@@ -339,7 +338,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
 
 
 @dp.message_handler(state=SendPhoto.waiting_kb_2, content_types=ContentType.TEXT)
-async def photo_button_name(message: types.Message, state: FSMContext):
+async def photo_button_name(message: Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data["kb_2"] = message.text
@@ -350,7 +349,7 @@ async def photo_button_name(message: types.Message, state: FSMContext):
 
 
 @dp.message_handler(state=SendPhoto.waiting_url_2, content_types=ContentType.TEXT)
-async def photo_button_url(message: types.Message, state: FSMContext):
+async def photo_button_url(message: Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data['url_2'] = message.text
@@ -365,7 +364,7 @@ async def photo_button_url(message: types.Message, state: FSMContext):
 
 
 @dp.callback_query_handler(state=SendPhoto.next_call_3)
-async def send_ads(call: types.CallbackQuery, state: FSMContext):
+async def send_ads(call: CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'kb_3':
@@ -389,7 +388,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
 
 
 @dp.callback_query_handler(state=SendPhoto.send_all_2)
-async def send_ads(call: types.CallbackQuery, state: FSMContext):
+async def send_ads(call: CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'send_message':
@@ -409,7 +408,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
 
 
 @dp.message_handler(state=SendPhoto.waiting_kb_3, content_types=ContentType.TEXT)
-async def photo_button_name(message: types.Message, state: FSMContext):
+async def photo_button_name(message: Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data["kb_3"] = message.text
@@ -420,7 +419,7 @@ async def photo_button_name(message: types.Message, state: FSMContext):
 
 
 @dp.message_handler(state=SendPhoto.waiting_url_3, content_types=ContentType.TEXT)
-async def photo_button_url(message: types.Message, state: FSMContext):
+async def photo_button_url(message: Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data['url_3'] = message.text
@@ -435,7 +434,7 @@ async def photo_button_url(message: types.Message, state: FSMContext):
 
 
 @dp.callback_query_handler(state=SendPhoto.next_call_4)
-async def send_ads(call: types.CallbackQuery, state: FSMContext):
+async def send_ads(call: CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'kb_4':
@@ -463,7 +462,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
 
 
 @dp.callback_query_handler(state=SendPhoto.send_all_3)
-async def send_ads(call: types.CallbackQuery, state: FSMContext):
+async def send_ads(call: CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'send_message':
@@ -484,7 +483,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
 
 
 @dp.message_handler(state=SendPhoto.waiting_kb_4, content_types=ContentType.TEXT)
-async def photo_button_name(message: types.Message, state: FSMContext):
+async def photo_button_name(message: Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data["kb_4"] = message.text
@@ -495,7 +494,7 @@ async def photo_button_name(message: types.Message, state: FSMContext):
 
 
 @dp.message_handler(state=SendPhoto.waiting_url_4, content_types=ContentType.TEXT)
-async def photo_button_url(message: types.Message, state: FSMContext):
+async def photo_button_url(message: Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data['url_4'] = message.text
@@ -510,7 +509,7 @@ async def photo_button_url(message: types.Message, state: FSMContext):
 
 
 @dp.callback_query_handler(state=SendPhoto.next_call_5)
-async def send_ads(call: types.CallbackQuery, state: FSMContext):
+async def send_ads(call: CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'send_message':
@@ -533,7 +532,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
 
 
 @dp.callback_query_handler(state=SendPhoto.send_all_4)
-async def send_ads(call: types.CallbackQuery, state: FSMContext):
+async def send_ads(call: CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'send_message':
@@ -558,13 +557,13 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
 
 
 @dp.callback_query_handler(text="video")
-async def send_video_to_all(call: types.CallbackQuery):
+async def send_video_to_all(call: CallbackQuery):
     await bot.edit_message_text(chat_id=call.from_user.id, message_id=call.message.message_id, text="📽️ SEND VIDEO")
     await SendVideo.video.set()
 
 
 @dp.message_handler(state=SendVideo.video, content_types=ContentType.VIDEO)
-async def send_video_to_all(message: types.Message, state: FSMContext):
+async def send_video_to_all(message: Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data["video"] = message.video.file_id
@@ -575,7 +574,7 @@ async def send_video_to_all(message: types.Message, state: FSMContext):
 
 
 @dp.message_handler(state=SendVideo.waiting_for_caption, content_types=ContentType.TEXT)
-async def video_caption(message: types.Message, state: FSMContext):
+async def video_caption(message: Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data['caption'] = await replace_text_to_links(text=message.text)
@@ -590,7 +589,7 @@ async def video_caption(message: types.Message, state: FSMContext):
 
 
 @dp.callback_query_handler(state=SendVideo.waiting_for_new_btn)
-async def send_ads(call: types.CallbackQuery, state: FSMContext):
+async def send_ads(call: CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'add_kb':
@@ -611,7 +610,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
 
 
 @dp.callback_query_handler(state=SendPhoto.waiting_for_is_not_btn)
-async def send_ads(call: types.CallbackQuery, state: FSMContext):
+async def send_ads(call: CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'send_message':
@@ -628,7 +627,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
 
 
 @dp.message_handler(state=SendVideo.waiting_kb_1, content_types=ContentType.TEXT)
-async def video_button_name(message: types.Message, state: FSMContext):
+async def video_button_name(message: Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data["kb_1"] = message.text
@@ -639,7 +638,7 @@ async def video_button_name(message: types.Message, state: FSMContext):
 
 
 @dp.message_handler(state=SendVideo.waiting_url_1, content_types=ContentType.TEXT)
-async def video_button_url(message: types.Message, state: FSMContext):
+async def video_button_url(message: Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data['url_1'] = message.text
@@ -654,7 +653,7 @@ async def video_button_url(message: types.Message, state: FSMContext):
 
 
 @dp.callback_query_handler(state=SendVideo.next_call_2)
-async def send_ads(call: types.CallbackQuery, state: FSMContext):
+async def send_ads(call: CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'kb_2':
@@ -676,7 +675,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
 
 
 @dp.callback_query_handler(state=SendVideo.send_all_1)
-async def send_ads(call: types.CallbackQuery, state: FSMContext):
+async def send_ads(call: CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'send_message':
@@ -694,7 +693,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
 
 
 @dp.message_handler(state=SendVideo.waiting_kb_2, content_types=ContentType.TEXT)
-async def video_button_name(message: types.Message, state: FSMContext):
+async def video_button_name(message: Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data["kb_2"] = message.text
@@ -705,7 +704,7 @@ async def video_button_name(message: types.Message, state: FSMContext):
 
 
 @dp.message_handler(state=SendVideo.waiting_url_2, content_types=ContentType.TEXT)
-async def video_button_url(message: types.Message, state: FSMContext):
+async def video_button_url(message: Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data['url_2'] = message.text
@@ -720,7 +719,7 @@ async def video_button_url(message: types.Message, state: FSMContext):
 
 
 @dp.callback_query_handler(state=SendVideo.next_call_3)
-async def send_ads(call: types.CallbackQuery, state: FSMContext):
+async def send_ads(call: CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'kb_3':
@@ -744,7 +743,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
 
 
 @dp.callback_query_handler(state=SendVideo.send_all_2)
-async def send_ads(call: types.CallbackQuery, state: FSMContext):
+async def send_ads(call: CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'send_message':
@@ -764,7 +763,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
 
 
 @dp.message_handler(state=SendVideo.waiting_kb_3, content_types=ContentType.TEXT)
-async def video_button_name(message: types.Message, state: FSMContext):
+async def video_button_name(message: Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data["kb_3"] = message.text
@@ -775,7 +774,7 @@ async def video_button_name(message: types.Message, state: FSMContext):
 
 
 @dp.message_handler(state=SendVideo.waiting_url_3, content_types=ContentType.TEXT)
-async def video_button_url(message: types.Message, state: FSMContext):
+async def video_button_url(message: Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data['url_3'] = message.text
@@ -790,7 +789,7 @@ async def video_button_url(message: types.Message, state: FSMContext):
 
 
 @dp.callback_query_handler(state=SendVideo.next_call_4)
-async def send_ads(call: types.CallbackQuery, state: FSMContext):
+async def send_ads(call: CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'kb_4':
@@ -815,7 +814,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
 
 
 @dp.callback_query_handler(state=SendVideo.send_all_3)
-async def send_ads(call: types.CallbackQuery, state: FSMContext):
+async def send_ads(call: CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'send_message':
@@ -836,7 +835,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
 
 
 @dp.message_handler(state=SendVideo.waiting_kb_4, content_types=ContentType.TEXT)
-async def video_button_name(message: types.Message, state: FSMContext):
+async def video_button_name(message: Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data["kb_4"] = message.text
@@ -847,7 +846,7 @@ async def video_button_name(message: types.Message, state: FSMContext):
 
 
 @dp.message_handler(state=SendVideo.waiting_url_4, content_types=ContentType.TEXT)
-async def video_button_url(message: types.Message, state: FSMContext):
+async def video_button_url(message: Message, state: FSMContext):
     try:
         async with state.proxy() as data:
             data['url_4'] = message.text
@@ -862,7 +861,7 @@ async def video_button_url(message: types.Message, state: FSMContext):
 
 
 @dp.callback_query_handler(state=SendVideo.next_call_5)
-async def send_ads(call: types.CallbackQuery, state: FSMContext):
+async def send_ads(call: CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'send_message':
@@ -885,7 +884,7 @@ async def send_ads(call: types.CallbackQuery, state: FSMContext):
 
 
 @dp.callback_query_handler(state=SendVideo.send_all_4)
-async def send_ads(call: types.CallbackQuery, state: FSMContext):
+async def send_ads(call: CallbackQuery, state: FSMContext):
     try:
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         if call.data == 'send_message':

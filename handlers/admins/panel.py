@@ -1,18 +1,17 @@
+import os
 from collections import Counter
 from aiogram.dispatcher import FSMContext
-from aiogram.types import ContentType
-from db.models import *
-from keyboards import *
-from data import *
-from .kbs import *
-
-logging.basicConfig(format=u'%(filename)s [LINE:%(lineno)d] #%(levelname)-8s [%(asctime)s]  %(message)s',
-                    level=logging.INFO)
-logger = logging.getLogger(__name__)
+from aiogram.types import ContentType, CallbackQuery, Message, InputFile
+from sqlalchemy import select
+from data import bot, ADMINS, dp, logger, AddAdmin
+from db import Admin, Group, User, db
+from handlers import (update_group_statistic, update_user_statistic_2x, chose_statistic_kb, admin_menu, menu_kb,
+                      send_message_kb, update_user_statistic, update_group_statistic_2x)
+from keyboards import statistic_lang
 
 
 @dp.message_handler(commands=['admin'])
-async def bot_echo(message: types.Message):
+async def bot_echo(message: Message):
     if message.chat.id in ADMINS:
         await message.delete()
         await message.answer("<b>⚙ Welcome to Admin Panel</b>", reply_markup=menu_kb)
@@ -20,7 +19,7 @@ async def bot_echo(message: types.Message):
 
 
 @dp.callback_query_handler(text="chat_ids_doc")
-async def add_admin_handler(call: types.CallbackQuery):
+async def add_admin_handler(call: CallbackQuery):
     try:
         if call.message.chat.id in ADMINS:
             await bot.answer_callback_query(callback_query_id=call.id)
@@ -35,7 +34,7 @@ async def add_admin_handler(call: types.CallbackQuery):
                     file.write(f"{chat_id}\n")
             msg = f"<b>• All users count:  {count_users}\n• All groups count:  {count_groups}</b>"
             with open(file_path, 'rb') as doc_file:
-                await bot.send_document(chat_id=call.message.chat.id, document=types.InputFile(doc_file), caption=msg)
+                await bot.send_document(chat_id=call.message.chat.id, document=InputFile(doc_file), caption=msg)
             os.remove(file_path)
         return None
     except Exception as e:
@@ -44,7 +43,7 @@ async def add_admin_handler(call: types.CallbackQuery):
 
 
 @dp.callback_query_handler(text="menu_kb")
-async def add_admin_handler(call: types.CallbackQuery):
+async def add_admin_handler(call: CallbackQuery):
     if call.message.chat.id in ADMINS:
         chat_id = call.from_user.id
         callback_id = call.message.message_id
@@ -54,7 +53,7 @@ async def add_admin_handler(call: types.CallbackQuery):
 
 
 @dp.callback_query_handler(text="admin_menu")
-async def add_admin_handler(call: types.CallbackQuery):
+async def add_admin_handler(call: CallbackQuery):
     if call.message.chat.id in ADMINS:
         chat_id = call.from_user.id
         callback_id = call.message.message_id
@@ -64,7 +63,7 @@ async def add_admin_handler(call: types.CallbackQuery):
 
 
 @dp.callback_query_handler(text="admins_data")
-async def admin_send_message(call: types.CallbackQuery):
+async def admin_send_message(call: CallbackQuery):
     if call.message.chat.id in ADMINS:
         try:
             callback_id = call.message.message_id
@@ -91,7 +90,7 @@ async def admin_send_message(call: types.CallbackQuery):
 
 
 @dp.callback_query_handler(text="add_admin")
-async def add_admin_handler(call: types.CallbackQuery):
+async def add_admin_handler(call: CallbackQuery):
     if call.message.chat.id in ADMINS:
         chat_id = call.from_user.id
         callback_id = call.message.message_id
@@ -102,7 +101,7 @@ async def add_admin_handler(call: types.CallbackQuery):
 
 
 @dp.message_handler(state=AddAdmin.waiting_for_add_chat_id, content_types=ContentType.TEXT)
-async def add_admin_save_handler(message: types.Message, state: FSMContext):
+async def add_admin_save_handler(message: Message, state: FSMContext):
     if message.chat.id in ADMINS:
         try:
             chat_id, username, first_name = await User.get_user(message.chat.id)
@@ -119,7 +118,7 @@ async def add_admin_save_handler(message: types.Message, state: FSMContext):
 
 
 @dp.callback_query_handler(text="del_admin")
-async def add_admin_handler(call: types.CallbackQuery):
+async def add_admin_handler(call: CallbackQuery):
     if call.message.chat.id in ADMINS:
         chat_id = call.from_user.id
         callback_id = call.message.message_id
@@ -130,7 +129,7 @@ async def add_admin_handler(call: types.CallbackQuery):
 
 
 @dp.message_handler(state=AddAdmin.waiting_for_del_chat_id, content_types=ContentType.TEXT)
-async def add_admin_save_handler(message: types.Message, state: FSMContext):
+async def add_admin_save_handler(message: Message, state: FSMContext):
     if message.chat.id in ADMINS:
         try:
             await Admin.delete_admin(message.text)
@@ -144,7 +143,7 @@ async def add_admin_save_handler(message: types.Message, state: FSMContext):
 
 
 @dp.callback_query_handler(text="bekor_qilish")
-async def admin_send_message_delete(call: types.CallbackQuery):
+async def admin_send_message_delete(call: CallbackQuery):
     try:
         chat_id = call.message.chat.id
         callback_id = call.message.message_id
@@ -155,7 +154,7 @@ async def admin_send_message_delete(call: types.CallbackQuery):
 
 
 @dp.callback_query_handler(text="send_all_msg")
-async def admin_send_message(call: types.CallbackQuery):
+async def admin_send_message(call: CallbackQuery):
     chat_id = call.from_user.id
     callback_id = call.message.message_id
     await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text="<b>💬 Xabar turini Tanlang</b>",
@@ -163,7 +162,7 @@ async def admin_send_message(call: types.CallbackQuery):
 
 
 @dp.message_handler(commands=['break'], state='*')
-async def add_admin_handler(message: types.Message, state: FSMContext):
+async def add_admin_handler(message: Message, state: FSMContext):
     if message.chat.id in ADMINS:
         try:
             await message.answer("⚙ Xabar yuborish toxtatildi")
@@ -175,7 +174,7 @@ async def add_admin_handler(message: types.Message, state: FSMContext):
 
 
 @dp.callback_query_handler(text="statistic")
-async def chose_statistics(call: types.CallbackQuery):
+async def chose_statistics(call: CallbackQuery):
     if call.message.chat.id in ADMINS:
         try:
             await bot.edit_message_text(chat_id=call.from_user.id, message_id=call.message.message_id,
@@ -244,7 +243,7 @@ async def group_language_statistics():
 
 
 @dp.callback_query_handler(text="user_statistic")
-async def total_user_statistics(call: types.CallbackQuery):
+async def total_user_statistics(call: CallbackQuery):
     if call.message.chat.id in ADMINS:
         try:
             user = await user_language_statistics()
@@ -259,7 +258,7 @@ async def total_user_statistics(call: types.CallbackQuery):
 
 
 @dp.callback_query_handler(text="update_user_statistic")
-async def update_total_user_statistics(call: types.CallbackQuery):
+async def update_total_user_statistics(call: CallbackQuery):
     if call.message.chat.id in ADMINS:
         try:
             user = await user_language_statistics()
@@ -274,7 +273,7 @@ async def update_total_user_statistics(call: types.CallbackQuery):
 
 
 @dp.callback_query_handler(text="group_statistic")
-async def total_group_statistics(call: types.CallbackQuery):
+async def total_group_statistics(call: CallbackQuery):
     if call.message.chat.id in ADMINS:
         try:
             group = await group_language_statistics()
@@ -289,7 +288,7 @@ async def total_group_statistics(call: types.CallbackQuery):
 
 
 @dp.callback_query_handler(text="update_group_statistic")
-async def update_total_group_statistics(call: types.CallbackQuery):
+async def update_total_group_statistics(call: CallbackQuery):
     if call.message.chat.id in ADMINS:
         try:
             group = await group_language_statistics()
