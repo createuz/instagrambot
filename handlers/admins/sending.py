@@ -1,6 +1,6 @@
 import asyncio
 import time
-from data import bot, ADMINS
+from data import bot, ADMINS, logger
 from db.models import User, Group
 
 
@@ -29,6 +29,8 @@ async def send_message_all(chat_id: int, text=None, video=None, photo=None, capt
             )
         return True
     except Exception as e:
+        logger.exception("Error send_message_all: %s", e)
+        await bot.send_message(chat_id=ADMINS[0], text=f"Xatolik yuz berdi: {str(e)}")
         return None
 
 
@@ -36,9 +38,11 @@ async def send_messages_to_users(user_ids: list, text=None, video=None, photo=No
     try:
         active_count = 0
         no_active_count = 0
-        for user_id in user_ids:
+        for user in user_ids:
+            text = text.format(user.get('first_name')) if text and '{}' in text else text
+            caption = caption.format(user.get('first_name')) if caption and '{}' in caption else caption
             if await send_message_all(
-                    chat_id=user_id,
+                    chat_id=user.get('chat_id'),
                     text=text,
                     video=video,
                     photo=photo,
@@ -51,6 +55,8 @@ async def send_messages_to_users(user_ids: list, text=None, video=None, photo=No
             await asyncio.sleep(0.04)
         return active_count, no_active_count
     except Exception as e:
+        await bot.send_message(chat_id=ADMINS[0], text=f"Xatolik yuz berdi: {str(e)}")
+        logger.exception("Error send_messages_to_users: %s", e)
         return None
 
 
@@ -58,9 +64,11 @@ async def send_messages_to_groups(group_ids: list, text=None, video=None, photo=
     try:
         active_count = 0
         no_active_count = 0
-        for group_id in group_ids:
+        for group in group_ids:
+            text = text.format(group.get('name')) if text and '{}' in text else text
+            caption = caption.format(group.get('name')) if caption and '{}' in caption else caption
             if await send_message_all(
-                    chat_id=group_id,
+                    chat_id=group.get('chat_id'),
                     text=text,
                     video=video,
                     photo=photo,
@@ -73,6 +81,8 @@ async def send_messages_to_groups(group_ids: list, text=None, video=None, photo=
             await asyncio.sleep(0.04)
         return active_count, no_active_count
     except Exception as e:
+        await bot.send_message(chat_id=ADMINS[0], text=f"Xatolik yuz berdi: {str(e)}")
+        logger.exception("Error send_messages_to_groups: %s", e)
         return None
 
 
@@ -101,6 +111,8 @@ async def send_message_admin(text: object = None, video: object = None, photo: o
                 reply_markup=keyboard
             )
     except Exception as e:
+        await bot.send_message(chat_id=ADMINS[0], text=f"Xatolik yuz berdi: {str(e)}")
+        logger.exception("Error send_message_admin: %s", e)
         return None
 
 
@@ -149,4 +161,5 @@ async def admin_send_message_all(text=None, video=None, photo=None, caption=None
 ┗━━━━━━━━━━━━━━━━━━━━━━━━'''
         await bot.send_message(chat_id=ADMINS[0], text=f"<b>{msg}</b>")
     except Exception as e:
+        logger.exception("Error admin_send_message_all: %s", e)
         await bot.send_message(chat_id=ADMINS[0], text=f"Xatolik yuz berdi: {str(e)}")

@@ -60,10 +60,10 @@ class User(Base):
             if admin_lang is None:
                 query = select(cls.chat_id)
             else:
-                query = select(cls.chat_id).where(
-                    admin_lang == cls.language if admin_lang == 'Uzbek' else cls.language != 'Uzbek')
+                query = select(cls.chat_id, cls.first_name).where(
+                    cls.language == admin_lang if admin_lang == 'Uzbek' else cls.language != 'Uzbek')
             result = await session.execute(query)
-            return [row[0] for row in result.all()]
+            return [{"chat_id": row[0], "first_name": row[1]} for row in result.all()]
 
     @classmethod
     async def joined_last_month(cls):
@@ -126,10 +126,10 @@ class Group(Base):
             if admin_lang is None:
                 query = select(cls.chat_id)
             else:
-                query = select(cls.chat_id).where(
-                    admin_lang == cls.language if admin_lang == 'Uzbek' else cls.language != 'Uzbek')
+                query = select(cls.chat_id, cls.name).where(
+                    cls.language == admin_lang if admin_lang == 'Uzbek' else cls.language != 'Uzbek')
             result = await session.execute(query)
-            return [row[0] for row in result.all()]
+            return [{"chat_id": row[0], "name": row[1]} for row in result.all()]
 
     @classmethod
     async def joined_last_month(cls):
