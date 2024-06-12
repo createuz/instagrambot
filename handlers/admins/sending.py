@@ -4,9 +4,11 @@ from data import bot, ADMINS, logger
 from db.models import User, Group
 
 
-async def send_message_all(chat_id: int, text=None, video=None, photo=None, caption=None, keyboard=None):
+async def send_message_all(chat: dict, text=None, video=None, photo=None, caption=None, keyboard=None):
     try:
         if text:
+            chat_id = chat.get('chat_id')
+            text = text.format(chat.get('first_name')) if text and '{}' in text else text
             await bot.send_message(
                 chat_id=chat_id,
                 text=f"<b>{text}</b>",
@@ -14,6 +16,8 @@ async def send_message_all(chat_id: int, text=None, video=None, photo=None, capt
                 disable_web_page_preview=True
             )
         if video:
+            chat_id = chat.get('chat_id')
+            caption = caption.format(chat.get('first_name')) if caption and '{}' in caption else caption
             await bot.send_video(
                 chat_id=chat_id,
                 video=video,
@@ -21,6 +25,8 @@ async def send_message_all(chat_id: int, text=None, video=None, photo=None, capt
                 reply_markup=keyboard
             )
         if photo:
+            chat_id = chat.get('chat_id')
+            caption = caption.format(chat.get('first_name')) if caption and '{}' in caption else caption
             await bot.send_photo(
                 chat_id=chat_id,
                 photo=photo,
@@ -39,10 +45,8 @@ async def send_messages_to_users(user_ids: list, text=None, video=None, photo=No
         active_count = 0
         no_active_count = 0
         for user in user_ids:
-            text = text.format(user.get('first_name')) if text and '{}' in text else text
-            caption = caption.format(user.get('first_name')) if caption and '{}' in caption else caption
             if await send_message_all(
-                    chat_id=user.get('chat_id'),
+                    chat=user,
                     text=text,
                     video=video,
                     photo=photo,
@@ -65,10 +69,8 @@ async def send_messages_to_groups(group_ids: list, text=None, video=None, photo=
         active_count = 0
         no_active_count = 0
         for group in group_ids:
-            text = text.format(group.get('name')) if text and '{}' in text else text
-            caption = caption.format(group.get('name')) if caption and '{}' in caption else caption
             if await send_message_all(
-                    chat_id=group.get('chat_id'),
+                    chat=group,
                     text=text,
                     video=video,
                     photo=photo,

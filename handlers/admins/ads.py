@@ -1,7 +1,8 @@
 from aiogram.dispatcher import FSMContext
 from aiogram.types import ContentType, CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, Message
 from data import SendVideo, bot, ADMINS, SendText, replace_text_to_links, dp, SendPhoto
-from handlers import kb_5, send_message_admin, tasdiqlash, admin_send_message_all, add_kb, kb_2, kb_3, kb_4
+from .kbs import kb_5, tasdiqlash, add_kb, kb_2, kb_3, kb_4
+from .sending import send_message_admin, admin_send_message_all
 from keyboards import send_message_type
 
 

@@ -5,8 +5,8 @@ from aiogram.types import ContentType, CallbackQuery, Message, InputFile
 from sqlalchemy import select
 from data import bot, ADMINS, dp, logger, AddAdmin
 from db import Admin, Group, User, db
-from handlers import (update_group_statistic, update_user_statistic_2x, chose_statistic_kb, admin_menu, menu_kb,
-                      send_message_kb, update_user_statistic, update_group_statistic_2x)
+from .kbs import (update_group_statistic, update_user_statistic_2x, chose_statistic_kb, admin_menu, menu_kb,
+                  send_message_kb, update_user_statistic, update_group_statistic_2x)
 from keyboards import statistic_lang
 
 

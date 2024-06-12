@@ -129,7 +129,7 @@ class Group(Base):
                 query = select(cls.chat_id, cls.name).where(
                     cls.language == admin_lang if admin_lang == 'Uzbek' else cls.language != 'Uzbek')
             result = await session.execute(query)
-            return [{"chat_id": row[0], "name": row[1]} for row in result.all()]
+            return [{"chat_id": row[0], "first_name": row[1]} for row in result.all()]
 
     @classmethod
     async def joined_last_month(cls):
