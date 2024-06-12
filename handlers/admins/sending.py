@@ -36,7 +36,6 @@ async def send_message_all(chat: dict, text=None, video=None, photo=None, captio
         return True
     except Exception as e:
         logger.exception("Error send_message_all: %s", e)
-        await bot.send_message(chat_id=ADMINS[0], text=f"Xatolik yuz berdi: {str(e)}")
         return None
 
 
@@ -59,7 +58,6 @@ async def send_messages_to_users(user_ids: list, text=None, video=None, photo=No
             await asyncio.sleep(0.04)
         return active_count, no_active_count
     except Exception as e:
-        await bot.send_message(chat_id=ADMINS[0], text=f"Xatolik yuz berdi: {str(e)}")
         logger.exception("Error send_messages_to_users: %s", e)
         return None
 
@@ -83,7 +81,6 @@ async def send_messages_to_groups(group_ids: list, text=None, video=None, photo=
             await asyncio.sleep(0.04)
         return active_count, no_active_count
     except Exception as e:
-        await bot.send_message(chat_id=ADMINS[0], text=f"Xatolik yuz berdi: {str(e)}")
         logger.exception("Error send_messages_to_groups: %s", e)
         return None
 
