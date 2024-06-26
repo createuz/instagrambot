@@ -47,8 +47,12 @@ async def add_admin_handler(call: CallbackQuery):
     if call.message.chat.id in ADMINS:
         chat_id = call.from_user.id
         callback_id = call.message.message_id
-        await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text="<b>⚙ Welcome to Admin Panel</b>",
-                                    reply_markup=menu_kb)
+        await bot.edit_message_text(
+            chat_id=chat_id,
+            message_id=callback_id,
+            text="<b>⚙ Welcome to Admin Panel</b>",
+            reply_markup=menu_kb
+        )
     return
 
 
@@ -57,8 +61,12 @@ async def add_admin_handler(call: CallbackQuery):
     if call.message.chat.id in ADMINS:
         chat_id = call.from_user.id
         callback_id = call.message.message_id
-        await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text="<b>🅰 Admin menu</b>",
-                                    reply_markup=admin_menu)
+        await bot.edit_message_text(
+            chat_id=chat_id,
+            message_id=callback_id,
+            text="<b>🅰 Admin menu</b>",
+            reply_markup=admin_menu
+        )
     return
 
 
@@ -80,12 +88,17 @@ async def admin_send_message(call: CallbackQuery):
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━'''
                 return await bot.edit_message_text(chat_id=call.message.chat.id, message_id=callback_id,
                                                    text=f'<b>{data_msg}</b>')
-            return await bot.edit_message_text(chat_id=call.message.chat.id, message_id=callback_id,
-                                               text=f'<b>🛑 Hozirda Admin malumotlari muvjud emas</b>')
+            return await bot.edit_message_text(
+                chat_id=call.message.chat.id,
+                message_id=callback_id,
+                text=f'<b>🛑 Hozirda Admin malumotlari muvjud emas</b>'
+            )
         except Exception as e:
             logger.exception("Xatolik: %s", e)
-            return await bot.send_message(chat_id=call.message.chat.id,
-                                          text=f'<b>🛑 Hozirda Admin malumotlari muvjud emas</b>')
+            return await bot.send_message(
+                chat_id=call.message.chat.id,
+                text=f'<b>🛑 Hozirda Admin malumotlari muvjud emas</b>'
+            )
     return
 
 
@@ -94,8 +107,11 @@ async def add_admin_handler(call: CallbackQuery):
     if call.message.chat.id in ADMINS:
         chat_id = call.from_user.id
         callback_id = call.message.message_id
-        await bot.edit_message_text(chat_id=chat_id, message_id=callback_id,
-                                    text="Yangi adminning chat ID sini kiriting")
+        await bot.edit_message_text(
+            chat_id=chat_id,
+            message_id=callback_id,
+            text="Yangi adminning chat ID sini kiriting"
+        )
         await AddAdmin.waiting_for_add_chat_id.set()
     return
 
@@ -122,8 +138,11 @@ async def add_admin_handler(call: CallbackQuery):
     if call.message.chat.id in ADMINS:
         chat_id = call.from_user.id
         callback_id = call.message.message_id
-        await bot.edit_message_text(chat_id=chat_id, message_id=callback_id,
-                                    text="O'chirmoqchi bo'lgan adminning Chat ID sini kiriting!")
+        await bot.edit_message_text(
+            chat_id=chat_id,
+            message_id=callback_id,
+            text="O'chirmoqchi bo'lgan adminning Chat ID sini kiriting!"
+        )
         await AddAdmin.waiting_for_del_chat_id.set()
     return
 
@@ -133,9 +152,11 @@ async def add_admin_save_handler(message: Message, state: FSMContext):
     if message.chat.id in ADMINS:
         try:
             await Admin.delete_admin(message.text)
-            await bot.send_message(message.chat.id,
-                                   f"Chat ID: <b>{message.text}</b>  Adminlar ro'yxatidan chiqarildi ✅",
-                                   reply_markup=admin_menu)
+            await bot.send_message(
+                chat_id=message.chat.id,
+                text=f"Chat ID: <b>{message.text}</b>  Adminlar ro'yxatidan chiqarildi ✅",
+                reply_markup=admin_menu
+            )
             await state.finish()
         except Exception as e:
             await message.answer(f"❌ Xatolik yuz berdi: {str(e)}")
@@ -157,8 +178,12 @@ async def admin_send_message_delete(call: CallbackQuery):
 async def admin_send_message(call: CallbackQuery):
     chat_id = call.from_user.id
     callback_id = call.message.message_id
-    await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text="<b>💬 Xabar turini Tanlang</b>",
-                                reply_markup=send_message_kb)
+    await bot.edit_message_text(
+        chat_id=chat_id,
+        message_id=callback_id,
+        text="<b>💬 Xabar turini Tanlang</b>",
+        reply_markup=send_message_kb
+    )
 
 
 @dp.message_handler(commands=['break'], state='*')
@@ -177,8 +202,12 @@ async def add_admin_handler(message: Message, state: FSMContext):
 async def chose_statistics(call: CallbackQuery):
     if call.message.chat.id in ADMINS:
         try:
-            await bot.edit_message_text(chat_id=call.from_user.id, message_id=call.message.message_id,
-                                        text='<b>📊 Chose Statistic</b>', reply_markup=chose_statistic_kb)
+            await bot.edit_message_text(
+                chat_id=call.from_user.id,
+                message_id=call.message.message_id,
+                text='<b>📊 Chose Statistic</b>',
+                reply_markup=chose_statistic_kb
+            )
         except Exception as e:
             logger.exception("Xatolik: %s", e)
     return
@@ -250,8 +279,12 @@ async def total_user_statistics(call: CallbackQuery):
             chat_id = call.from_user.id
             callback_id = call.message.message_id
             await bot.answer_callback_query(callback_query_id=call.id, text="Updating statistics...")
-            await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text=f'<b>{user}</b>',
-                                        reply_markup=update_user_statistic)
+            await bot.edit_message_text(
+                chat_id=chat_id,
+                message_id=callback_id,
+                text=f'<b>{user}</b>',
+                reply_markup=update_user_statistic
+            )
         except Exception as e:
             logger.exception("Xatolik: %s", e)
     return
@@ -265,8 +298,12 @@ async def update_total_user_statistics(call: CallbackQuery):
             chat_id = call.from_user.id
             callback_id = call.message.message_id
             await bot.answer_callback_query(callback_query_id=call.id, text="Updating statistics...")
-            await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text=f'<b>{user}</b>',
-                                        reply_markup=update_user_statistic_2x)
+            await bot.edit_message_text(
+                chat_id=chat_id,
+                message_id=callback_id,
+                text=f'<b>{user}</b>',
+                reply_markup=update_user_statistic_2x
+            )
         except Exception as e:
             logger.exception("Xatolik: %s", e)
     return
@@ -280,8 +317,12 @@ async def total_group_statistics(call: CallbackQuery):
             chat_id = call.from_user.id
             callback_id = call.message.message_id
             await bot.answer_callback_query(callback_query_id=call.id, text="Updating statistics...")
-            await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text=f'<b>{group}</b>',
-                                        reply_markup=update_group_statistic)
+            await bot.edit_message_text(
+                chat_id=chat_id,
+                message_id=callback_id,
+                text=f'<b>{group}</b>',
+                reply_markup=update_group_statistic
+            )
         except Exception as e:
             logger.exception("Xatolik: %s", e)
     return
@@ -295,8 +336,12 @@ async def update_total_group_statistics(call: CallbackQuery):
             chat_id = call.from_user.id
             callback_id = call.message.message_id
             await bot.answer_callback_query(callback_query_id=call.id, text="Updating statistics...")
-            await bot.edit_message_text(chat_id=chat_id, message_id=callback_id, text=f'<b>{group}</b>',
-                                        reply_markup=update_group_statistic_2x)
+            await bot.edit_message_text(
+                chat_id=chat_id,
+                message_id=callback_id,
+                text=f'<b>{group}</b>',
+                reply_markup=update_group_statistic_2x
+            )
         except Exception as e:
             logger.exception("Xatolik: %s", e)
     return

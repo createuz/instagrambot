@@ -1,8 +1,10 @@
+import json
 from functools import wraps
 import redis.asyncio as aioredis
-from data import *
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from sqlalchemy.orm import declarative_base
+
+from data import DB_URL, logger, REDIS_URL
 
 Base = declarative_base()
 

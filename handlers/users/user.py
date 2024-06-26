@@ -1,11 +1,12 @@
 from aiogram.dispatcher import FSMContext
-from db.models import *
-from data import *
-from keyboards import *
+from aiogram.types import Message, ChatType, CallbackQuery
+from data import bot, LanguageSelection, logger, dp, LanguageChange
+from db import User, Group
+from keyboards import choose_button, language_keyboard, langs_text, add_group, languages, language_changed, del_help
 
 
-@dp.message_handler(commands=['start'], chat_type=types.ChatType.PRIVATE)
-async def start_handler(message: types.Message, state: FSMContext):
+@dp.message_handler(commands=['start'], chat_type=ChatType.PRIVATE)
+async def start_handler(message: Message, state: FSMContext):
     await message.delete()
     parts = message.text.split()
     identifier = parts[1] if len(parts) > 1 else None
@@ -33,8 +34,8 @@ async def start_handler(message: types.Message, state: FSMContext):
 
 
 @dp.callback_query_handler(lambda c: c.data in languages, state=LanguageSelection.select_language,
-                           chat_type=types.ChatType.PRIVATE)
-async def create_user_handler(call: types.CallbackQuery, state: FSMContext):
+                           chat_type=ChatType.PRIVATE)
+async def create_user_handler(call: CallbackQuery, state: FSMContext):
     chat_id = call.message.chat.id
     language = languages.get(call.data)
     try:
@@ -59,8 +60,8 @@ async def create_user_handler(call: types.CallbackQuery, state: FSMContext):
         logger.exception("Error while processing language selection: %s", e)
 
 
-@dp.message_handler(commands=['lang'], chat_type=types.ChatType.PRIVATE)
-async def change_language_handler(message: types.Message):
+@dp.message_handler(commands=['lang'], chat_type=ChatType.PRIVATE)
+async def change_language_handler(message: Message):
     await message.delete()
     try:
         await bot.send_message(
@@ -79,8 +80,8 @@ async def change_language_handler(message: types.Message):
 
 
 @dp.callback_query_handler(lambda c: c.data in languages.keys(), state=LanguageChange.select_language,
-                           chat_type=types.ChatType.PRIVATE)
-async def process_change_language(call: types.CallbackQuery, state: FSMContext):
+                           chat_type=ChatType.PRIVATE)
+async def process_change_language(call: CallbackQuery, state: FSMContext):
     try:
         language = languages.get(call.data)
         await User.update_language(chat_id=call.message.chat.id, language=language)
@@ -98,9 +99,10 @@ async def process_change_language(call: types.CallbackQuery, state: FSMContext):
 
 
 @dp.message_handler(commands=['help'])
-async def help_handler(message: types.Message):
+async def help_handler(message: Message):
+    await message.delete()
     try:
-        if message.chat.type != types.ChatType.PRIVATE:
+        if message.chat.type != ChatType.PRIVATE:
             language = await Group.get_language(chat_id=message.chat.id)
             await bot.send_message(
                 chat_id=message.chat.id,
@@ -120,4 +122,4 @@ async def help_handler(message: types.Message):
             )
     except Exception as e:
         logger.exception("Error while processing start command: %s", e)
-    await message.delete()
+
