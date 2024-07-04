@@ -1,3 +1,4 @@
+import json
 import os
 from collections import Counter
 from aiogram.dispatcher import FSMContext
@@ -18,28 +19,50 @@ async def bot_echo(message: Message):
     return
 
 
+# @dp.callback_query_handler(text="chat_ids_doc")
+# async def add_admin_handler(call: CallbackQuery):
+#     try:
+#         if call.message.chat.id in ADMINS:
+#             await bot.answer_callback_query(callback_query_id=call.id)
+#             users_chat_id = await User.get_all_users()
+#             groups_chat_id = await Group.get_all_groups()
+#             file_path = 'chat_ids.txt'
+#             all_chat_ids = users_chat_id + groups_chat_id
+#             count_users = len(users_chat_id)
+#             count_groups = len(groups_chat_id)
+#             with open(file_path, 'w') as file:
+#                 for chat_id in all_chat_ids:
+#                     file.write(f"{chat_id}\n")
+#             msg = f"<b>• All users count:  {count_users}\n• All groups count:  {count_groups}</b>"
+#             with open(file_path, 'rb') as doc_file:
+#                 await bot.send_document(chat_id=call.message.chat.id, document=InputFile(doc_file), caption=msg)
+#             os.remove(file_path)
+#         return None
+#     except Exception as e:
+#         logger.exception("Unexpected error: %s", e)
+#         return None
+
+
 @dp.callback_query_handler(text="chat_ids_doc")
-async def add_admin_handler(call: CallbackQuery):
+async def chat_ids_handler(call: CallbackQuery):
     try:
-        if call.message.chat.id in ADMINS:
-            await bot.answer_callback_query(callback_query_id=call.id)
-            users_chat_id = await User.get_all_users()
-            groups_chat_id = await Group.get_all_groups()
-            file_path = 'chat_ids.txt'
-            all_chat_ids = users_chat_id + groups_chat_id
-            count_users = len(users_chat_id)
-            count_groups = len(groups_chat_id)
-            with open(file_path, 'w') as file:
-                for chat_id in all_chat_ids:
-                    file.write(f"{chat_id}\n")
-            msg = f"<b>• All users count:  {count_users}\n• All groups count:  {count_groups}</b>"
-            with open(file_path, 'rb') as doc_file:
-                await bot.send_document(chat_id=call.message.chat.id, document=InputFile(doc_file), caption=msg)
-            os.remove(file_path)
-        return None
+        await bot.answer_callback_query(callback_query_id=call.id)
+        users_data = await User.get_all_users()
+        groups_data = await Group.get_all_groups()
+        users_file_path = 'users.json'
+        groups_file_path = 'groups.json'
+        with open(users_file_path, 'w') as users_file:
+            json.dump(users_data, users_file, indent=3)
+        with open(groups_file_path, 'w') as groups_file:
+            json.dump(groups_data, groups_file, indent=3)
+        user_msg = f"<b>• All users count:  {len(users_data)}</b>"
+        group_msg = f"<b>• All groups count:  {len(groups_data)}</b>"
+        await bot.send_document(chat_id=call.message.chat.id, document=InputFile(users_file_path), caption=user_msg)
+        await bot.send_document(chat_id=call.message.chat.id, document=InputFile(groups_file_path), caption=group_msg)
+        os.remove(users_file_path)
+        os.remove(groups_file_path)
     except Exception as e:
         logger.exception("Unexpected error: %s", e)
-        return None
 
 
 @dp.callback_query_handler(text="menu_kb")

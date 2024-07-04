@@ -58,13 +58,22 @@ class User(Base):
     async def get_all_users(cls, admin_lang: str = None):
         async for session in db.get_session():
             if admin_lang is None:
-                query = select(cls.chat_id)
+                query = select(cls.chat_id, cls.username, cls.first_name, cls.language, cls.added_by, cls.created_add)
+                result = await session.execute(query)
+                return [
+                    {
+                        "chat_id": user.chat_id,
+                        "username": user.username,
+                        "first_name": user.first_name,
+                        "language": user.language,
+                        "added_by": user.added_by,
+                        "created_add": user.created_add
+                    } for user in result.all()
+                ]
             else:
-                query = select(cls.chat_id, cls.first_name).where(
-                    cls.language == admin_lang if admin_lang == 'Uzbek' else 'Uzbek' != cls.language
-                )
-            result = await session.execute(query)
-            return [{"chat_id": row[0], "first_name": row[1]} for row in result.all()]
+                query = cls.language == admin_lang if admin_lang == 'Uzbek' else 'Uzbek' != cls.language
+                result = await session.execute(select(cls.chat_id, cls.first_name).where(query))
+                return [{"chat_id": row[0], "first_name": row[1]} for row in result.all()]
 
     @classmethod
     async def joined_last_month(cls):
@@ -125,13 +134,23 @@ class Group(Base):
     async def get_all_groups(cls, admin_lang: str = None):
         async for session in db.get_session():
             if admin_lang is None:
-                query = select(cls.chat_id)
+                query = select(cls.chat_id, cls.name, cls.username, cls.members, cls.language, cls.created_add)
+                result = await session.execute(query)
+                return [
+                    {
+                        "chat_id": group.chat_id,
+                        "name": group.name,
+                        "username": group.username,
+                        "members": group.members,
+                        "language": group.language,
+                        "added_by": group.added_by,
+                        "created_add": group.created_add
+                    } for group in result.all()
+                ]
             else:
-                query = select(cls.chat_id, cls.name).where(
-                    cls.language == admin_lang if admin_lang == 'Uzbek' else 'Uzbek' != cls.language
-                )
-            result = await session.execute(query)
-            return [{"chat_id": row[0], "first_name": row[1]} for row in result.all()]
+                query = cls.language == admin_lang if admin_lang == 'Uzbek' else 'Uzbek' != cls.language
+                result = await session.execute(select(cls.chat_id, cls.name).where(query))
+                return [{"chat_id": group.chat_id, "first_name": group.name} for group in result.all()]
 
     @classmethod
     async def joined_last_month(cls):
