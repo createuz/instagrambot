@@ -143,7 +143,6 @@ class Group(Base):
                         "username": group.username,
                         "members": group.members,
                         "language": group.language,
-                        "added_by": group.added_by,
                         "created_add": group.created_add
                     } for group in result.all()
                 ]
