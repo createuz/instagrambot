@@ -56,8 +56,10 @@ async def chat_ids_handler(call: CallbackQuery):
         with open(groups_file_path, 'w') as groups_file:
             json.dump(groups_data, groups_file, indent=3)
         user_msg = f"""
+        
         <b>📄 Users count:   {len(users_data)}</b>"""
         group_msg = f"""
+        
         <b>📄 Groups count:   {len(groups_data)}</b>"""
         await bot.send_document(chat_id=call.message.chat.id, document=InputFile(users_file_path), caption=user_msg)
         await bot.send_document(chat_id=call.message.chat.id, document=InputFile(groups_file_path), caption=group_msg)
