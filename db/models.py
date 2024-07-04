@@ -67,7 +67,7 @@ class User(Base):
                         "first_name": user.first_name,
                         "language": user.language,
                         "added_by": user.added_by,
-                        "created_add": user.created_add
+                        "created_add": f"{user.created_add}"
                     } for user in result.all()
                 ]
             else:
@@ -143,7 +143,7 @@ class Group(Base):
                         "username": group.username,
                         "members": group.members,
                         "language": group.language,
-                        "created_add": group.created_add
+                        "created_add": f"{group.created_add}"
                     } for group in result.all()
                 ]
             else:
