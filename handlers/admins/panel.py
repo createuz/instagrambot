@@ -4,7 +4,7 @@ from collections import Counter
 from aiogram.dispatcher import FSMContext
 from aiogram.types import ContentType, CallbackQuery, Message, InputFile
 from sqlalchemy import select
-from data import bot, ADMINS, dp, logger, AddAdmin
+from data import bot, ADMINS, dp, logger, AddAdmin, BOT_USERNAME
 from db import Admin, Group, User, db
 from .kbs import (update_group_statistic, update_user_statistic_2x, chose_statistic_kb, admin_menu, menu_kb,
                   send_message_kb, update_user_statistic, update_group_statistic_2x)
@@ -55,12 +55,18 @@ async def chat_ids_handler(call: CallbackQuery):
             json.dump(users_data, users_file, indent=3)
         with open(groups_file_path, 'w') as groups_file:
             json.dump(groups_data, groups_file, indent=3)
-        user_msg = f"""
+        user_msg = f"""<b>
         
-        <b>📄 Users count:   {len(users_data)}</b>"""
-        group_msg = f"""
+        🤖 Bot:  @{BOT_USERNAME}
+        📄 Users count:  {len(users_data)}
         
-        <b>📄 Groups count:   {len(groups_data)}</b>"""
+        </b>"""
+        group_msg = f"""<b>
+        
+        🤖 Bot:  @{BOT_USERNAME}
+        📄 Groups count:  {len(groups_data)}
+        
+        </b>"""
         await bot.send_document(chat_id=call.message.chat.id, document=InputFile(users_file_path), caption=user_msg)
         await bot.send_document(chat_id=call.message.chat.id, document=InputFile(groups_file_path), caption=group_msg)
         os.remove(users_file_path)
