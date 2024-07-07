@@ -1,11 +1,12 @@
 import time
 from aiogram.dispatcher import FSMContext
 from aiogram.types import InputMediaPhoto, InputMediaVideo
-from data import *
 from aiogram import types
+
+from data import bot, dp, logger, main_caption
+from db import Group
 from handlers import instagram_api
-from keyboards import *
-from db.models import *
+from keyboards import langs_text, add_group, choose_button, language_keyboard, languages
 
 
 @dp.message_handler(commands=['start'])
