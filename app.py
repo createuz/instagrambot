@@ -1,4 +1,6 @@
+from db import cache
 from handlers import *
+from keyboards import start_bot
 
 
 async def main():
