@@ -4,7 +4,7 @@ from collections import Counter
 from aiogram.dispatcher import FSMContext
 from aiogram.types import ContentType, CallbackQuery, Message, InputFile
 from sqlalchemy import select
-from data import bot, ADMINS, dp, logger, AddAdmin, BOT_USERNAME
+from data import bot, config, dp, logger, AddAdmin, ADMINS
 from db import Admin, Group, User, db
 from .kbs import (update_group_statistic, update_user_statistic_2x, chose_statistic_kb, admin_menu, menu_kb,
                   send_message_kb, update_user_statistic, update_group_statistic_2x)
@@ -34,11 +34,11 @@ async def chat_ids_handler(call: CallbackQuery):
         user_msg = f"""<b>
 📄 Users count:  {len(users_data)}
 
-🤖 Bot:  @{BOT_USERNAME}</b>"""
+🤖 Bot:  @{config.BOT_USERNAME}</b>"""
         group_msg = f"""<b>
 📄 Groups count:  {len(groups_data)}
 
-🤖 Bot:  @{BOT_USERNAME}</b>"""
+🤖 Bot:  @{config.BOT_USERNAME}</b>"""
         await bot.send_document(chat_id=call.message.chat.id, document=InputFile(users_file_path), caption=user_msg)
         await bot.send_document(chat_id=call.message.chat.id, document=InputFile(groups_file_path), caption=group_msg)
         os.remove(users_file_path)

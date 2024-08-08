@@ -1,4 +1,4 @@
-from .config import *
+from .configration import *
 from .middlewares import *
 from .state import *
 from .settings import *

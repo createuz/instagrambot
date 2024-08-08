@@ -3,8 +3,8 @@ import aiofiles
 import aiohttp
 from aiogram.types import ContentType, Message
 from aiogram.utils.exceptions import BadRequest
-from data import dp, bot, Backup, logger, BOT_TOKEN, ADMINS
-from db import Group, User
+from data import dp, bot, Backup, logger, config, ADMINS
+from db import User, Group
 
 
 @dp.message_handler(commands=['backup'])
@@ -22,7 +22,7 @@ async def download_file(file_id, doc_path):
     try:
         file = await bot.get_file(file_id)
         async with aiohttp.ClientSession() as session:
-            async with session.get(f'https://api.telegram.org/file/bot{BOT_TOKEN}/{file.file_path}') as response:
+            async with session.get(f'https://api.telegram.org/file/bot{config.BOT_TOKEN}/{file.file_path}') as response:
                 response.raise_for_status()
                 async with aiofiles.open(doc_path, "wb") as new_file:
                     await new_file.write(await response.read())

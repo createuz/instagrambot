@@ -3,8 +3,7 @@ from functools import wraps
 import redis.asyncio as aioredis
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from sqlalchemy.orm import declarative_base
-
-from data import DB_URL, logger, REDIS_URL
+from data import logger, config
 
 Base = declarative_base()
 
@@ -23,7 +22,7 @@ class AsyncDatabaseSession:
             await conn.run_sync(Base.metadata.create_all)
 
 
-db = AsyncDatabaseSession(db_url=DB_URL)
+db = AsyncDatabaseSession(db_url=config.DB_URL)
 
 
 class RedisCache:
@@ -44,8 +43,12 @@ class RedisCache:
     async def delete(self, key: str):
         await self._redis.delete(key)
 
+    @property
+    def redis(self):
+        return self._redis
 
-cache: RedisCache = RedisCache(url=REDIS_URL)
+
+cache: RedisCache = RedisCache(url=config.REDIS_URL)
 
 
 def cache_result(expire: int = 3600):

@@ -3,7 +3,7 @@ import re
 from typing import Union, List
 import httpx
 
-from data import logger, fake_agent, INSTA_API_LIST
+from data import logger, fake_agent, config
 
 
 class InstagramAPI:
@@ -39,7 +39,7 @@ class InstagramAPI:
 
     async def instagram_downloader(self, link: str) -> Union[list, None]:
         try:
-            for api_url in INSTA_API_LIST:
+            for api_url in config.API_LIST:
                 results = await self.get_data_insta(api_url, link)
                 if results:
                     return results
@@ -78,7 +78,6 @@ class InstagramAPI:
 
 
 instagram_api = InstagramAPI()
-
 
 # async def main():
 #     link = 'https://pin.it/yCWjfPX7L'

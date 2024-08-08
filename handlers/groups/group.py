@@ -2,7 +2,6 @@ import time
 from aiogram.dispatcher import FSMContext
 from aiogram.types import InputMediaPhoto, InputMediaVideo
 from aiogram import types
-
 from data import bot, dp, logger, main_caption
 from db import Group
 from handlers import instagram_api
@@ -41,7 +40,7 @@ async def change_language_handler_group(message: types.Message):
             reply_markup=language_keyboard,
             protect_content=True
         )
-    except Exception as e:
+    except Exception:
         await bot.send_message(
             chat_id=message.chat.id,
             text="You haven't selected a language yet. Please use the /start command to select a language.",
@@ -150,7 +149,7 @@ async def send_instagram_media(message: types.Message):
             media[-1].caption = f"<b>{main_caption}{langs_text.get(language).get('saved')} 📥</b>"
             await bot.send_media_group(chat_id=message.chat.id, media=media)
         await wait_msg.delete()
-    except Exception as e:
+    except Exception:
         logger.exception("Error while sending Instagram photo: %s", )
         await wait_msg.delete()
         return await bot.send_message(

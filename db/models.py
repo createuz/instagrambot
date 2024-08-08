@@ -13,7 +13,7 @@ class User(Base):
     first_name = Column(String)
     language = Column(String)
     added_by = Column(String)
-    created_add = Column(DateTime, default=datetime.now)
+    created_at = Column(DateTime, default=datetime.now)
 
     @classmethod
     async def create_user(cls, chat_id: int, username: str, first_name: str, language: str, added_by: str):
@@ -58,7 +58,7 @@ class User(Base):
     async def get_all_users(cls, admin_lang: str = None):
         async for session in db.get_session():
             if admin_lang is None:
-                query = select(cls.chat_id, cls.username, cls.first_name, cls.language, cls.added_by, cls.created_add)
+                query = select(cls.chat_id, cls.username, cls.first_name, cls.language, cls.added_by, cls.created_at)
                 result = await session.execute(query)
                 return [
                     {
@@ -67,7 +67,7 @@ class User(Base):
                         "first_name": user.first_name,
                         "language": user.language,
                         "added_by": user.added_by,
-                        "created_add": f"{user.created_add}"
+                        "created_at": user.created_at,
                     } for user in result.all()
                 ]
             else:
@@ -79,14 +79,14 @@ class User(Base):
     async def joined_last_month(cls):
         last_month = datetime.now() - timedelta(days=30)
         async for session in db.get_session():
-            return await session.scalar(select(func.count(cls.chat_id)).where(cls.created_add >= last_month))
+            return await session.scalar(select(func.count(cls.chat_id)).where(cls.created_at >= last_month))
 
     @classmethod
     async def joined_last_24_hours(cls):
         last_24_hours = datetime.now() - timedelta(hours=24)
         async for session in db.get_session():
             return await session.scalar(select(func.count(cls.chat_id)).where(
-                and_(cls.created_add >= last_24_hours, cls.created_add <= datetime.now())))
+                and_(cls.created_at >= last_24_hours, cls.created_at <= datetime.now())))
 
 
 class Group(Base):
@@ -97,7 +97,7 @@ class Group(Base):
     username = Column(String)
     members = Column(Integer)
     language = Column(String)
-    created_add = Column(DateTime, default=datetime.now)
+    created_at = Column(DateTime, default=datetime.now)
 
     @classmethod
     async def create_group(cls, chat_id: int, name: str, username: str, members: int, language: str):
@@ -134,7 +134,7 @@ class Group(Base):
     async def get_all_groups(cls, admin_lang: str = None):
         async for session in db.get_session():
             if admin_lang is None:
-                query = select(cls.chat_id, cls.name, cls.username, cls.members, cls.language, cls.created_add)
+                query = select(cls.chat_id, cls.name, cls.username, cls.members, cls.language, cls.created_at)
                 result = await session.execute(query)
                 return [
                     {
@@ -143,7 +143,7 @@ class Group(Base):
                         "username": group.username,
                         "members": group.members,
                         "language": group.language,
-                        "created_add": f"{group.created_add}"
+                        "created_at": f"{group.created_at}"
                     } for group in result.all()
                 ]
             else:
@@ -155,14 +155,14 @@ class Group(Base):
     async def joined_last_month(cls):
         last_month = datetime.now() - timedelta(days=30)
         async for session in db.get_session():
-            return await session.scalar(select(func.count(cls.chat_id)).where(cls.created_add >= last_month))
+            return await session.scalar(select(func.count(cls.chat_id)).where(cls.created_at >= last_month))
 
     @classmethod
     async def joined_last_24_hours(cls):
         last_24_hours = datetime.now() - timedelta(hours=24)
         async for session in db.get_session():
             return await session.scalar(select(func.count(cls.chat_id)).where(
-                and_(cls.created_add >= last_24_hours, cls.created_add <= datetime.now())))
+                and_(cls.created_at >= last_24_hours, cls.created_at <= datetime.now())))
 
 
 class Admin(Base):

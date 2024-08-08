@@ -1,5 +1,6 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from data.config import BOT_URL
+from data.configration import config
+START_GROUP = config.START_GROUP
 
 language_keyboard = InlineKeyboardMarkup(row_width=2).add(
     InlineKeyboardButton(text="🇺🇿 O'zbekcha", callback_data="uz"),
@@ -17,18 +18,20 @@ language_keyboard = InlineKeyboardMarkup(row_width=2).add(
 )
 
 add_group = {
-    'Uzbek': InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Guruhga Qushish', url=BOT_URL)),
-    'Russian': InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Добавить в группу', url=BOT_URL)),
-    'Arabic': InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text="إضافة إلى المجموعة ➕", url=BOT_URL)),
-    'Turkey': InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Gruba ekle', url=BOT_URL)),
-    'Germany': InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Zur Gruppe hinzufügen', url=BOT_URL)),
-    'France': InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Ajouter au groupe', url=BOT_URL)),
-    'Spain': InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Añadir al grupo', url=BOT_URL)),
-    'Italy': InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Aggiungi al gruppo', url=BOT_URL)),
-    'English': InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Add to group', url=BOT_URL)),
-    "Kazakh": InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Топқа қосу', url=BOT_URL)),
-    "Ukraine": InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Додати до групи', url=BOT_URL)),
-    "Azerbaijan": InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Qrupa əlavə edin', url=BOT_URL))
+    'Uzbek': InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Guruhga Qushish', url=START_GROUP)),
+    'Russian': InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Добавить в группу', url=START_GROUP)),
+    'Arabic': InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text="إضافة إلى المجموعة ➕", url=START_GROUP)),
+    'Turkey': InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Gruba ekle', url=START_GROUP)),
+    'Germany': InlineKeyboardMarkup(row_width=1).add(
+        InlineKeyboardButton(text='➕ Zur Gruppe hinzufügen', url=START_GROUP)),
+    'France': InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Ajouter au groupe', url=START_GROUP)),
+    'Spain': InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Añadir al grupo', url=START_GROUP)),
+    'Italy': InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Aggiungi al gruppo', url=START_GROUP)),
+    'English': InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Add to group', url=START_GROUP)),
+    "Kazakh": InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Топқа қосу', url=START_GROUP)),
+    "Ukraine": InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='➕ Додати до групи', url=START_GROUP)),
+    "Azerbaijan": InlineKeyboardMarkup(row_width=1).add(
+        InlineKeyboardButton(text='➕ Qrupa əlavə edin', url=START_GROUP))
 }
 
 del_help = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='🔻', callback_data=f"bekor_qilish"))
