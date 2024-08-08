@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sess
 from sqlalchemy.orm import declarative_base
 from data import logger, config
 
+DB_URL = config.DB_URL
 Base = declarative_base()
 
 
@@ -22,7 +23,7 @@ class AsyncDatabaseSession:
             await conn.run_sync(Base.metadata.create_all)
 
 
-db = AsyncDatabaseSession(db_url=config.DB_URL)
+db = AsyncDatabaseSession(db_url=DB_URL)
 
 
 class RedisCache:
