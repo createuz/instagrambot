@@ -3,7 +3,7 @@ from functools import wraps
 import redis.asyncio as aioredis
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from sqlalchemy.orm import declarative_base
-from data import logger, config
+from settings import logger, config
 
 DB_URL = config.DB_URL
 Base = declarative_base()

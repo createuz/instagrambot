@@ -1,6 +1,6 @@
 import asyncio
 import time
-from data import bot, ADMINS, logger
+from settings import bot, ADMINS, logger
 from db.models import User, Group
 
 

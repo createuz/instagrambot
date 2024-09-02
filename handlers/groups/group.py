@@ -2,7 +2,7 @@ import time
 from aiogram.dispatcher import FSMContext
 from aiogram.types import InputMediaPhoto, InputMediaVideo
 from aiogram import types
-from data import bot, dp, logger, main_caption
+from settings import bot, dp, logger, main_caption
 from db import Group
 from handlers import instagram_api
 from keyboards import langs_text, add_group, choose_button, language_keyboard, languages

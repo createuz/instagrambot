@@ -2,8 +2,7 @@ import asyncio
 import re
 from typing import Union, List
 import httpx
-
-from data import logger, fake_agent, config
+from settings import logger, fake_agent, config
 
 
 class InstagramAPI:
@@ -11,9 +10,6 @@ class InstagramAPI:
     def __init__(self):
         self.client = httpx.AsyncClient(headers={'User-Agent': fake_agent.get_random_user_agent()})
         self.cache = {}
-
-    async def close_session(self):
-        await self.client.aclose()
 
     async def instagram_download_stories(self, username: str) -> Union[list, None]:
         try:
@@ -78,12 +74,3 @@ class InstagramAPI:
 
 
 instagram_api = InstagramAPI()
-
-# async def main():
-#     link = 'https://pin.it/yCWjfPX7L'
-#     res = await instagram_api.instagram_downloader(link)
-#     print(res)
-#
-#
-# if __name__ == "__main__":
-#     asyncio.run(main())

@@ -1,6 +1,6 @@
 from aiogram.dispatcher import FSMContext
 from aiogram.types import Message, ChatType, CallbackQuery
-from data import bot, LanguageSelection, logger, dp, LanguageChange
+from settings import bot, LanguageSelection, logger, dp, LanguageChange
 from db import User, Group
 from keyboards import choose_button, language_keyboard, langs_text, add_group, languages, language_changed, del_help
 

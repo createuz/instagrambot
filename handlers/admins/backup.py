@@ -3,7 +3,7 @@ import aiofiles
 import aiohttp
 from aiogram.types import ContentType, Message
 from aiogram.utils.exceptions import BadRequest
-from data import dp, bot, Backup, logger, config, ADMINS
+from settings import dp, bot, Backup, logger, config, ADMINS
 from db import User, Group
 
 

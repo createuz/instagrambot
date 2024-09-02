@@ -1,7 +1,7 @@
 import time
 from aiogram.types import InputMediaPhoto, InputMediaVideo, ChatType, Message
 from api import instagram_api
-from data import dp, bot, main_caption, logger
+from settings import dp, bot, main_caption, logger
 from db import User
 from keyboards import langs_text
 
