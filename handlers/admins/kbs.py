@@ -1,10 +1,5 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-
-def create_inline_button(text, callback_data):
-    return InlineKeyboardButton(text=text, callback_data=callback_data)
-
-
 bekor_qilish_kb = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text="🔻", callback_data="bekor_qilish"))
 del_help = InlineKeyboardMarkup(row_width=1).add(InlineKeyboardButton(text='🔻', callback_data=f"bekor_qilish"))
 back_media_statistic = InlineKeyboardMarkup(row_width=1).add(
@@ -48,33 +43,32 @@ send_message_kb = InlineKeyboardMarkup(row_width=2).add(
     InlineKeyboardButton(text="📝 Send Message", callback_data="text"),
     InlineKeyboardButton(text="🖼 Send Photo", callback_data="photo"),
     InlineKeyboardButton(text="📹 Send Video", callback_data="video"),
-    InlineKeyboardButton(text="🗑 Cancel", callback_data="bekor_qilish"),
     InlineKeyboardButton(text="⬅ Back", callback_data="menu_kb"))
 
 kb_2 = InlineKeyboardMarkup(row_width=1).add(
     InlineKeyboardButton(text="📍2-Tugmani kiritish", callback_data="kb_2"),
     InlineKeyboardButton(text="✅ Xabarni yuborish", callback_data="send_message"),
-    InlineKeyboardButton(text="🗑 Bekor qilish", callback_data="cancel"))
+    InlineKeyboardButton(text="🗑 Bekor qilish", callback_data="bekor_qilish"))
 
 kb_3 = InlineKeyboardMarkup(row_width=1).add(
     InlineKeyboardButton(text="📍3-Tugmani kiritish", callback_data="kb_3"),
     InlineKeyboardButton(text="✅ Xabarni yuborish", callback_data="send_message"),
-    InlineKeyboardButton(text="🗑 Bekor qilish", callback_data="cancel"))
+    InlineKeyboardButton(text="🗑 Bekor qilish", callback_data="bekor_qilish"))
 
 kb_4 = InlineKeyboardMarkup(row_width=1).add(
     InlineKeyboardButton(text="📍4-Tugmani kiritish", callback_data="kb_4"),
     InlineKeyboardButton(text="✅ Xabarni yuborish", callback_data="send_message"),
-    InlineKeyboardButton(text="🗑 Bekor qilish", callback_data="cancel"))
+    InlineKeyboardButton(text="🗑 Bekor qilish", callback_data="bekor_qilish"))
 
 kb_5 = InlineKeyboardMarkup(row_width=1).add(
     InlineKeyboardButton(text="✅ Tasdiqlash", callback_data="send_message"),
-    InlineKeyboardButton(text="🗑 Bekor qilish ", callback_data="cancel"))
+    InlineKeyboardButton(text="🗑 Bekor qilish ", callback_data="bekor_qilish"))
 
 tasdiqlash = InlineKeyboardMarkup(row_width=1).add(
     InlineKeyboardButton(text="✅ Tasdiqlash", callback_data="send_message"),
-    InlineKeyboardButton(text="🗑 Bekor qilish ", callback_data="cancel"))
+    InlineKeyboardButton(text="🗑 Bekor qilish ", callback_data="bekor_qilish"))
 
 add_kb = InlineKeyboardMarkup(row_width=1).add(
     InlineKeyboardButton(text="📍Tugma yaratish", callback_data="add_kb"),
     InlineKeyboardButton(text="✅ Xabarni yuborish", callback_data="send_message"),
-    InlineKeyboardButton(text="🗑 Bekor qilish ", callback_data="cancel"))
+    InlineKeyboardButton(text="🗑 Bekor qilish ", callback_data="bekor_qilish"))

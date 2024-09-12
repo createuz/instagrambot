@@ -1,5 +1,6 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from settings.configration import config
+
 START_GROUP = config.START_GROUP
 
 language_keyboard = InlineKeyboardMarkup(row_width=2).add(

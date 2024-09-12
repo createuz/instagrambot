@@ -6,9 +6,10 @@ from db.models import User, Group
 
 async def send_message_all(chat: dict, text=None, video=None, photo=None, caption=None, keyboard=None):
     try:
+        chat_id = chat.get('chat_id')
+        caption = caption.format(chat.get('first_name')) if caption and '{}' in caption else caption
+        text = text.format(chat.get('first_name')) if text and '{}' in text else text
         if text:
-            chat_id = chat.get('chat_id')
-            text = text.format(chat.get('first_name')) if text and '{}' in text else text
             await bot.send_message(
                 chat_id=chat_id,
                 text=f"<b>{text}</b>",
@@ -16,8 +17,6 @@ async def send_message_all(chat: dict, text=None, video=None, photo=None, captio
                 disable_web_page_preview=True
             )
         if video:
-            chat_id = chat.get('chat_id')
-            caption = caption.format(chat.get('first_name')) if caption and '{}' in caption else caption
             await bot.send_video(
                 chat_id=chat_id,
                 video=video,
@@ -25,8 +24,6 @@ async def send_message_all(chat: dict, text=None, video=None, photo=None, captio
                 reply_markup=keyboard
             )
         if photo:
-            chat_id = chat.get('chat_id')
-            caption = caption.format(chat.get('first_name')) if caption and '{}' in caption else caption
             await bot.send_photo(
                 chat_id=chat_id,
                 photo=photo,
