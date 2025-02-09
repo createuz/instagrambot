@@ -1,13 +1,10 @@
-import asyncio
 import re
-from io import StringIO
-from typing import Union, List
-import httpx
-from bs4 import BeautifulSoup
-from lxml import etree
+from typing import Union
 
-from settings import logger, fake_agent, config
-from pyquery import PyQuery as pq
+import httpx
+
+from data import logger
+from data.user_agent import fake_agent
 
 
 class InstagramAPI:
@@ -40,46 +37,13 @@ class InstagramAPI:
 
     async def instagram_downloader(self, link: str) -> Union[list, None]:
         try:
-            for api_url in config.API_LIST:
+            for api_url in 'config.API_LIST':
                 results = await self.get_data_insta(api_url, link)
                 if results:
                     return results
             return None
         except Exception as e:
             return None
-
-    # async def tiktok_downloader(self, link: str) -> Union[list, None]:
-    #     try:
-    #         response = await self.client.post(
-    #             'https://tikwm.com/api/',
-    #             data={'url': link, 'count': 12, 'cursor': 0, 'web': 1, 'hd': 1}
-    #         )
-    #         return response.json()
-    #     except Exception as e:
-    #         logger.exception(f"• User stories error: {e}")
-    #         return None
-
-    # async def tiktok_downloader(self, link: str) -> Union[list, None]:
-    #     try:
-    #         response = await self.client.post(
-    #             'https://ssstik.io/abc?url=dl',
-    #             data={'id': link, 'locale': 'en', 'tt': 'ODNwWFk2'}
-    #         )
-    #         return response.text
-    #     except Exception as e:
-    #         logger.exception(f"• User stories error: {e}")
-    #         return None
-
-    # async def likee_downloader(self, link: str) -> any:
-    #     try:
-    #         response = await self.client.post('https://likeedownloader.com/process', data={'id': link, 'locale': 'en'})
-    #         parser = etree.HTMLParser()
-    #         tree = etree.parse(StringIO(response.text), parser)
-    #         links = tree.xpath('//a/@href')
-    #         return links[0].replace("\\/", "/").replace('\\"', ''), links[1].replace("\\/", "/").replace('\\"', '')
-    #     except Exception as e:
-    #         logger.exception("Error while inserting video data: %s", e)
-    #         return None
 
 
 instagram_api = InstagramAPI()
