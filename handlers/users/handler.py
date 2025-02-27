@@ -68,7 +68,7 @@ async def send_pinterest_all_media(message: Message):
         )
 
 
-@download_router.message(regexp=r'https?:\/\/(www\.)?instagram\.com\/(reel|p)\/([-_a-zA-Z0-9]{11})', )
+@download_router.message(F.text.regexp(r'https?:\/\/(www\.)?instagram\.com\/(reel|p)\/([-_a-zA-Z0-9]{11})'))
 async def send_instagram_media(message: Message):
     await message.delete()
     global wait_msg

@@ -30,8 +30,8 @@ def get_language_keyboard():
             ],
             [
                 InlineKeyboardButton(text="🇸🇦 عربي", callback_data="ar"),
-                InlineKeyboardButton(text="🇮🇷 فارسی", callback_data="fa"),
-                InlineKeyboardButton(text="🇨🇳 中文", callback_data="zh"),
+                InlineKeyboardButton(text="🇮🇷 فارسی", callback_data="ir"),
+                InlineKeyboardButton(text="🇨🇳 中文", callback_data="ch"),
             ]
             ,
             [
@@ -64,8 +64,8 @@ def get_language_keyboards():
             ],
             [
                 InlineKeyboardButton(text="🇸🇦 AR", callback_data="ar"),
-                InlineKeyboardButton(text="🇮🇷 FA", callback_data="fa"),
-                InlineKeyboardButton(text="🇨🇳 ZH", callback_data="zh")
+                InlineKeyboardButton(text="🇮🇷 FA", callback_data="ir"),
+                InlineKeyboardButton(text="🇨🇳 ZH", callback_data="ch")
             ],
             [
                 InlineKeyboardButton(text="🔻", callback_data="cancel")
@@ -158,20 +158,6 @@ def get_add_to_group():
             inline_keyboard=[
                 [
                     InlineKeyboardButton(text="➕ Dodaj do grupy", url='https://t.me/pintersrobot?startgroup=true')
-                ],
-            ]
-        ),
-        'Hindi': InlineKeyboardMarkup(
-            inline_keyboard=[
-                [
-                    InlineKeyboardButton(text="➕ समूह में जोड़ें", url='https://t.me/pintersrobot?startgroup=true')
-                ],
-            ]
-        ),
-        'Japanese': InlineKeyboardMarkup(
-            inline_keyboard=[
-                [
-                    InlineKeyboardButton(text="➕ グループに追加", url='https://t.me/pintersrobot?startgroup=true')
                 ],
             ]
         ),

@@ -1,11 +1,17 @@
 import json
 import os
+import platform
+import subprocess
+import time
 from collections import Counter
+from datetime import timedelta
 
+import psutil
+import speedtest
 from aiogram import Router, F
 from aiogram.filters import Command, StateFilter
 from aiogram.fsm.context import FSMContext
-from aiogram.types import CallbackQuery, Message, InputFile, FSInputFile
+from aiogram.types import CallbackQuery, Message, FSInputFile
 from sqlalchemy import select
 
 from data import bot, logger, AddAdmin, IsAdmin
@@ -219,3 +225,95 @@ async def stop_message_sending(message: Message, state: FSMContext):
     except Exception as e:
         await state.clear()
         await message.answer(f"❌ Xatolik yuz berdi: {str(e)}")
+
+
+BOT_START_TIME = time.time()
+
+
+def get_ping():
+    try:
+        ping_cmd = ["ping", "-c", "4", "google.com"] if platform.system() != "Windows" else ["ping", "-n", "4",
+                                                                                             "google.com"]
+        result = subprocess.run(ping_cmd, capture_output=True, text=True)
+        output = result.stdout.split("\n")[-2]
+        ping_time = output.split("/")[-3] if "/" in output else "Noma'lum"
+        return f"📶 Ping: <b>{ping_time} ms</b>"
+    except Exception:
+        return "📶 Ping olinmadi"
+
+
+def get_speed():
+    try:
+        st = speedtest.Speedtest()
+        st.get_best_server()
+        download_speed = st.download() / 1e6
+        upload_speed = st.upload() / 1e6
+        return f"🚀 <b>Internet tezligi:</b>\n🔻 Yuklab olish: <b>{download_speed:.2f} Mbps</b>\n🔺 Yuklash: <b>{upload_speed:.2f} Mbps</b>"
+    except Exception:
+        return "🚀 Internet tezligi aniqlanmadi"
+
+
+def get_uptime():
+    uptime_seconds = time.time() - psutil.boot_time()
+    bot_uptime_seconds = time.time() - BOT_START_TIME
+    return (
+        f"⏳ <b>Server Uptime:</b> {str(timedelta(seconds=int(uptime_seconds)))}\n"
+        f"🤖 <b>Bot Uptime:</b> {str(timedelta(seconds=int(bot_uptime_seconds)))}"
+    )
+
+
+def format_size(bytes):
+    for unit in ['B', 'KB', 'MB', 'GB', 'TB']:
+        if bytes < 1024.0:
+            return f"{bytes:.2f} {unit}"
+        bytes /= 1024.0
+    return f"{bytes:.2f} PB"
+
+
+def get_system_info():
+    try:
+        uname = platform.uname()
+        virtual_memory = psutil.virtual_memory()
+        disk_usage = psutil.disk_usage("/")
+
+        system_info = (
+            f"🖥 <b>Server Ma'lumotlari:</b>\n"
+            f"🔹 Tizim: <b>{uname.system}</b>\n"
+            f"🔹 Host: <b>{uname.node}</b>\n"
+            f"🔹 OS: <b>{uname.release}</b>\n"
+            f"🔹 Arxitektura: <b>{uname.machine}</b>\n"
+            f"🔹 Processor: <b>{uname.processor}</b>\n"
+        )
+
+        cpu_info = (
+            f"\n⚙️ <b>CPU Ma'lumotlari:</b>\n"
+            f"🖥 Yadro: <b>{psutil.cpu_count(logical=True)}</b>\n"
+            f"📊 CPU Yuklanishi: <b>{psutil.cpu_percent()}%</b>\n"
+        )
+
+        ram_info = (
+            f"\n💾 <b>RAM:</b>\n"
+            f"📌 Jami: <b>{format_size(virtual_memory.total)}</b>\n"
+            f"📊 Ishlatilmoqda: <b>{format_size(virtual_memory.used)}</b>\n"
+            f"🟢 Bo‘sh: <b>{format_size(virtual_memory.available)}</b>\n"
+            f"📈 Yuklanish: <b>{virtual_memory.percent}%</b>\n"
+        )
+
+        disk_info = (
+            f"\n🗄 <b>Disk:</b>\n"
+            f"💾 Umumiy: <b>{format_size(disk_usage.total)}</b>\n"
+            f"📂 Ishlatilgan: <b>{format_size(disk_usage.used)}</b>\n"
+            f"🟢 Bo‘sh joy: <b>{format_size(disk_usage.free)}</b>\n"
+            f"📊 Yuklanish: <b>{disk_usage.percent}%</b>\n"
+        )
+
+        return system_info + cpu_info + ram_info + disk_info + f"\n{get_ping()}\n{get_speed()}\n\n{get_uptime()}"
+    except Exception as e:
+        return f"🚨 Xatolik yuz berdi: {str(e)}"
+
+
+@panel_router.message(Command("server"))
+async def send_server_info(message: Message):
+    await message.answer("⏳ <b>Server haqida ma'lumotlar olinmoqda...</b>", parse_mode="HTML")
+    info = get_system_info()
+    await message.answer(info, parse_mode="HTML")
