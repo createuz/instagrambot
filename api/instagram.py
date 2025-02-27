@@ -27,7 +27,6 @@ class InstagramAPI:
         try:
             response = await self.client.get(f'https://www.instagram.com/p/{vid}/?__a=1&__d=dis', headers=headers)
             items = response.json().get('items', [{}])[0]
-            print(response.json())
             is_carousel = items.get('product_type') == 'carousel_container'
             get_url = lambda item, key: next(iter(item.get(key, [{}])), {}).get('url')
             return [get_url(i, 'video_versions') or get_url(i.get('image_versions2', {}), 'candidates')
@@ -86,6 +85,6 @@ class InstagramAPI:
     #         logger.exception(f"• User data error: {e}")
     #         return None
 
-'https://www.instagram.com/p/DGVMuEHsclg/'
+# 'https://www.instagram.com/p/DGVMuEHsclg/'
 instagram_api = InstagramAPI()
-print(asyncio.run(instagram_api.instagram_downloader('DGVMuEHsclg')))
+# print(asyncio.run(instagram_api.instagram_downloader('DGVMuEHsclg')))

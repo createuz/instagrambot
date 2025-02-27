@@ -106,7 +106,7 @@ async def send_instagram_media(message: Message):
         )
 
 
-@download_router.message(regexp=r'https?:\/\/(www\.)?api\.com\/(stories)')
+@download_router.message(F.text.regexp(r'https?:\/\/(www\.)?api\.com\/(stories)'))
 async def send_instagram_media(message: Message):
     await message.delete()
     global wait_msg

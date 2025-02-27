@@ -25,13 +25,13 @@ def get_language_keyboard():
             ],
             [
                 InlineKeyboardButton(text="🇩🇪 Deutsch", callback_data="de"),
-                InlineKeyboardButton(text="🇧🇷 Português", callback_data="pt"),
+                InlineKeyboardButton(text="🇵🇹 Português", callback_data="pt"),
                 InlineKeyboardButton(text="🇵🇱 Polski", callback_data="pl")
             ],
             [
                 InlineKeyboardButton(text="🇸🇦 عربي", callback_data="ar"),
                 InlineKeyboardButton(text="🇮🇷 فارسی", callback_data="ir"),
-                InlineKeyboardButton(text="🇨🇳 中文", callback_data="ch"),
+                InlineKeyboardButton(text="🇨🇳 中文", callback_data="cn"),
             ]
             ,
             [
@@ -41,7 +41,7 @@ def get_language_keyboard():
     )
 
 
-def get_language_keyboards():
+def get_language_keyboard_code():
     return InlineKeyboardMarkup(
         inline_keyboard=[
             [
@@ -59,13 +59,13 @@ def get_language_keyboards():
             [
                 InlineKeyboardButton(text="🇫🇷 FR", callback_data="fr"),
                 InlineKeyboardButton(text="🇩🇪 DE", callback_data="de"),
-                InlineKeyboardButton(text="🇧🇷 PT", callback_data="pt"),
+                InlineKeyboardButton(text="🇵🇹 PT", callback_data="pt"),
                 InlineKeyboardButton(text="🇵🇱 PL", callback_data="pl")
             ],
             [
                 InlineKeyboardButton(text="🇸🇦 AR", callback_data="ar"),
                 InlineKeyboardButton(text="🇮🇷 FA", callback_data="ir"),
-                InlineKeyboardButton(text="🇨🇳 ZH", callback_data="ch")
+                InlineKeyboardButton(text="🇨🇳 CN", callback_data="cn")
             ],
             [
                 InlineKeyboardButton(text="🔻", callback_data="cancel")
@@ -79,106 +79,122 @@ def get_add_to_group():
         'Uzbek': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
-                    InlineKeyboardButton(text="➕ Guruhga Qushish", url='https://t.me/pintersrobot?startgroup=true')
+                    InlineKeyboardButton(text="🔻", callback_data="cancel"),
+                    InlineKeyboardButton(text="Guruhga Qushish", url='https://t.me/instavsbot?startgroup=true')
+
                 ],
             ]
         ),
         'English': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
-                    InlineKeyboardButton(text="➕ Add to Group", url='https://t.me/pintersrobot?startgroup=true')
+                    InlineKeyboardButton(text="🔻", callback_data="cancel"),
+                    InlineKeyboardButton(text="Add to Group", url='https://t.me/instavsbot?startgroup=true')
                 ],
             ]
         ),
         'Russian': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
-                    InlineKeyboardButton(text="➕ Добавить в группу", url='https://t.me/pintersrobot?startgroup=true')
+                    InlineKeyboardButton(text="🔻", callback_data="cancel"),
+                    InlineKeyboardButton(text="Добавить в группу", url='https://t.me/instavsbot?startgroup=true')
                 ],
             ]
         ),
         'Turkish': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
-                    InlineKeyboardButton(text="➕ Gruba Ekle", url='https://t.me/pintersrobot?startgroup=true')
+                    InlineKeyboardButton(text="🔻", callback_data="cancel"),
+                    InlineKeyboardButton(text="Gruba Ekle", url='https://t.me/instavsbot?startgroup=true')
                 ],
             ]
         ),
         'Kazakh': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
-                    InlineKeyboardButton(text="➕ Топқа қосу", url='https://t.me/pintersrobot?startgroup=true')
+                    InlineKeyboardButton(text="🔻", callback_data="cancel"),
+                    InlineKeyboardButton(text="Топқа қосу", url='https://t.me/instavsbot?startgroup=true')
                 ],
             ]
         ),
         'Ukrainian': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
-                    InlineKeyboardButton(text="➕ Додати в групу", url='https://t.me/pintersrobot?startgroup=true')
+                    InlineKeyboardButton(text="🔻", callback_data="cancel"),
+                    InlineKeyboardButton(text="Додати в групу", url='https://t.me/instavsbot?startgroup=true')
                 ],
             ]
         ),
         'Azerbaijani': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
-                    InlineKeyboardButton(text="➕ Qrupa əlavə et", url='https://t.me/pintersrobot?startgroup=true')
+                    InlineKeyboardButton(text="🔻", callback_data="cancel"),
+                    InlineKeyboardButton(text="Qrupa əlavə et", url='https://t.me/instavsbot?startgroup=true')
                 ],
             ]
         ),
         'Spanish': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
-                    InlineKeyboardButton(text="➕ Agregar al grupo", url='https://t.me/pintersrobot?startgroup=true')
+                    InlineKeyboardButton(text="🔻", callback_data="cancel"),
+                    InlineKeyboardButton(text="Agregar al grupo", url='https://t.me/instavsbot?startgroup=true')
                 ],
             ]
         ),
         'French': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
-                    InlineKeyboardButton(text="➕ Ajouter au groupe", url='https://t.me/pintersrobot?startgroup=true')
+                    InlineKeyboardButton(text="🔻", callback_data="cancel"),
+                    InlineKeyboardButton(text="Ajouter au groupe", url='https://t.me/instavsbot?startgroup=true')
                 ],
             ]
         ),
         'German': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
-                    InlineKeyboardButton(text="➕ Zur Gruppe hinzufügen",
-                                         url='https://t.me/pintersrobot?startgroup=true')
+                    InlineKeyboardButton(text="🔻", callback_data="cancel"),
+                    InlineKeyboardButton(text="Zur Gruppe hinzufügen",
+                                         url='https://t.me/instavsbot?startgroup=true')
                 ],
             ]
         ),
         'Portuguese': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
-                    InlineKeyboardButton(text="➕ Adicionar ao grupo", url='https://t.me/pintersrobot?startgroup=true')
+                    InlineKeyboardButton(text="🔻", callback_data="cancel"),
+                    InlineKeyboardButton(text="Adicionar ao grupo", url='https://t.me/instavsbot?startgroup=true')
                 ],
             ]
         ),
         'Polish': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
-                    InlineKeyboardButton(text="➕ Dodaj do grupy", url='https://t.me/pintersrobot?startgroup=true')
+                    InlineKeyboardButton(text="🔻", callback_data="cancel"),
+                    InlineKeyboardButton(text="Dodaj do grupy", url='https://t.me/instavsbot?startgroup=true')
                 ],
             ]
         ),
         'Chinese': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
-                    InlineKeyboardButton(text="➕ 添加到群组", url='https://t.me/pintersrobot?startgroup=true')
+                    InlineKeyboardButton(text="🔻", callback_data="cancel"),
+                    InlineKeyboardButton(text="添加到群组", url='https://t.me/instavsbot?startgroup=true')
                 ],
             ]
         ),
         'Arabic': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
-                    InlineKeyboardButton(text="➕ إضافة إلى المجموعة", url='https://t.me/pintersrobot?startgroup=true')
+                    InlineKeyboardButton(text="🔻", callback_data="cancel"),
+                    InlineKeyboardButton(text="إضافة إلى المجموعة", url='https://t.me/instavsbot?startgroup=true')
                 ],
             ]
         ),
         'Persian': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
-                    InlineKeyboardButton(text="➕ گروه اضافه کن", url='https://t.me/pintersrobot?startgroup=true')
+                    InlineKeyboardButton(text="🔻", callback_data="cancel"),
+                    InlineKeyboardButton(text="گروه اضافه کن", url='https://t.me/instavsbot?startgroup=true')
                 ],
             ]
         ),

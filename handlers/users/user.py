@@ -19,7 +19,11 @@ async def start_handler(message: Message, state: FSMContext):
     try:
         language = await User.get_language(message.chat.id)
         if not language:
-            await bot.send_message(chat_id=message.chat.id, text=choose_button, reply_markup=get_language_keyboard())
+            await bot.send_message(
+                chat_id=message.chat.id,
+                text=choose_button,
+                reply_markup=get_language_keyboard(),
+            )
             parts = message.text.split()
             added_by = parts[1] if len(parts) > 1 else 'true'
             await state.update_data(added_by=added_by)
@@ -29,7 +33,7 @@ async def start_handler(message: Message, state: FSMContext):
                 chat_id=message.chat.id,
                 text=langs_text[language]['start'],
                 reply_markup=get_add_to_group()[language],
-                disable_web_page_preview=True
+                disable_web_page_preview=True,
             )
     except Exception as e:
         logger.exception("Error in start_handler: %s", e)
@@ -70,7 +74,11 @@ async def change_language_handler(message: Message, state: FSMContext):
     await message.delete()
     await state.clear()
     try:
-        await bot.send_message(chat_id=message.chat.id, text=choose_button, reply_markup=get_language_keyboard())
+        await bot.send_message(
+            chat_id=message.chat.id,
+            text=choose_button,
+            reply_markup=get_language_keyboard(),
+        )
         await state.set_state(LanguageChange.select_language)
     except Exception as e:
         logger.exception("Error in change_language_handler: %s", e)
@@ -100,19 +108,23 @@ async def process_change_language(call: CallbackQuery, state: FSMContext):
 async def handler_in_specific_state(message: Message, state: FSMContext):
     await message.delete()
     language = await User.get_language(message.chat.id)
-    await bot.send_message(chat_id=message.chat.id, text=langs_text[language]['help'], reply_markup=cancel)
+    await bot.send_message(
+        chat_id=message.chat.id,
+        text=langs_text[language]['help'],
+        reply_markup=cancel,
+    )
     await state.clear()
 
 
 @user_router.message(Command("terms"), StateFilter('*'))
 async def handler_in_specific_state(message: Message, state: FSMContext):
     await message.delete()
-    await bot.send_message(chat_id=message.chat.id, text=terms, reply_markup=cancel)
+    await bot.send_message(chat_id=message.chat.id, text=terms, reply_markup=cancel, protect_content=True)
     await state.clear()
 
 
 @user_router.message(Command("privacy"), StateFilter('*'))
 async def handler_in_specific_state(message: Message, state: FSMContext):
     await message.delete()
-    await bot.send_message(chat_id=message.chat.id, text=privacy, reply_markup=cancel)
+    await bot.send_message(chat_id=message.chat.id, text=privacy, reply_markup=cancel, protect_content=True)
     await state.clear()

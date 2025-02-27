@@ -6,10 +6,11 @@ from aiogram import Bot, Dispatcher
 from aiogram import Router
 from aiohttp import web
 
-from data import setup_logger, conf
+from data import setup_logger, conf, ADMIN, bot
 from data.middleware import StructLoggingMiddleware
 from db.postgres import create_db_connections, close_db_connections
 from handlers import user_router, ads_router, panel_router, download_router
+from handlers.users.kb import cancel
 from utils.updates import tg_updates_app
 
 
@@ -44,9 +45,10 @@ async def setup_aiogram(dp: Dispatcher) -> None:
     logger.info("Configured aiogram")
 
 
-async def aiogram_on_startup_polling(dispatcher: Dispatcher, bot: Bot) -> None:
+async def aiogram_on_startup_polling(dispatcher: Dispatcher, bot: bot) -> None:
     await bot.delete_webhook(drop_pending_updates=True)
     await setup_aiogram(dispatcher)
+    await bot.send_message(chat_id=ADMIN, text="<b>✅ Bot ishga tushdi...</b>", reply_markup=cancel)
     dispatcher["aiogram_logger"].info("Started polling")
 
 

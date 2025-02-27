@@ -13,13 +13,13 @@ load_dotenv()
 
 @dataclass
 class DatabaseConfig:
-    host: str = os.getenv("PG_HOST", "localhost")
-    port: int = int(os.getenv("PG_PORT", 5432))
-    user: str = os.getenv("PG_USER", "postgres")
-    password: str = os.getenv("PG_PASSWORD", "1")
-    name: str = os.getenv("PG_NAME", "pinbot")
-    driver: str = os.getenv("DRIVER", "asyncpg")
-    db_system: str = os.getenv("DB_SYSTEM", "postgresql")
+    host: str = os.getenv("PG_HOST")
+    port: int = int(os.getenv("PG_PORT"))
+    user: str = os.getenv("PG_USER")
+    password: str = os.getenv("PG_PASSWORD")
+    name: str = os.getenv("PG_NAME")
+    driver: str = os.getenv("DRIVER")
+    db_system: str = os.getenv("DB_SYSTEM")
 
     def build_db_url(self) -> str:
         return URL.create(
@@ -34,14 +34,14 @@ class DatabaseConfig:
 
 @dataclass
 class RedisConfig:
-    db: int = int(os.getenv("REDIS_DATABASE", 0))
-    host: str = os.getenv("REDIS_HOST", "localhost")
-    port: int = int(os.getenv("REDIS_PORT", 6379))
+    db: int = int(os.getenv("REDIS_DATABASE"))
+    host: str = os.getenv("REDIS_HOST")
+    port: int = int(os.getenv("REDIS_PORT"))
     password = None
     # password: str | None = os.getenv("REDIS_PASSWORD")
     username: str | None = os.getenv("REDIS_USERNAME")
-    state_ttl: int = int(os.getenv("REDIS_TTL_STATE", 3600))
-    data_ttl: int = int(os.getenv("REDIS_TTL_DATA", 7200))
+    state_ttl: int = int(os.getenv("REDIS_TTL_STATE"))
+    data_ttl: int = int(os.getenv("REDIS_TTL_DATA"))
 
     def build_redis_url(self) -> str:
         credentials = (f"{self.username}:{self.password}@" if self.username and self.password else "")
@@ -50,10 +50,10 @@ class RedisConfig:
 
 @dataclass
 class CacheConfig:
-    enabled: bool = bool(os.getenv("USE_CACHE", False))
-    host: str = os.getenv("CACHE_HOST", "localhost")
-    port: int = int(os.getenv("CACHE_PORT", 6379))
-    password: str = os.getenv("CACHE_PASSWORD", None)
+    enabled: bool = bool(os.getenv("USE_CACHE"))
+    host: str = os.getenv("CACHE_HOST")
+    port: int = int(os.getenv("CACHE_PORT"))
+    password: str = os.getenv("CACHE_PASSWORD")
 
     def build_cache_url(self) -> str:
         credentials = (f"{self.password}@" if self.password else "")
@@ -62,31 +62,31 @@ class CacheConfig:
 
 @dataclass
 class WebhookConfig:
-    enabled: bool = bool(os.getenv("USE_WEBHOOK", False))
-    url: str = os.getenv("WEBHOOK_URL", "")
-    secret_token: str = os.getenv("WEBHOOK_SECRET_TOKEN", "")
-    host: str = os.getenv("WEBHOOK_HOST", "0.0.0.0")
-    port: int = int(os.getenv("WEBHOOK_PORT", 8443))
-    max_updates_in_queue: int = int(os.getenv("MAX_UPDATES_IN_QUEUE", 1000))
+    enabled: bool = bool(os.getenv("USE_WEBHOOK"))
+    url: str = os.getenv("WEBHOOK_URL")
+    secret_token: str = os.getenv("WEBHOOK_SECRET_TOKEN")
+    host: str = os.getenv("WEBHOOK_HOST")
+    port: int = int(os.getenv("WEBHOOK_PORT"))
+    max_updates_in_queue: int = int(os.getenv("MAX_UPDATES_IN_QUEUE"))
 
 
 @dataclass
 class CustomApiServerConfig:
-    enabled: bool = bool(os.getenv("USE_CUSTOM_API_SERVER", False))
-    is_local: bool = bool(os.getenv("CUSTOM_API_SERVER_IS_LOCAL", False))
-    base_url: str = os.getenv("CUSTOM_API_SERVER_BASE", "")
-    file_url: str = os.getenv("CUSTOM_API_SERVER_FILE", "")
+    enabled: bool = bool(os.getenv("USE_CUSTOM_API_SERVER"))
+    is_local: bool = bool(os.getenv("CUSTOM_API_SERVER_IS_LOCAL"))
+    base_url: str = os.getenv("CUSTOM_API_SERVER_BASE")
+    file_url: str = os.getenv("CUSTOM_API_SERVER_FILE")
 
 
 @dataclass
 class BotConfig:
-    token: str = os.getenv("BOT_TOKEN", "")
-    logging_level: int = int(os.getenv("LOGGING_LEVEL", 10))
+    token: str = os.getenv("BOT_TOKEN")
+    logging_level: int = int(os.getenv("LOGGING_LEVEL"))
 
 
 @dataclass
 class AppConfig:
-    debug: bool = bool(int(os.getenv("DEBUG", 0)))
+    debug: bool = bool(int(os.getenv("LOGGING_LEVEL")))
     db: DatabaseConfig = field(default_factory=DatabaseConfig)
     redis: RedisConfig = field(default_factory=RedisConfig)
     cache: CacheConfig = field(default_factory=CacheConfig)

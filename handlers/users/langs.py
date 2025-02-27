@@ -13,7 +13,7 @@ languages = {
     "de": "German",
     "pt": "Portuguese",
     "pl": "Polish",
-    "ch": "Chinese",
+    "cn": "Chinese",
     "ar": "Arabic",
     "ir": "Persian",
 }
@@ -29,9 +29,9 @@ language_changed = {
     "es": "🇪🇸 Español",
     "fr": "🇫🇷 Français",
     "de": "🇩🇪 Deutsch",
-    "pt": "🇧🇷 Português",
+    "pt": "🇵🇹 Português",
     "pl": "🇵🇱 Polski",
-    "ch": "🇨🇳 中文",
+    "cn": "🇨🇳 中文",
     "ar": "🇸🇦 عربي",
     "ir": "🇮🇷 فارسی",
 }
@@ -92,71 +92,101 @@ We may update our Privacy Policy from time to time. We encourage you to periodic
 <b>Contact Us</b>
 If you have any questions about this Privacy Policy, please contact us at <b>@tmcode</b>
 
-<b>Use of Media</b>
+<b>Use of Media</b> 
 Our bot is primarily used as a bookmarking tool for interesting media. We do not claim ownership of any media content saved or shared using our bot.
 
 <b>Copyright Notice</b>
 All copyrights belong to their respective owners. We strongly recommend that you seek permission from the original media owners before distributing any content."""
 
-start_uz = """Salom! Ushbu bot yordamida siz <b>Instagram</b>-dan <b>Video, Photo, Reels, Stories</b> va <b>IGTV</b>-larni tez va sifatli formatda yuklab olishingiz mumkin.\n
-Yuklab olmoqchi bo'lgan media havolasini ushbu botga yuboring!\n
-Bot to‘g‘ridan-to‘g‘ri chatlarda ham ishlaydi. Botni guruhga qo‘shing va xabar yuborish uchun ruxsat bering, so'ngra media havolasini yuboring va bot mediani chatga yuboradi.""",
+start_uz = """
+<b>Salom!</b> Ushbu bot orqali siz <b>Instagram</b>’dan <b>photo</b>, <b>video</b>, <b>reels</b>, <b>stories</b> va <b>IGTV</b>’larni tez va sifatli formatda yuklab olishingiz mumkin. Yuklab olmoqchi bo‘lgan media havolasini ushbu botga yuboring!
 
-start_ru = """Привет! С помощью этого бота вы можете быстро и качественно скачивать <b>Видео, Фото, Рилс, Истории</b> и <b>IGTV</b> с <b>Instagram</b>.\n
-Отправьте ссылку на медиафайл, который хотите скачать, в этот бот!\n
-Бот работает и в чатах. Добавьте бота в группу, дайте разрешение на отправку сообщений, затем отправьте ссылку на медиа, и бот отправит файл в чат.""",
+Botning to‘g‘ridan-to‘g‘ri chatlarda ham ishlash imkoniyati mavjud. Botni guruhga qo‘shing va xabar yuborish uchun ruxsat bering, so‘ngra media havolasini yuboring va bot mediani chatga yuboradi.
+"""
 
-start_en = """Hello! With this bot, you can quickly and efficiently download <b>Video, Photo, Reels, Stories</b>, and <b>IGTV</b> from <b>Instagram</b>.\n
-Send the media link you want to download to this bot!\n
-The bot also works in direct chats. Add the bot to a group, grant it permission to send messages, then send the media link, and the bot will send the media to the chat.""",
+start_en = """
+<b>Hello!</b> With this bot, you can quickly and efficiently download <b>photo</b>, <b>video</b>, <b>reels</b>, <b>stories</b>, and <b>IGTV</b> from <b>Instagram</b>. Send the media link you want to download to this bot!
 
-start_tr = """Merhaba! Bu bot ile <b>Instagram</b>'dan <b>Video, Fotoğraf, Reels, Hikayeler</b> ve <b>IGTV</b> içeriklerini hızlı ve kaliteli bir şekilde indirebilirsiniz.\n
-İndirmek istediğiniz medya bağlantısını bu bota gönderin!\n
-Bot, doğrudan sohbetlerde de çalışır. Botu bir gruba ekleyin, mesaj göndermesine izin verin, ardından medya bağlantısını gönderin ve bot medyayı sohbete gönderir.""",
+The bot has the ability to work directly in chats as well. Add the bot to the group and allow it to send messages, then send a media link and the bot will send the media to the chat.
+"""
 
-start_kz = """Сәлем! Бұл бот арқылы сіз <b>Instagram</b>-нан <b>Бейне, Фото, Reels, Stories</b> және <b>IGTV</b>-ны тез әрі сапалы түрде жүктей аласыз.\n
-Жүктегіңіз келетін медиа сілтемесін осы ботқа жіберіңіз!\n
-Бот тікелей чаттарда да жұмыс істейді. Ботты топқа қосып, хабарлама жіберуге рұқсат беріңіз, содан кейін медиа сілтемесін жіберіңіз, сонда бот медианы чатқа жібереді.""",
+start_ru = """
+<b>Привет!</b> С помощью этого бота вы можете быстро и качественно скачивать <b>фото</b>, <b>видео</b>, <b>reels</b>, <b>stories</b> и <b>IGTV</b> с <b>Instagram</b>. Отправьте ссылку на нужный медиафайл этому боту!
 
-start_uk = """Привіт! За допомогою цього бота ви можете швидко та якісно завантажувати <b>Відео, Фото, Reels, Історії</b> та <b>IGTV</b> з <b>Instagram</b>.\n
-Надішліть цьому боту посилання на медіа, яке хочете завантажити!\n
-Бот також працює в чатах. Додайте бота до групи, дозвольте йому надсилати повідомлення, потім надішліть посилання на медіа, і бот надішле його в чат.""",
+Бот может работать и в прямых чатах. Добавьте бота в группу и дайте разрешение на отправку сообщений, затем отправьте медиа-ссылку, и бот отправит медиа в чат.
+"""
 
-start_az = """Salam! Bu bot vasitəsilə siz <b>Instagram</b>-dan <b>Video, Foto, Reels, Hekayələr</b> və <b>IGTV</b>-ni tez və keyfiyyətli şəkildə yükləyə bilərsiniz.\n
-Yükləmək istədiyiniz medianın linkini bu bota göndərin!\n
-Bot birbaşa söhbətlərdə də işləyir. Botu qrupa əlavə edin, mesaj göndərməsinə icazə verin, sonra media linkini göndərin və bot medianı söhbətə göndərəcək.""",
+start_tr = """
+<b>Merhaba!</b> Bu bot ile <b>Instagram</b>’dan <b>fotoğrafları</b>, <b>videoları</b>, <b>reels</b>, <b>hikayeleri</b> ve <b>IGTV</b> içeriklerini hızlı ve kaliteli bir şekilde indirebilirsiniz. İndirmek istediğiniz medya bağlantısını bu bota gönderin!
 
-start_es = """¡Hola! Con este bot, puedes descargar rápidamente y en alta calidad <b>Videos, Fotos, Reels, Historias</b> e <b>IGTV</b> de <b>Instagram</b>.\n
-¡Envía el enlace del medio que deseas descargar a este bot!\n
-El bot también funciona en chats directos. Agrégalo a un grupo, dale permiso para enviar mensajes, luego envía el enlace del medio y el bot lo enviará al chat.""",
+Bot doğrudan sohbetlerde de çalışabilir. Botu bir gruba ekleyin, mesaj göndermesine izin verin ve ardından medya bağlantısını paylaşın ve bot medyayı sohbete gönderecektir.
+"""
 
-start_fr = """Bonjour ! Avec ce bot, vous pouvez télécharger rapidement et en haute qualité des <b>Vidéos, Photos, Reels, Stories</b> et <b>IGTV</b> depuis <b>Instagram</b>.\n
-Envoyez le lien du média que vous souhaitez télécharger à ce bot !\n
-Le bot fonctionne aussi dans les discussions directes. Ajoutez le bot à un groupe, autorisez-le à envoyer des messages, puis envoyez le lien du média, et le bot l’enverra dans le chat.""",
+start_kz = """
+<b>Сәлем!</b> Осы бот арқылы <b>Instagram</b> желісінен <b>фото</b>, <b>видео</b>, <b>reels</b>, <b>stories</b> және <b>IGTV</b> файлдарын жылдам әрі сапалы түрде жүктей аласыз. Жүктеп алғыңыз келген медиа сілтемесін осы ботқа жіберіңіз!
 
-start_de = """Hallo! Mit diesem Bot kannst du schnell und in hoher Qualität <b>Videos, Fotos, Reels, Stories</b> und <b>IGTV</b> von <b>Instagram</b> herunterladen.\n
-Sende den Link des Mediums, das du herunterladen möchtest, an diesen Bot!\n
-Der Bot funktioniert auch in Direktchats. Füge den Bot einer Gruppe hinzu, erlaube ihm, Nachrichten zu senden, dann sende den Medienlink, und der Bot wird das Medium in den Chat senden.""",
+Бот тікелей чаттарда да жұмыс істей алады. Ботты топқа қосып, хабарлама жіберуге рұқсат беріңіз, содан кейін медиа сілтемесін жіберіңіз және бот медианы чатқа жібереді.
+"""
 
-start_pt = """Olá! Com este bot, você pode baixar rapidamente e com qualidade <b>Vídeos, Fotos, Reels, Stories</b> e <b>IGTV</b> do <b>Instagram</b>.\n
-Envie o link da mídia que deseja baixar para este bot!\n
-O bot também funciona em chats diretos. Adicione o bot a um grupo, permita que ele envie mensagens e, em seguida, envie o link da mídia, e o bot enviará o conteúdo para o chat.""",
+start_uk = """
+<b>Привіт!</b> За допомогою цього бота ви можете швидко та якісно завантажувати <b>фото</b>, <b>відео</b>, <b>reels</b>, <b>stories</b> та <b>IGTV</b> з <b>Instagram</b>. Надішліть посилання на медіафайл цьому боту!
 
-start_pl = """Cześć! Dzięki temu botowi możesz szybko i w wysokiej jakości pobierać <b>Wideo, Zdjęcia, Reels, Stories</b> i <b>IGTV</b> z <b>Instagrama</b>.\n
-Prześlij do tego bota link do mediów, które chcesz pobrać!\n
-Bot działa również w czatach. Dodaj bota do grupy, pozwól mu wysyłać wiadomości, a następnie prześlij link do mediów, a bot wyśle plik na czat.""",
+Бот також може працювати безпосередньо в чатах. Додайте бота в групу, надайте дозвіл на надсилання повідомлень, потім надішліть посилання на медіа і бот надішле файл у чат.
+"""
 
-start_ch = """你好！通过这个机器人，你可以快速、高质量地下载来自<b>Instagram</b>的<b>视频、照片、Reels、故事</b>和<b>IGTV</b>。\n
-请将要下载的媒体链接发送给这个机器人！\n
-机器人也能在群聊中工作。将机器人添加到群组，允许其发送消息，然后发送媒体链接，机器人会将媒体发送到聊天中。""",
+start_az = """
+<b>Salam!</b> Bu bot vasitəsilə <b>Instagram</b>’dan <b>foto</b>, <b>video</b>, <b>reels</b>, <b>stories</b> və <b>IGTV</b>’ni tez və keyfiyyətli şəkildə yükləyə bilərsiniz. Yükləmək istədiyiniz media linkini bu bota göndərin!
 
-start_ar = """مرحبًا! باستخدام هذا البوت، يمكنك تنزيل <b>الفيديوهات، الصور، Reels، القصص</b> و<b>IGTV</b> من <b>Instagram</b> بسرعة وجودة عالية.\n
-أرسل رابط الوسائط الذي تريد تنزيله إلى هذا البوت!\n
-يعمل البوت أيضًا في الدردشات المباشرة. أضف البوت إلى مجموعة، وامنحه الإذن لإرسال الرسائل، ثم أرسل رابط الوسائط وسيرسلها البوت إلى الدردشة.""",
+Bot birbaşa çatlarda da işləyə bilər. Boti qrupa əlavə edin, mesaj göndərməyə icazə verin, sonra media linkini göndərin və bot medianı çata göndərəcək.
+"""
 
-start_ir = """سلام! با استفاده از این ربات، می‌توانید <b>ویدیو، عکس، Reels، استوری</b> و <b>IGTV</b> را از <b>اینستاگرام</b> به سرعت و با کیفیت بالا دانلود کنید.\n
-لینک رسانه‌ای که می‌خواهید دانلود کنید را به این ربات ارسال کنید!\n
-ربات در چت‌های مستقیم نیز کار می‌کند. ربات را به گروه اضافه کنید، اجازه ارسال پیام دهید، سپس لینک رسانه را ارسال کنید و ربات آن را در چت ارسال خواهد کرد.""",
+start_es = """
+<b>¡Hola!</b> Con este bot, puedes descargar rápida y eficientemente <b>fotos</b>, <b>videos</b>, <b>reels</b>, <b>historias</b> y <b>IGTV</b> de <b>Instagram</b>. Envía el enlace del contenido que deseas descargar a este bot.
+
+El bot también puede funcionar directamente en los chats. Agrega el bot a un grupo, otorga permiso para enviar mensajes y luego envía el enlace del contenido y el bot enviará el archivo al chat.
+"""
+
+start_fr = """
+<b>Bonjour!</b> Avec ce bot, vous pouvez télécharger rapidement et efficacement <b>des photos</b>, <b>des vidéos</b>, <b>des reels</b>, <b>des stories</b> et <b>IGTV</b> depuis <b>Instagram</b>. Envoyez le lien du média que vous souhaitez télécharger à ce bot !
+
+Le bot peut également fonctionner directement dans les discussions. Ajoutez le bot à un groupe, accordez l'autorisation d'envoyer des messages, puis envoyez le lien du média et le bot enverra le fichier dans le chat.
+"""
+
+start_de = """
+<b>Hallo!</b> Mit diesem Bot kannst du schnell und effizient <b>Fotos</b>, <b>Videos</b>, <b>Reels</b>, <b>Stories</b> und <b>IGTV</b> von <b>Instagram</b> herunterladen. Sende den Medienlink, den du herunterladen möchtest, an diesen Bot!
+
+Der Bot kann auch direkt in Chats arbeiten. Füge den Bot zu einer Gruppe hinzu, erlaube ihm das Senden von Nachrichten und sende dann den Medienlink, und der Bot sendet die Datei in den Chat.
+"""
+
+start_pt = """
+<b>Olá!</b> Com este bot, você pode baixar <b>fotos</b>, <b>vídeos</b>, <b>reels</b>, <b>stories</b> e <b>IGTV</b> do <b>Instagram</b> de forma rápida e eficiente. Envie o link da mídia que deseja baixar para este bot!
+
+O bot também pode funcionar diretamente em chats. Adicione o bot a um grupo, conceda permissão para enviar mensagens e depois envie um link de mídia – o bot enviará a mídia para o chat.
+"""
+
+start_pl = """
+<b>Cześć!</b> Dzięki temu botowi możesz szybko i efektywnie pobierać <b>zdjęcia</b>, <b>wideo</b>, <b>reels</b>, <b>stories</b> oraz <b>IGTV</b> z <b>Instagrama</b>. Prześlij link do mediów, które chcesz pobrać, do tego bota!
+
+Bot może również działać bezpośrednio na czatach. Dodaj bota do grupy, udziel mu uprawnień do wysyłania wiadomości, a następnie prześlij link do mediów – bot wyśle plik na czat.
+"""
+
+start_ar = """
+<b>مرحبًا!</b> باستخدام هذا البوت، يمكنك تنزيل <b>الصور</b>، <b>الفيديوهات</b>، <b>Reels</b>، <b>القصص</b> و<b>IGTV</b> من <b>Instagram</b> بسرعة وجودة عالية. أرسل رابط الوسائط التي تريد تنزيلها إلى هذا البوت!
+
+يمكن للبوت أيضًا العمل مباشرة في الدردشات. أضف البوت إلى مجموعة، ومنحه إذن إرسال الرسائل، ثم أرسل رابط الوسائط وسيقوم البوت بإرسال الملف إلى الدردشة.
+"""
+
+start_ir = """
+<b>سلام!</b> با این ربات، شما می‌توانید <b>عکس‌ها</b>، <b>ویدیوها</b>، <b>رول‌ها</b>، <b>استوری‌ها</b> و <b>IGTV</b> را از <b>اینستاگرام</b> به‌سرعت و با کیفیت بالا دانلود کنید. لینک مدیایی که می‌خواهید دانلود کنید را برای این ربات ارسال کنید!
+
+این ربات می‌تواند به‌طور مستقیم در چت‌ها نیز کار کند. ربات را به یک گروه اضافه کنید، مجوز ارسال پیام بدهید و سپس لینک رسانه‌ای را ارسال کنید تا ربات آن را در چت ارسال کند.
+"""
+
+start_cn = """
+<b>你好！</b> 通过这个机器人，你可以快速高质量地从<b>Instagram</b>下载<b>照片</b>、<b>视频</b>、<b>Reels</b>、<b>Stories</b>和<b>IGTV</b>。将你想下载的媒体链接发送给这个机器人！
+
+该机器人也可以直接在聊天中工作。将机器人添加到群组，授予其发送消息的权限，然后发送媒体链接，机器人就会将媒体发送到聊天中。
+"""
 
 # --------------------------------------------------------------------------
 
@@ -173,8 +203,7 @@ help_uz = """
 
 O'zingiz xohlagan media havolasini yuborish orqali ushbu bot avtomatik ravishda uni siz uchun yuklab olishni amalga oshiradi.
 
-Botning to‘g‘ridan-to‘g‘ri chatlarda ham ishlash imkoniyati mavjud. Botni guruhga qo‘shing va xabar yuborish uchun ruxsat bering, so'ngra media havolasini yuboring va bot mediani chatga yuboradi.
-"""
+Botning to‘g‘ridan-to‘g‘ri chatlarda ham ishlash imkoniyati mavjud. Botni guruhga qo‘shing va xabar yuborish uchun ruxsat bering, so'ngra media havolasini yuboring va bot mediani chatga yuboradi."""
 
 help_en = """
 <b>A guide to using the bot!</b>
@@ -189,7 +218,7 @@ help_en = """
 
 By sending the media link you want, this bot will automatically download it for you.
 
-The bot also has the ability to work directly in chats. Add the bot to a group and allow it to send messages, then send a media link and the bot will send the media to the chat.
+The bot has the ability to work directly in chats as well. Add the bot to the group and allow it to send messages, then send a media link and the bot will send the media to the chat.
 """
 
 help_ru = """
@@ -205,7 +234,7 @@ help_ru = """
 
 Отправив любую медиассылку, этот бот автоматически загрузит её для вас.
 
-Бот также может работать в прямых чатах. Добавьте бота в группу, дайте разрешение на отправку сообщений, затем отправьте медиа-ссылку, и бот отправит медиа в чат.
+Бот может работать и в прямых чатах. Добавьте бота в группу и дайте разрешение на отправку сообщений, затем отправьте медиа-ссылку, и бот отправит медиа в чат.
 """
 
 help_tr = """
@@ -486,7 +515,7 @@ langs_text = {
         'error': "🛑 <b>Błąd pobierania!</b>\n\n<a href='{}'><b>Nie można pobrać tego pliku multimedialnego</b></a>.\nProszę spróbować ponownie później."
     },
     "Chinese": {
-        'start': start_ch,
+        'start': start_cn,
         'help': help_ch,
         'wait': '正在加载，请稍候...',
         'saved': '已下载',
