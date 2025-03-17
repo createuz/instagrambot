@@ -57,9 +57,29 @@ class InstagramAPI:
 
 async def main():
     api = InstagramAPI()
-    result = await api.instagram_downloader("https://www.instagram.com/p/DAhP1RlO-dh")
+    result = await api.instagram_downloader("https://www.instagram.com/p/DAhP1RlO-dh/?__a=1&__d=1")
     print(result)
     await api.close()
 
+
+asyncio.run(main())
+
+
+import asyncio
+import httpx
+
+proxy_mounts = {
+    "http://": httpx.AsyncHTTPTransport(proxy="http://localhost:8030"),
+    "https://": httpx.AsyncHTTPTransport(proxy="http://localhost:8031"),
+}
+
+async def fetch(url):
+    async with httpx.AsyncClient(transport=proxy_mounts["http://"]) as client:
+        response = await client.get(url)
+        return response.text
+
+async def main():
+    result = await fetch("http://example.com")
+    print(result)
 
 asyncio.run(main())
