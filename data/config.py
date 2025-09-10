@@ -34,7 +34,8 @@ class DatabaseConfig:
 
 @dataclass
 class RedisConfig:
-    db: int = int(os.getenv("REDIS_DATABASE"))
+    # db: int = int(os.getenv("REDIS_DATABASE"))
+    db: int = 0
     host: str = os.getenv("REDIS_HOST")
     port: int = int(os.getenv("REDIS_PORT"))
     password = None
@@ -50,10 +51,10 @@ class RedisConfig:
 
 @dataclass
 class CacheConfig:
-    enabled: bool = bool(os.getenv("USE_CACHE"))
-    host: str = os.getenv("CACHE_HOST")
-    port: int = int(os.getenv("CACHE_PORT"))
-    password: str = os.getenv("CACHE_PASSWORD")
+    enabled: bool = True
+    host: str = os.getenv("REDIS_HOST")
+    port: int = int(os.getenv("REDIS_PORT"))
+    password: str = None
 
     def build_cache_url(self) -> str:
         credentials = (f"{self.password}@" if self.password else "")
