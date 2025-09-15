@@ -1,20 +1,36 @@
 # handlers/admins/panel.py
+import json
 import time
-from typing import Optional
+from typing import Optional, Dict, Any
 
+import redis.asyncio as aioredis
 from aiogram import Router, F
 from aiogram.types import CallbackQuery
 from sqlalchemy import select, func
 
+from app.bot.handlers.admins.kb import update_user_stat, stat_menu, statistic_lang
 from app.bot.utils import IsAdmin
-from app.core.config import bot
+from app.core.config import conf, bot  # conf must have redis_url (optional)
+from app.core.logger import get_logger
 from app.db.models.user import User
 from app.db.services.user_repo import UserRepo
-from app.db.sessions.session import logger
+from app.db.sessions.session import AsyncSessionLocal
 
+logger = get_logger(__name__)
 panel_router = Router()
+repo = UserRepo(logger=logger)
 
-from app.bot.handlers.admins.kb import update_user_stat, stat_menu, statistic_lang
+# Redis client (shared). If conf.redis_url not set, default to localhost.
+_redis_url = getattr(conf, "redis_url", None) or "redis://localhost:6379/0"
+_redis_client: Optional[aioredis.Redis] = None
+try:
+    _redis_client = aioredis.from_url(_redis_url, encoding="utf-8", decode_responses=True)
+except Exception:
+    logger.exception("Could not initialize Redis client for admin stats caching")
+
+# cache key and TTL (10 minutes)
+STATS_CACHE_KEY = "stats"
+STATS_TTL = 10 * 60  # 10 minutes
 
 BOT_START_TIME = time.time()
 
@@ -27,53 +43,117 @@ async def chose_statistics(call: CallbackQuery):
 @panel_router.callback_query(F.data.in_(("user_stat", "update_user_stat")), IsAdmin())
 async def total_user_statistics(call: CallbackQuery):
     try:
-        user_stat = await user_statistics()
-        if not user_stat:
+        # Try Redis cache first
+        cached = None
+        if _redis_client is not None:
+            try:
+                cached = await _redis_client.get(STATS_CACHE_KEY)
+            except Exception:
+                logger.warning("Redis get failed for stats cache")
+                cached = None
+
+        if cached:
+            # cached is JSON string
+            try:
+                stats_obj = json.loads(cached)
+                text = _format_stats_text(stats_obj)
+                await call.message.edit_text(text=text, reply_markup=update_user_stat())
+                return
+            except Exception:
+                logger.exception("Failed to parse cached stats; will recompute")
+
+        # No cache -> compute
+        stats_obj = await _compute_stats_and_counts()
+        if not stats_obj:
             await bot.answer_callback_query(call.id, "Statistika olinmadi.")
             return
-        await call.message.edit_text(text=user_stat, reply_markup=update_user_stat())
-    except Exception as e:
-        logger.exception("total_user_statistics error: %s", e)
+
+        # store in redis
+        if _redis_client is not None:
+            try:
+                await _redis_client.set(STATS_CACHE_KEY, json.dumps(stats_obj), ex=STATS_TTL)
+            except Exception:
+                logger.warning("Redis set failed for stats cache")
+
+        text = _format_stats_text(stats_obj)
+        await call.message.edit_text(text=text, reply_markup=update_user_stat())
+
+    except Exception:
+        logger.exception("total_user_statistics error")
+        await bot.answer_callback_query(call.id, "Server xatoligi — keyinroq urinib ko'ring.")
 
 
-async def user_statistics() -> Optional[str]:
+async def _compute_stats_and_counts() -> Optional[Dict[str, Any]]:
+    """
+    Compute stats:
+      - counts per language (all users)
+      - total users (exact count)
+      - joined last 24h and last 30 days (repo helpers)
+    Returns a JSON-serializable dict.
+    """
     try:
-        async with db.get_session() as session:
-            stmt = select(User.language, func.count()).group_by(User.language)
+        async with AsyncSessionLocal() as session:
+            # 1) counts by language (ALL users, no is_active filter)
+            stmt = select(User.language, func.count().label("cnt")).group_by(User.language)
             res = await session.execute(stmt)
-            rows = res.all()  # list of tuples (language, count)
-            lang_count = {lang if lang is not None else "unknown": cnt for lang, cnt in rows}
-            total_users = sum(lang_count.values()) or 1
+            rows = res.all()  # small: number of languages
 
-            max_lang_len = max((len(name) for name in statistic_lang.values()), default=2)
-            max_count_len = max((len(str(v)) for v in lang_count.values()), default=1)
+            lang_count: Dict[str, int] = {}
+            total_users = 0
+            for lang, cnt in rows:
+                key = lang if lang is not None else "unknown"
+                lang_count[key] = int(cnt)
+                total_users += int(cnt)
 
-            sorted_langs = sorted(statistic_lang.items(), key=lambda kv: lang_count.get(kv[0], 0), reverse=True)
+            # 2) total users - ensure exact (if rows empty, fallback to count)
+            if total_users == 0:
+                # if no grouped rows (unlikely), fallback to explicit count
+                total_res = await session.execute(select(func.count(User.chat_id)))
+                total_users = int(total_res.scalar_one_or_none() or 0)
 
-            lines = []
-            for code, display in sorted_langs:
-                count = lang_count.get(code, 0)
-                pct = count / total_users * 100
-                lines.append(f"<b>┃ {display.ljust(max_lang_len)}: {str(count).rjust(max_count_len)}</b>  {pct:5.1f}%")
+            # 3) joined counts using repo helpers (they expect session param)
+            joined_24h = await repo.joined_last_24h(session)
+            joined_month = await repo.joined_last_month(session)
 
-            today = await UserRepo.joined_last_24h()
-            month = await UserRepo.joined_last_month()
-
-            header = (
-                "<b>\n"
-                "┏━━━━━━━━━━━━━━━━━━━━━\n"
-                "┃ ✦  ᴜꜱᴇʀꜱ ꜱᴛᴀᴛɪꜱᴛɪᴄ\n"
-                "┣━━━━━━━━━━━━━━━━━━━━━\n"
-                f"┃ ✦  ᴊᴏɪɴᴇᴅ ᴛᴏᴅᴀʏ:  {today}\n\n"
-                f"┃ ✦  ᴊᴏɪɴᴇᴅ ᴛʜɪꜱ ᴍᴏɴᴛʜ:  {month}\n\n"
-                f"┃ ✦  ᴀʟʟ ᴜꜱᴇʀꜱ ᴄᴏᴜɴᴛ:  {total_users}\n"
-                "┣━━━━━━━━━━━━━━━━━━━━━</b>\n"
-            )
-
-            body = "\n".join(lines)
-            footer = "<b>\n┗━━━━━━━━━━━━━━━━━━━━━</b>"
-            return header + body + "\n" + footer
-
-    except Exception as e:
-        logger.exception("user_statistics error: %s", e)
+        return {
+            "generated_at": int(time.time()),
+            "total_users": total_users,
+            "lang_count": lang_count,
+            "joined_24h": joined_24h,
+            "joined_month": joined_month,
+        }
+    except Exception:
+        logger.exception("_compute_stats_and_counts failed")
         return None
+
+
+def _format_stats_text(stats_obj: Dict[str, Any]) -> str:
+    total_users = stats_obj.get("total_users", 0)
+    lang_count = stats_obj.get("lang_count", {}) or {}
+    joined_24h = stats_obj.get("joined_24h", 0)
+    joined_month = stats_obj.get("joined_month", 0)
+    denom = total_users if total_users > 0 else 1
+    codes_sorted = sorted(statistic_lang.keys(), key=lambda c: lang_count.get(c, 0), reverse=True)
+    display_labels = [statistic_lang[c] for c in codes_sorted]
+    max_label_len = max((len(lbl) for lbl in display_labels), default=2)
+    max_count_len = max((len(str(lang_count.get(c, 0))) for c in codes_sorted), default=1)
+
+    lines = []
+    for code in codes_sorted:
+        label = statistic_lang.get(code, code)
+        count = lang_count.get(code, 0)
+        pct = (count / denom) * 100
+        lines.append(f"┃ {label.ljust(max_label_len)} : {str(count).rjust(max_count_len)}   {pct:5.1f}%")
+    header = (
+        "<b>\n"
+        "┏━━━━━━━━━━━━━━━━━━━━━\n"
+        "┃ ✦  ᴜꜱᴇʀꜱ ꜱᴛᴀᴛɪꜱᴛɪᴄ\n"
+        "┣━━━━━━━━━━━━━━━━━━━━━\n"
+        f"┃ ✦  ᴊᴏɪɴᴇᴅ ᴛᴏᴅᴀʏ:  {joined_24h}\n\n"
+        f"┃ ✦  ᴊᴏɪɴᴇᴅ ᴛʜɪꜱ ᴍᴏɴᴛʜ:  {joined_month}\n\n"
+        f"┃ ✦  ᴀʟʟ ᴜꜱᴇʀꜱ ᴄᴏᴜɴᴛ:  {total_users}\n"
+        "┣━━━━━━━━━━━━━━━━━━━━━</b>\n"
+    )
+    body = "\n".join(lines) if lines else "<b>┃ Hech qanday foydalanuvchi topilmadi.</b>"
+    footer = "<b>\n┗━━━━━━━━━━━━━━━━━━━━━━━━━</b>"
+    return header + body + "\n" + footer

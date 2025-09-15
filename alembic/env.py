@@ -9,7 +9,9 @@ from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from app.core import conf
-from app.db import Base, User
+from app.db import Base
+from app.db.models.user import User
+
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 config = context.config

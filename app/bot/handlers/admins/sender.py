@@ -4,9 +4,10 @@ from typing import Optional, List, Tuple
 
 from aiogram.fsm.context import FSMContext
 
-from data import bot, ADMIN, AdsStates
-from db import User
 from app.bot.handlers.admins.kb import create_keyboard, confirm_options
+from app.bot.utils import AdsStates
+from app.core.config import bot, ADMIN
+from app.db.services.user_repo import UserRepo
 
 
 async def send_message_all(chat_id: int, state: FSMContext) -> Optional[bool]:
@@ -115,9 +116,9 @@ async def send_message_admin(state: FSMContext):
 
 async def admin_send_message_all(state: FSMContext):
     try:
-        admin_lang = await User.get_language(chat_id=int(ADMIN))
+        admin_lang = await UserRepo.get_language(chat_id=int(ADMIN))
         start_time = time.time()
-        total_users = await User.get_all_users(admin_lang=admin_lang)
+        total_users = await UserRepo.get_all_users(admin_lang=admin_lang)
         active_users, inactive_users = await send_message_users(user_ids=total_users, state=state)
         end_time = time.time()
         msg = f'''┏━━━━━━━━━━━━━━━━━━━━━━━━
