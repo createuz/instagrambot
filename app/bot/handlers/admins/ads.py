@@ -9,7 +9,7 @@ from app.bot.handlers.admins.sender import admin_send_message_all, send_message_
 from app.bot.utils import IsAdmin, AdsStates
 from app.core.config import bot
 
-ads_router = Router()
+router = Router()
 from app.bot.handlers.admins.kb import initial_options, media_type_options
 
 ADS_MEDIA_TYPES = {
@@ -30,12 +30,12 @@ async def replace_text_to_links(text):
     return re.sub(pattern, create_html_link, text)
 
 
-@ads_router.message(CommandStart(), IsAdmin(), StateFilter('*'))
+@router.message(CommandStart(), IsAdmin(), StateFilter('*'))
 async def start(message: Message):
     await message.answer("Welcome! Use /admins to create an ad.")
 
 
-@ads_router.callback_query(F.data == "ads_menu", IsAdmin())
+@router.callback_query(F.data == "menu", IsAdmin())
 async def create_ad(call: CallbackQuery, state: FSMContext):
     await call.message.edit_text(text="<b>Qaysi turdagi post yaratmoqchisiz?</b>", reply_markup=media_type_options())
     await state.set_state(AdsStates.waiting_for_media_type)
@@ -50,7 +50,7 @@ MEDIA_PROMPT_MESSAGES = {
 }
 
 
-@ads_router.callback_query(AdsStates.waiting_for_media_type)
+@router.callback_query(AdsStates.waiting_for_media_type)
 async def choose_media_type(call: CallbackQuery, state: FSMContext):
     media_type = call.data
     if media_type == "cancel":
@@ -66,7 +66,7 @@ async def choose_media_type(call: CallbackQuery, state: FSMContext):
         await state.clear()
 
 
-@ads_router.message(AdsStates.waiting_for_media, F.content_type.in_(ADS_MEDIA_TYPES.keys()))
+@router.message(AdsStates.waiting_for_media, F.content_type.in_(ADS_MEDIA_TYPES.keys()))
 async def handle_media(message: Message, state: FSMContext):
     content_type = message.content_type
     media_data = {"media": None, "media_type": ADS_MEDIA_TYPES[content_type]}
@@ -88,7 +88,7 @@ async def handle_media(message: Message, state: FSMContext):
         await ask_buttons(message, state)
 
 
-@ads_router.message(AdsStates.waiting_for_caption, F.text)
+@router.message(AdsStates.waiting_for_caption, F.text)
 async def handle_caption(message: Message, state: FSMContext):
     await state.update_data(caption=message.text)
     await ask_buttons(message, state)
@@ -99,7 +99,7 @@ async def ask_buttons(message: Message, state: FSMContext):
     await state.set_state(AdsStates.confirm_buttons)
 
 
-@ads_router.callback_query(AdsStates.confirm_buttons)
+@router.callback_query(AdsStates.confirm_buttons)
 async def handle_buttons(call: CallbackQuery, bot: Bot, state: FSMContext):
     await bot.answer_callback_query(call.id)
     if call.data == "add_button":
@@ -112,14 +112,14 @@ async def handle_buttons(call: CallbackQuery, bot: Bot, state: FSMContext):
         await call.message.answer("Post yaratish bekor qilindi.")
 
 
-@ads_router.message(AdsStates.waiting_for_button_name, F.text)
+@router.message(AdsStates.waiting_for_button_name, F.text)
 async def button_name(message: Message, state: FSMContext):
     await state.update_data(button_name=message.text)
     await message.answer("Tugma uchun URL kiriting:")
     await state.set_state(AdsStates.waiting_for_button_url)
 
 
-@ads_router.message(AdsStates.waiting_for_button_url, F.text)
+@router.message(AdsStates.waiting_for_button_url, F.text)
 async def button_url(message: Message, state: FSMContext):
     data = await state.get_data()
     buttons = data.get("buttons", [])
@@ -129,7 +129,7 @@ async def button_url(message: Message, state: FSMContext):
     await state.set_state(AdsStates.confirm_buttons)
 
 
-@ads_router.callback_query(AdsStates.confirm_send)
+@router.callback_query(AdsStates.confirm_send)
 async def send_ad(call: CallbackQuery, state: FSMContext):
     await bot.answer_callback_query(call.id)
     if call.data == "confirm":

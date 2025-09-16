@@ -4,8 +4,8 @@ import signal
 
 from redis.asyncio import Redis
 
-from app.bot.handlers.admins import panel_router
 from app.bot.handlers.users import start, callbacks
+from app.bot.handlers.admins import panel, statistics, ads, server
 from app.bot.middlewares.db_middleware import DBSessionMiddleware
 from app.bot.middlewares.request_id_middleware import RequestIDMiddleware
 from app.bot.middlewares.update_middleware import ChatLoggerMiddleware
@@ -18,6 +18,7 @@ from app.db.sessions.session import init_db, dispose_db
 
 logger = get_logger()
 
+
 async def create_bot_and_dp():
     storage = get_redis_storage(redis=Redis.from_url(conf.redis.url_or_build()))
     dp = get_dispatcher(storage=storage)
@@ -26,7 +27,10 @@ async def create_bot_and_dp():
     dp.update.outer_middleware(ChatLoggerMiddleware(logger=logger))
     dp.include_router(start.router)
     dp.include_router(callbacks.router)
-    dp.include_router(panel_router)
+    dp.include_router(panel.router)
+    dp.include_router(statistics.router)
+    dp.include_router(ads.router)
+    dp.include_router(server.router)
     return bot, dp
 
 

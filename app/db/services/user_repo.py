@@ -69,6 +69,14 @@ class UserRepo:
 
     async def upsert_language(self, session: AsyncSession, chat_id: int, language: str) -> int:
         try:
+            upd = update(User).where(User.chat_id == chat_id).values(language=language).returning(User.id)
+            res = await session.execute(upd)
+            user_id = res.scalar_one_or_none()
+            if user_id:
+                self._mark_writes(session)
+                self.logger.info("upsert_language: updated chat_id=%s id=%s lang=%s", chat_id, user_id, language)
+                return user_id
+
             ins = pg_insert(User).values(chat_id=chat_id, language=language)
             stmt = ins.on_conflict_do_update(
                 index_elements=[User.chat_id],

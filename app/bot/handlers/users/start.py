@@ -78,6 +78,19 @@ async def lang_command(message: Message, state: FSMContext, **data):
     await state.set_state(LanguageSelection.select_language)
 
 
+@router.message(Command("help"), StateFilter('*'), F.chat.type == ChatType.PRIVATE)
+async def lang_command(message: Message, state: FSMContext, **data):
+    await message.delete()
+    await state.clear()
+    db = data.get("db")
+    rid = data.get("request_id")
+    logger = get_logger(rid)
+    tg_id = message.from_user.id
+    redis = RedisManager.client()
+    lang = await get_lang_cache_then_db(session=db, redis_client=redis, chat_id=tg_id)
+    await bot.send_message(chat_id=message.chat.id, text=t(lang,'help'), reply_markup=cancel)
+
+
 @router.message(Command("terms"), StateFilter('*'))
 async def handler_in_specific_state(message: Message, state: FSMContext):
     await message.delete()

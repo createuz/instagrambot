@@ -9,7 +9,7 @@ import psutil
 import speedtest
 from aiogram import Router
 
-panel_router = Router()
+router = Router()
 
 BOT_START_TIME = time.time()
 

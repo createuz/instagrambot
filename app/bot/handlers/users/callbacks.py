@@ -1,11 +1,13 @@
 # app/bot/handlers/callbacks.py
 from aiogram import Router, F
+from aiogram.enums import ChatType
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
 
 from app.bot.handlers.users.kb import get_add_to_group
 from app.bot.handlers.users.translations import t
 from app.bot.utils import LanguageSelection
+from app.core.config import bot
 from app.core.logger import get_logger
 from app.db.services.redis_manager import RedisManager
 from app.db.services.user_service import upsert_user_language, redis_set_lang
@@ -22,7 +24,7 @@ async def lang_callback(call: CallbackQuery, state: FSMContext, **data):
     lang = call.data.split(":", 1)[1].strip()
     tg_id = call.from_user.id
     try:
-        user_id = await upsert_user_language(session=db, chat_id=tg_id, language=lang)
+        user_id = await upsert_user_language(session=db, redis_client=redis, chat_id=tg_id, language=lang)
         if getattr(db, "session_created", False):
             db.info["committed_by_handler"] = True
             await db.commit()
@@ -41,13 +43,20 @@ async def lang_callback(call: CallbackQuery, state: FSMContext, **data):
     except Exception:
         logger.warning("redis set failed for %s", tg_id)
 
-    await call.answer(f'✅ {lang}')
+    # await call.answer(f'✅ {lang}')
     try:
-        await call.message.edit_text(
+        await bot.edit_message_text(
+            chat_id=call.message.chat.id,
+            message_id=call.message.message_id,
             text=t(lang, "start"),
             reply_markup=get_add_to_group(lang),
             disable_web_page_preview=True
         )
+        # await call.message.edit_text(
+        #     text=t(lang, "start"),
+        #     reply_markup=get_add_to_group(lang),
+        #     disable_web_page_preview=True
+        # )
     except Exception:
         logger.warning("edit message failed")
     return await state.clear()

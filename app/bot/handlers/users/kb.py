@@ -79,7 +79,7 @@ def get_language_keyboard_code():
 
 def get_add_to_group(language: str):
     data = {
-        'Uzbek': InlineKeyboardMarkup(
+        'uz': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
                     InlineKeyboardButton(text="🔻", callback_data="cancel"),
@@ -88,7 +88,7 @@ def get_add_to_group(language: str):
                 ],
             ]
         ),
-        'English': InlineKeyboardMarkup(
+        'en': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
                     InlineKeyboardButton(text="🔻", callback_data="cancel"),
@@ -96,7 +96,7 @@ def get_add_to_group(language: str):
                 ],
             ]
         ),
-        'Russian': InlineKeyboardMarkup(
+        'ru': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
                     InlineKeyboardButton(text="🔻", callback_data="cancel"),
@@ -104,7 +104,7 @@ def get_add_to_group(language: str):
                 ],
             ]
         ),
-        'Turkish': InlineKeyboardMarkup(
+        'tr': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
                     InlineKeyboardButton(text="🔻", callback_data="cancel"),
@@ -112,7 +112,7 @@ def get_add_to_group(language: str):
                 ],
             ]
         ),
-        'Kazakh': InlineKeyboardMarkup(
+        'kz': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
                     InlineKeyboardButton(text="🔻", callback_data="cancel"),
@@ -120,7 +120,7 @@ def get_add_to_group(language: str):
                 ],
             ]
         ),
-        'Ukrainian': InlineKeyboardMarkup(
+        'uk': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
                     InlineKeyboardButton(text="🔻", callback_data="cancel"),
@@ -128,7 +128,7 @@ def get_add_to_group(language: str):
                 ],
             ]
         ),
-        'Azerbaijani': InlineKeyboardMarkup(
+        'az': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
                     InlineKeyboardButton(text="🔻", callback_data="cancel"),
@@ -136,7 +136,7 @@ def get_add_to_group(language: str):
                 ],
             ]
         ),
-        'Spanish': InlineKeyboardMarkup(
+        'es': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
                     InlineKeyboardButton(text="🔻", callback_data="cancel"),
@@ -144,7 +144,7 @@ def get_add_to_group(language: str):
                 ],
             ]
         ),
-        'French': InlineKeyboardMarkup(
+        'fr': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
                     InlineKeyboardButton(text="🔻", callback_data="cancel"),
@@ -152,7 +152,7 @@ def get_add_to_group(language: str):
                 ],
             ]
         ),
-        'German': InlineKeyboardMarkup(
+        'de': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
                     InlineKeyboardButton(text="🔻", callback_data="cancel"),
@@ -161,7 +161,7 @@ def get_add_to_group(language: str):
                 ],
             ]
         ),
-        'Portuguese': InlineKeyboardMarkup(
+        'pt': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
                     InlineKeyboardButton(text="🔻", callback_data="cancel"),
@@ -169,7 +169,7 @@ def get_add_to_group(language: str):
                 ],
             ]
         ),
-        'Polish': InlineKeyboardMarkup(
+        'pl': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
                     InlineKeyboardButton(text="🔻", callback_data="cancel"),
@@ -177,7 +177,7 @@ def get_add_to_group(language: str):
                 ],
             ]
         ),
-        'Chinese': InlineKeyboardMarkup(
+        'cn': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
                     InlineKeyboardButton(text="🔻", callback_data="cancel"),
@@ -185,7 +185,7 @@ def get_add_to_group(language: str):
                 ],
             ]
         ),
-        'Arabic': InlineKeyboardMarkup(
+        'ar': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
                     InlineKeyboardButton(text="🔻", callback_data="cancel"),
@@ -193,7 +193,7 @@ def get_add_to_group(language: str):
                 ],
             ]
         ),
-        'Persian': InlineKeyboardMarkup(
+        'fa': InlineKeyboardMarkup(
             inline_keyboard=[
                 [
                     InlineKeyboardButton(text="🔻", callback_data="cancel"),

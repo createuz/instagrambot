@@ -17,7 +17,7 @@ from app.db.services.user_repo import UserRepo
 from app.db.sessions.session import AsyncSessionLocal
 
 logger = get_logger(__name__)
-panel_router = Router()
+router = Router()
 repo = UserRepo(logger=logger)
 
 # Redis client (shared). If conf.redis_url not set, default to localhost.
@@ -35,12 +35,12 @@ STATS_TTL = 10 * 60  # 10 minutes
 BOT_START_TIME = time.time()
 
 
-@panel_router.callback_query(F.data == "stat_menu", IsAdmin())
+@router.callback_query(F.data == "stat_menu", IsAdmin())
 async def chose_statistics(call: CallbackQuery):
     await call.message.edit_text(text="<b>📊 Statistikani tanlang:</b>", reply_markup=stat_menu())
 
 
-@panel_router.callback_query(F.data.in_(("user_stat", "update_user_stat")), IsAdmin())
+@router.callback_query(F.data.in_(("user_stat", "update_user_stat")), IsAdmin())
 async def total_user_statistics(call: CallbackQuery):
     try:
         # Try Redis cache first
