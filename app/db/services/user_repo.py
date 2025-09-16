@@ -63,7 +63,6 @@ class UserRepo:
             user_id = res.scalar_one()
             self.logger.info("ensure_user: upsert chat_id=%s id=%s", chat_id, user_id)
             return user_id
-
         except SQLAlchemyError as e:
             self.logger.exception("ensure_user failed for %s: %s", chat_id, e)
             raise
