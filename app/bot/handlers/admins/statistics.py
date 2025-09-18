@@ -3,36 +3,26 @@ import json
 import time
 from typing import Optional, Dict, Any
 
-import redis.asyncio as aioredis
 from aiogram import Router, F
 from aiogram.types import CallbackQuery
 from sqlalchemy import select, func
 
-from app.bot.handlers.admins.kb import update_user_stat, stat_menu, statistic_lang
+from app.bot.handlers.admins.keyboards import update_user_stat, stat_menu, statistic_lang
 from app.bot.utils import IsAdmin
-from app.core.config import conf, bot  # conf must have redis_url (optional)
+from app.core.config import bot  # conf must have redis_url (optional)
 from app.core.logger import get_logger
 from app.db.models.user import User
+from app.db.services.redis_manager import RedisManager
 from app.db.services.user_repo import UserRepo
 from app.db.sessions.session import AsyncSessionLocal
 
-logger = get_logger(__name__)
-router = Router()
+logger = get_logger()
 repo = UserRepo(logger=logger)
 
-# Redis client (shared). If conf.redis_url not set, default to localhost.
-_redis_url = getattr(conf, "redis_url", None) or "redis://localhost:6379/0"
-_redis_client: Optional[aioredis.Redis] = None
-try:
-    _redis_client = aioredis.from_url(_redis_url, encoding="utf-8", decode_responses=True)
-except Exception:
-    logger.exception("Could not initialize Redis client for admin stats caching")
-
-# cache key and TTL (10 minutes)
+router = Router()
 STATS_CACHE_KEY = "stats"
 STATS_TTL = 10 * 60  # 10 minutes
 
-BOT_START_TIME = time.time()
 
 
 @router.callback_query(F.data == "stat_menu", IsAdmin())
@@ -42,6 +32,7 @@ async def chose_statistics(call: CallbackQuery):
 
 @router.callback_query(F.data.in_(("user_stat", "update_user_stat")), IsAdmin())
 async def total_user_statistics(call: CallbackQuery):
+    _redis_client = RedisManager.client()
     try:
         # Try Redis cache first
         cached = None

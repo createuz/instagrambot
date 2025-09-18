@@ -1,7 +1,6 @@
 import re
 
 from aiogram import Bot, F, types, Router
-from aiogram.filters import CommandStart, StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
 
@@ -10,7 +9,7 @@ from app.bot.utils import IsAdmin, AdsStates
 from app.core.config import bot
 
 router = Router()
-from app.bot.handlers.admins.kb import initial_options, media_type_options
+from app.bot.handlers.admins.keyboards import initial_options, media_type_options
 
 ADS_MEDIA_TYPES = {
     types.ContentType.PHOTO: "photo",
@@ -28,11 +27,6 @@ async def replace_text_to_links(text):
 
     pattern = r'\((.*?)\)\[(.*?)\]'
     return re.sub(pattern, create_html_link, text)
-
-
-@router.message(CommandStart(), IsAdmin(), StateFilter('*'))
-async def start(message: Message):
-    await message.answer("Welcome! Use /admins to create an ad.")
 
 
 @router.callback_query(F.data == "menu", IsAdmin())

@@ -4,7 +4,7 @@ from typing import Optional, List, Tuple
 
 from aiogram.fsm.context import FSMContext
 
-from app.bot.handlers.admins.kb import create_keyboard, confirm_options
+from app.bot.handlers.admins.keyboards import create_keyboard, confirm_options
 from app.bot.utils import AdsStates
 from app.core.config import bot, ADMIN
 from app.db.services.user_repo import UserRepo

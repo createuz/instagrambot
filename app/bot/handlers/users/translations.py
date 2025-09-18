@@ -1,23 +1,5 @@
 choose_button = "<b>🌐 Welcome! Please select your language:</b>"
 
-languages = {
-    "uz": "Uzbek",
-    "en": "English",
-    "ru": "Russian",
-    "tr": "Turkish",
-    "kz": "Kazakh",
-    "uk": "Ukrainian",
-    "az": "Azerbaijani",
-    "es": "Spanish",
-    "fr": "French",
-    "de": "German",
-    "pt": "Portuguese",
-    "pl": "Polish",
-    "cn": "Chinese",
-    "ar": "Arabic",
-    "ir": "Persian",
-}
-
 language_changed = {
     "uz": "🇺🇿 Oʻzbekcha",  # Uzbek
     "en": "🇬🇧 English",  # English

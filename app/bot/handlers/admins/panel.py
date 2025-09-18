@@ -14,7 +14,7 @@ from app.db.sessions.session import logger
 
 router = Router()
 
-from app.bot.handlers.admins.kb import admin_menu, home_menu
+from app.bot.handlers.admins.keyboards import admin_menu, home_menu
 
 BOT_START_TIME = time.time()
 

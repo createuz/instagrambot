@@ -7,7 +7,7 @@ from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 
-from app.bot.handlers.admins.kb import create_keyboard
+from app.bot.handlers.admins.keyboards import create_keyboard
 from app.core.logger import get_logger
 from app.db.sessions.session import AsyncSessionLocal
 from app.bot.handlers.admins.broadcast_integrated import BroadcastManager
