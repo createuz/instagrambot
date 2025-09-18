@@ -10,8 +10,7 @@ from app.db.sessions.session import AsyncSessionLocal
 
 class DBSessionMiddleware(BaseMiddleware):
     async def __call__(self, handler: Callable[[Any, dict], Awaitable[Any]], event: Any, data: dict):
-        request_id = data.get("request_id")
-        logger = get_logger(request_id)
+        logger = get_logger()
         proxy = LazySessionProxy(session_maker=AsyncSessionLocal)
         data["db"] = proxy
 

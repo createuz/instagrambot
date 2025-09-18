@@ -21,8 +21,7 @@ class ChatLoggerMiddleware(BaseMiddleware):
     ) -> Any:
         start = time.perf_counter()
         bot: Optional[Bot] = data.get("bot")
-        request_id = data.get("request_id")
-        log = self.logger.bind(rid=request_id) if request_id else self.logger
+        log = self.logger
 
         update_id = getattr(event, "update_id", None)
         chat_id = None
@@ -48,7 +47,7 @@ class ChatLoggerMiddleware(BaseMiddleware):
             duration_ms = round((time.perf_counter() - start) * 1000)
             tb = traceback.format_exc()
             log.error(
-                "update_handler_exception",
+                "tg_update_exception",
                 update_id=update_id,
                 chat_id=chat_id,
                 bot_id=getattr(bot, "id", None),
@@ -60,7 +59,7 @@ class ChatLoggerMiddleware(BaseMiddleware):
         else:
             duration_ms = round((time.perf_counter() - start) * 1000)
             log.info(
-                "update_handled",
+                "tg_update",
                 update_id=update_id,
                 chat_id=chat_id,
                 bot_id=getattr(bot, "id", None),

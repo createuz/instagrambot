@@ -28,9 +28,9 @@ class AdsStates(StatesGroup):
     waiting_for_caption = State()
     waiting_for_button_name = State()
     waiting_for_button_url = State()
+    waiting_for_media_type = State()
     confirm_buttons = State()
     confirm_send = State()
-    waiting_for_media_type = State()
 
 
 class BackupStates(StatesGroup):
