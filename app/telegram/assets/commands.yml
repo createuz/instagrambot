@@ -1,0 +1,180 @@
+commands:
+  en:
+    - command: start
+      description: "Main menu"
+    - command: lang
+      description: "Change language"
+    - command: help
+      description: "Help"
+    - command: terms
+      description: "Terms & Conditions"
+    - command: privacy
+      description: "Privacy policy"
+
+  uz:
+    - command: start
+      description: "Asosiy menyu"
+    - command: lang
+      description: "Tilni o'zgartirish"
+    - command: help
+      description: "Yordam"
+    - command: terms
+      description: "Qoidalar va shartlar"
+    - command: privacy
+      description: "Maxfiylik siyosati"
+
+  ru:
+    - command: start
+      description: "Главное меню"
+    - command: lang
+      description: "Сменить язык"
+    - command: help
+      description: "Помощь"
+    - command: terms
+      description: "Условия и положения"
+    - command: privacy
+      description: "Политика конфиденциальности"
+
+  tr:
+    - command: start
+      description: "Ana menü"
+    - command: lang
+      description: "Dili değiştir"
+    - command: help
+      description: "Yardım"
+    - command: terms
+      description: "Şartlar ve Koşullar"
+    - command: privacy
+      description: "Gizlilik politikası"
+
+  kz:
+    - command: start
+      description: "Басты мәзір"
+    - command: lang
+      description: "Тілді өзгерту"
+    - command: help
+      description: "Көмек"
+    - command: terms
+      description: "Ережелер мен шарттар"
+    - command: privacy
+      description: "Құпиялылық саясаты"
+
+  uk:
+    - command: start
+      description: "Головне меню"
+    - command: lang
+      description: "Змінити мову"
+    - command: help
+      description: "Допомога"
+    - command: terms
+      description: "Умови та положення"
+    - command: privacy
+      description: "Політика конфіденційності"
+
+  az:
+    - command: start
+      description: "Əsas menyu"
+    - command: lang
+      description: "Dili dəyiş"
+    - command: help
+      description: "Kömək"
+    - command: terms
+      description: "Şərtlər və qaydalar"
+    - command: privacy
+      description: "Məxfilik siyasəti"
+
+  es:
+    - command: start
+      description: "Menú principal"
+    - command: lang
+      description: "Cambiar idioma"
+    - command: help
+      description: "Ayuda"
+    - command: terms
+      description: "Términos y condiciones"
+    - command: privacy
+      description: "Política de privacidad"
+
+  fr:
+    - command: start
+      description: "Menu principal"
+    - command: lang
+      description: "Changer la langue"
+    - command: help
+      description: "Aide"
+    - command: terms
+      description: "Conditions générales"
+    - command: privacy
+      description: "Politique de confidentialité"
+
+  de:
+    - command: start
+      description: "Hauptmenü"
+    - command: lang
+      description: "Sprache ändern"
+    - command: help
+      description: "Hilfe"
+    - command: terms
+      description: "Nutzungsbedingungen"
+    - command: privacy
+      description: "Datenschutzrichtlinie"
+
+  pt:
+    - command: start
+      description: "Menu principal"
+    - command: lang
+      description: "Alterar idioma"
+    - command: help
+      description: "Ajuda"
+    - command: terms
+      description: "Termos e condições"
+    - command: privacy
+      description: "Política de privacidade"
+
+  pl:
+    - command: start
+      description: "Menu główne"
+    - command: lang
+      description: "Zmień język"
+    - command: help
+      description: "Pomoc"
+    - command: terms
+      description: "Warunki i zasady"
+    - command: privacy
+      description: "Polityka prywatności"
+
+  cn:
+    - command: start
+      description: "主菜单"
+    - command: lang
+      description: "切换语言"
+    - command: help
+      description: "帮助"
+    - command: terms
+      description: "条款和条件"
+    - command: privacy
+      description: "隐私政策"
+
+  ar:
+    - command: start
+      description: "القائمة الرئيسية"
+    - command: lang
+      description: "تغيير اللغة"
+    - command: help
+      description: "مساعدة"
+    - command: terms
+      description: "الشروط والأحكام"
+    - command: privacy
+      description: "سياسة الخصوصية"
+
+  fa:
+    - command: start
+      description: "منوی اصلی"
+    - command: lang
+      description: "تغییر زبان"
+    - command: help
+      description: "راهنما"
+    - command: terms
+      description: "شرایط و ضوابط"
+    - command: privacy
+      description: "حریم خصوصی"
