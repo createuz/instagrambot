@@ -9,7 +9,7 @@ TIMEZONE: Final[timezone] = timezone.utc
 DEFAULT_LOCALE: Final[str] = Locale.EN
 ROOT_DIR: Final[Path] = Path(__file__).parent.parent
 ENV_FILE: Final[Path] = ROOT_DIR / ".env"
-ASSETS_SOURCE_DIR: Final[Path] = ROOT_DIR / "assets"
+ASSETS_SOURCE_DIR: Final[Path] = ROOT_DIR / "app/telegram/assets"
 MESSAGES_SOURCE_DIR: Final[Path] = ASSETS_SOURCE_DIR / "messages"
 
 # Time constants
