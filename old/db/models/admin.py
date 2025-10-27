@@ -10,20 +10,22 @@ from old.db import Base
 
 
 class Admin(Base):
-    __tablename__ = 'admins'
+    __tablename__ = "admins"
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    chat_id: Mapped[int] = mapped_column(BigInteger, unique=True, index=True, nullable=False)
+    chat_id: Mapped[int] = mapped_column(
+        BigInteger, unique=True, index=True, nullable=False
+    )
     username: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     first_name: Mapped[Optional[str]] = mapped_column(String, nullable=True)
 
     @classmethod
     async def create_admin(
-            cls,
-            session: AsyncSession,
-            chat_id: int,
-            username: Optional[str],
-            first_name: Optional[str],
-            language: str
+        cls,
+        session: AsyncSession,
+        chat_id: int,
+        username: Optional[str],
+        first_name: Optional[str],
+        language: str,
     ) -> "Admin":
         try:
             admin = cls(

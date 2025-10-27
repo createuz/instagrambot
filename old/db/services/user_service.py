@@ -41,7 +41,9 @@ async def redis_set_lang(redis_client, chat_id: int, lang: str) -> None:
         logger.warning("redis_set_lang failed for %s: %s", chat_id, e)
 
 
-async def get_lang_cache_then_db(session: AsyncSession, redis_client, chat_id: int) -> Optional[str]:
+async def get_lang_cache_then_db(
+    session: AsyncSession, redis_client, chat_id: int
+) -> Optional[str]:
     lang = await redis_get_lang(redis_client, chat_id)
     if lang:
         logger.debug("get_lang_cache_then_db: redis hit %s -> %s", chat_id, lang)
@@ -58,13 +60,13 @@ async def get_lang_cache_then_db(session: AsyncSession, redis_client, chat_id: i
 
 
 async def ensure_user_exists(
-        session: AsyncSession,
-        chat_id: int,
-        username: Optional[str],
-        first_name: Optional[str],
-        is_premium: Optional[bool],
-        default_lang: Optional[str] = None,
-        added_by: Optional[str] = None
+    session: AsyncSession,
+    chat_id: int,
+    username: Optional[str],
+    first_name: Optional[str],
+    is_premium: Optional[bool],
+    default_lang: Optional[str] = None,
+    added_by: Optional[str] = None,
 ) -> int:
     return await repo.ensure_user(
         session=session,
@@ -77,11 +79,17 @@ async def ensure_user_exists(
     )
 
 
-async def upsert_user_language(session: AsyncSession, redis_client, chat_id: int, language: str) -> int:
-    user_id = await repo.upsert_language(session=session, chat_id=chat_id, language=language)
+async def upsert_user_language(
+    session: AsyncSession, redis_client, chat_id: int, language: str
+) -> int:
+    user_id = await repo.upsert_language(
+        session=session, chat_id=chat_id, language=language
+    )
     await redis_set_lang(redis_client, chat_id, language)
     return user_id
 
 
-async def set_language_and_cache(session: AsyncSession, redis_client, chat_id: int, language: str) -> int:
+async def set_language_and_cache(
+    session: AsyncSession, redis_client, chat_id: int, language: str
+) -> int:
     return await upsert_user_language(session, redis_client, chat_id, language)

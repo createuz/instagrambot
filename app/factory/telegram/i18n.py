@@ -5,8 +5,8 @@ from typing import cast
 from aiogram_i18n import I18nMiddleware
 from aiogram_i18n.cores import FluentRuntimeCore
 
-from app.factory.config import AppConfig
-from app.utils.const import DEFAULT_LOCALE, MESSAGES_SOURCE_DIR
+from app.db.config import AppConfig
+from app.const import DEFAULT_LOCALE, MESSAGES_SOURCE_DIR
 from app.utils.localization import UserManager
 
 

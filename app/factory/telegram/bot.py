@@ -12,11 +12,13 @@ from aiogram.types import LinkPreviewOptions
 from app.utils import mjson
 
 if TYPE_CHECKING:
-    from app.factory.config import AppConfig
+    from app.db.config import AppConfig
 
 
 def create_bot(config: AppConfig) -> Bot:
-    session: AiohttpSession = AiohttpSession(json_loads=mjson.decode, json_dumps=mjson.encode)
+    session: AiohttpSession = AiohttpSession(
+        json_loads=mjson.decode, json_dumps=mjson.encode
+    )
     session.middleware(RetryRequestMiddleware())
     return Bot(
         token=config.telegram.bot_token.get_secret_value(),

@@ -1,8 +1,8 @@
 from aiogram import Bot, Dispatcher
 
 from app.factory import create_bot, create_dispatcher
-from app.factory.config import AppConfig
-from app.factory.config.app_config import create_app_config
+from app.db.config import AppConfig
+from app.db.config.app_config import create_app_config
 from app.runners.app import run_polling, run_webhook
 from app.utils.logging import setup_logger
 

@@ -27,7 +27,9 @@ broadcast_manager = BroadcastManager(
 
 
 @router.message(Command("broadcast_preview"))
-async def broadcast_preview_handler(message: Message, state: FSMContext, bot: Bot, **data: Any):
+async def broadcast_preview_handler(
+    message: Message, state: FSMContext, bot: Bot, **data: Any
+):
     admin_id = message.from_user.id
     st = await state.get_data()
     caption = st.get("caption", "")
@@ -37,19 +39,35 @@ async def broadcast_preview_handler(message: Message, state: FSMContext, bot: Bo
 
     try:
         if media_type == "text":
-            await bot.send_message(chat_id=admin_id, text=caption, reply_markup=keyboard)
+            await bot.send_message(
+                chat_id=admin_id, text=caption, reply_markup=keyboard
+            )
         elif media_type == "photo":
-            await bot.send_photo(chat_id=admin_id, photo=st.get("media"), caption=caption, reply_markup=keyboard)
+            await bot.send_photo(
+                chat_id=admin_id,
+                photo=st.get("media"),
+                caption=caption,
+                reply_markup=keyboard,
+            )
         elif media_type == "video":
-            await bot.send_video(chat_id=admin_id, video=st.get("media"), caption=caption, reply_markup=keyboard)
-        await message.answer("Agar hamma narsa toʻgʻri bo'lsa, /broadcast_confirm buyrug'i bilan tasdiqlang.")
+            await bot.send_video(
+                chat_id=admin_id,
+                video=st.get("media"),
+                caption=caption,
+                reply_markup=keyboard,
+            )
+        await message.answer(
+            "Agar hamma narsa toʻgʻri bo'lsa, /broadcast_confirm buyrug'i bilan tasdiqlang."
+        )
     except Exception as e:
         logger.exception("Preview send failed: %s", e)
         await message.answer("Preview yuborishda xatolik yuz berdi.")
 
 
 @router.message(Command("broadcast_confirm"))
-async def broadcast_confirm_handler(message: Message, state: FSMContext, bot: Bot, **data: Any):
+async def broadcast_confirm_handler(
+    message: Message, state: FSMContext, bot: Bot, **data: Any
+):
     admin_id = message.from_user.id
     st = await state.get_data()
     payload: Dict[str, Any] = {
@@ -68,12 +86,16 @@ async def broadcast_confirm_handler(message: Message, state: FSMContext, bot: Bo
     async def _run_and_log():
         try:
             logger.info("Broadcast started by admin %s", admin_id)
-            stats = await broadcast_manager.broadcast(payload=payload, admin_chat_id=admin_id)
+            stats = await broadcast_manager.broadcast(
+                payload=payload, admin_chat_id=admin_id
+            )
             logger.info("Broadcast finished (admin=%s) stats=%s", admin_id, stats)
         except Exception as e:
             logger.exception("Broadcast task exception: %s", e)
             try:
-                await bot.send_message(chat_id=admin_id, text=f"Broadcast failed with exception: {e}")
+                await bot.send_message(
+                    chat_id=admin_id, text=f"Broadcast failed with exception: {e}"
+                )
             except Exception:
                 logger.exception("Failed to notify admin about broadcast failure")
 
@@ -82,5 +104,3 @@ async def broadcast_confirm_handler(message: Message, state: FSMContext, bot: Bo
 
     await message.answer("Broadcast boshlandi. Tugaganida hisobot yuboriladi.")
     await state.clear()
-
-

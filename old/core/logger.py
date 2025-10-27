@@ -25,7 +25,9 @@ def _reorder_event_keys(_, __, event_dict: MutableMapping) -> MutableMapping:
 
 
 def setup_logger():
-    level_name = (getattr(conf, "bot", None) and getattr(conf.bot, "log_level", None)) or "INFO"
+    level_name = (
+        getattr(conf, "bot", None) and getattr(conf.bot, "log_level", None)
+    ) or "INFO"
     level = getattr(logging, level_name.upper(), logging.INFO)
 
     root = logging.getLogger()
@@ -51,7 +53,13 @@ def setup_logger():
         cache_logger_on_first_use=True,
     )
 
-    for name in ("aiogram", "aiogram.dispatcher", "aiogram.client", "aiohttp", "asyncio"):
+    for name in (
+        "aiogram",
+        "aiogram.dispatcher",
+        "aiogram.client",
+        "aiohttp",
+        "asyncio",
+    ):
         lg = logging.getLogger(name)
         lg.setLevel(logging.WARNING)
         lg.propagate = True

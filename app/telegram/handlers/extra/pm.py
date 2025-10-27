@@ -18,10 +18,14 @@ router.my_chat_member.filter(F.chat.type == ChatType.PRIVATE)
 
 
 @router.my_chat_member(ChatMemberUpdatedFilter(JOIN_TRANSITION))
-async def bot_unblocked(_: ChatMemberUpdated, user: UserDto, user_service: UserService) -> Any:
+async def bot_unblocked(
+    _: ChatMemberUpdated, user: UserDto, user_service: UserService
+) -> Any:
     await user_service.update(user=user, blocked_at=None)
 
 
 @router.my_chat_member(ChatMemberUpdatedFilter(LEAVE_TRANSITION))
-async def bot_blocked(_: ChatMemberUpdated, user: UserDto, user_service: UserService) -> Any:
+async def bot_blocked(
+    _: ChatMemberUpdated, user: UserDto, user_service: UserService
+) -> Any:
     await user_service.update(user=user, blocked_at=datetime_now())

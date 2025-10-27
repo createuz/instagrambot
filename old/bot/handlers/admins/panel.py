@@ -19,15 +19,21 @@ from old.bot.handlers.admins.keyboards import admin_menu, home_menu
 BOT_START_TIME = time.time()
 
 
-@router.message(Command("admin"), IsAdmin(), StateFilter('*'))
+@router.message(Command("admin"), IsAdmin(), StateFilter("*"))
 async def show_admin_panel(message: Message):
     await message.delete()
-    await bot.send_message(chat_id=message.chat.id, text="<b>⚙ Welcome to Admin Panel</b>", reply_markup=home_menu())
+    await bot.send_message(
+        chat_id=message.chat.id,
+        text="<b>⚙ Welcome to Admin Panel</b>",
+        reply_markup=home_menu(),
+    )
 
 
 @router.callback_query(F.data == "home_menu", IsAdmin())
 async def return_to_menu(call: CallbackQuery):
-    await call.message.edit_text(text="<b>⚙ Welcome to Admin Panel</b>", reply_markup=home_menu())
+    await call.message.edit_text(
+        text="<b>⚙ Welcome to Admin Panel</b>", reply_markup=home_menu()
+    )
 
 
 @router.callback_query(F.data == "admin_menu", IsAdmin())
@@ -40,13 +46,17 @@ async def admin_data_handler(call: CallbackQuery):
     try:
         data = await Admin.get_admins_data()
         if not data:
-            await call.message.edit_text(text="<b>🛑 Hozirda Admin ma'lumotlari mavjud emas.</b>")
+            await call.message.edit_text(
+                text="<b>🛑 Hozirda Admin ma'lumotlari mavjud emas.</b>"
+            )
             return
 
         admin_lines = []
         for user in data:
             name = user.first_name or "NoName"
-            admin_lines.append(f"┃ ID: <code>{user.chat_id}</code> ┃ <a href='tg://user?id={user.chat_id}'>{name}</a>")
+            admin_lines.append(
+                f"┃ ID: <code>{user.chat_id}</code> ┃ <a href='tg://user?id={user.chat_id}'>{name}</a>"
+            )
 
         data_msg = "\n".join(admin_lines)
         full = f"""
@@ -75,8 +85,13 @@ async def save_new_admin(message: Message, state: FSMContext, **data):
         chat_id = user.chat_id
         username = user.username
         first_name = user.first_name
-        await Admin.create_admin(chat_id=chat_id, username=username, first_name=first_name)
-        await message.answer(f"<b>{first_name}</b> adminlar ro'yxatiga qo'shildi ✅", reply_markup=admin_menu())
+        await Admin.create_admin(
+            chat_id=chat_id, username=username, first_name=first_name
+        )
+        await message.answer(
+            f"<b>{first_name}</b> adminlar ro'yxatiga qo'shildi ✅",
+            reply_markup=admin_menu(),
+        )
         await state.clear()
     except Exception as e:
         logger.exception("save_new_admin error: %s", e)
@@ -85,7 +100,9 @@ async def save_new_admin(message: Message, state: FSMContext, **data):
 
 @router.callback_query(F.data == "del_admin", IsAdmin())
 async def delete_admin_handler(call: CallbackQuery):
-    await call.message.edit_text(text="O'chirmoqchi bo'lgan adminning Chat ID sini kiriting:")
+    await call.message.edit_text(
+        text="O'chirmoqchi bo'lgan adminning Chat ID sini kiriting:"
+    )
     await call.message.delete_reply_markup()
 
 
@@ -93,15 +110,17 @@ async def delete_admin_handler(call: CallbackQuery):
 async def save_deleted_admin(message: Message, state: FSMContext):
     try:
         await Admin.delete_admin(message.text)
-        await message.answer(f"Chat ID: <b>{message.text}</b> adminlar ro'yxatidan chiqarildi ✅",
-                             reply_markup=admin_menu())
+        await message.answer(
+            f"Chat ID: <b>{message.text}</b> adminlar ro'yxatidan chiqarildi ✅",
+            reply_markup=admin_menu(),
+        )
         await state.clear()
     except Exception as e:
         logger.exception("save_deleted_admin error: %s", e)
         await message.answer(f"❌ Xatolik yuz berdi: {str(e)}")
 
 
-@router.callback_query(F.data == "cancel", StateFilter('*'))
+@router.callback_query(F.data == "cancel", StateFilter("*"))
 async def cancel_admin_action(call: CallbackQuery, state: FSMContext):
     try:
         await call.message.delete()
@@ -111,7 +130,7 @@ async def cancel_admin_action(call: CallbackQuery, state: FSMContext):
         logger.exception("cancel_admin_action error: %s", e)
 
 
-@router.message(Command('break'), IsAdmin(), StateFilter('*'))
+@router.message(Command("break"), IsAdmin(), StateFilter("*"))
 async def stop_message_sending(message: Message, state: FSMContext):
     try:
         await message.answer("⚙ Xabar yuborish to‘xtatildi")

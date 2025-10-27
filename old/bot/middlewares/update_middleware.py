@@ -5,8 +5,16 @@ from collections.abc import Awaitable, Callable
 from typing import Any, Optional
 
 from aiogram import BaseMiddleware, Bot
-from aiogram.types import TelegramObject, Update, Message, CallbackQuery, InlineQuery, ChatMemberUpdated
+from aiogram.types import (
+    TelegramObject,
+    Update,
+    Message,
+    CallbackQuery,
+    InlineQuery,
+    ChatMemberUpdated,
+)
 from structlog.typing import FilteringBoundLogger
+
 
 class ChatLoggerMiddleware(BaseMiddleware):
     def __init__(self, logger: FilteringBoundLogger) -> None:
@@ -29,13 +37,23 @@ class ChatLoggerMiddleware(BaseMiddleware):
             if isinstance(event, Update):
                 if event.message and isinstance(event.message, Message):
                     chat_id = event.message.chat.id
-                elif event.callback_query and isinstance(event.callback_query, CallbackQuery):
-                    chat_id = event.callback_query.message.chat.id if event.callback_query.message else event.callback_query.from_user.id
+                elif event.callback_query and isinstance(
+                    event.callback_query, CallbackQuery
+                ):
+                    chat_id = (
+                        event.callback_query.message.chat.id
+                        if event.callback_query.message
+                        else event.callback_query.from_user.id
+                    )
                 elif event.inline_query and isinstance(event.inline_query, InlineQuery):
                     chat_id = event.inline_query.from_user.id
-                elif event.my_chat_member and isinstance(event.my_chat_member, ChatMemberUpdated):
+                elif event.my_chat_member and isinstance(
+                    event.my_chat_member, ChatMemberUpdated
+                ):
                     chat_id = event.my_chat_member.chat.id
-                elif event.chat_member and isinstance(event.chat_member, ChatMemberUpdated):
+                elif event.chat_member and isinstance(
+                    event.chat_member, ChatMemberUpdated
+                ):
                     chat_id = event.chat_member.chat.id
         except Exception:
             log.warning("chat_id_extract_failed", update_id=update_id, exc_info=True)

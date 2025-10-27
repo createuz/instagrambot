@@ -413,110 +413,110 @@ help_ir = """
 
 langs_text = {
     "uz": {
-        'start': start_uz,
-        'help': help_uz,
-        'wait': 'Yuklanmoqda, biroz kuting...',
-        'saved': 'Yuklab olindi',
-        'error': "🛑 <b>Yuklab olishda xato!</b>\n\n<a href='{}'><b>Ushbu media faylni </b></a> yuklab olib bo'lmadi.\nIltimos keyinroq qayta urinib ko'ring."
+        "start": start_uz,
+        "help": help_uz,
+        "wait": "Yuklanmoqda, biroz kuting...",
+        "saved": "Yuklab olindi",
+        "error": "🛑 <b>Yuklab olishda xato!</b>\n\n<a href='{}'><b>Ushbu media faylni </b></a> yuklab olib bo'lmadi.\nIltimos keyinroq qayta urinib ko'ring.",
     },
     "en": {
-        'start': start_en,
-        'help': help_en,
-        'wait': 'Loading, please wait...',
-        'saved': 'Downloaded',
-        'error': "🛑 <b>Download error!</b>\n\n<a href='{}'><b>This media file</b></a> could not be downloaded.\nPlease try again later."
+        "start": start_en,
+        "help": help_en,
+        "wait": "Loading, please wait...",
+        "saved": "Downloaded",
+        "error": "🛑 <b>Download error!</b>\n\n<a href='{}'><b>This media file</b></a> could not be downloaded.\nPlease try again later.",
     },
     "ru": {
-        'start': start_ru,
-        'help': help_ru,
-        'wait': 'Загрузка, пожалуйста, подождите...',
-        'saved': 'Загружено',
-        'error': "🛑 <b>Ошибка загрузки!</b>\n\n<a href='{}'><b>Этот медиафайл</b></a> не удалось загрузить.\nПожалуйста, попробуйте позже."
+        "start": start_ru,
+        "help": help_ru,
+        "wait": "Загрузка, пожалуйста, подождите...",
+        "saved": "Загружено",
+        "error": "🛑 <b>Ошибка загрузки!</b>\n\n<a href='{}'><b>Этот медиафайл</b></a> не удалось загрузить.\nПожалуйста, попробуйте позже.",
     },
     "tr": {
-        'start': start_tr,
-        'help': help_tr,
-        'wait': 'Yükleniyor, lütfen bekleyin...',
-        'saved': 'İndirildi',
-        'error': "🛑 <b>İndirme hatası!</b>\n\n<a href='{}'><b>Bu medya dosyası</b></a> indirilemedi.\nLütfen daha sonra tekrar deneyin."
+        "start": start_tr,
+        "help": help_tr,
+        "wait": "Yükleniyor, lütfen bekleyin...",
+        "saved": "İndirildi",
+        "error": "🛑 <b>İndirme hatası!</b>\n\n<a href='{}'><b>Bu medya dosyası</b></a> indirilemedi.\nLütfen daha sonra tekrar deneyin.",
     },
     "kz": {
-        'start': start_kz,
-        'help': help_kz,
-        'wait': 'Жүктелуде, күте тұрыңыз...',
-        'saved': 'Жүктеп алынды',
-        'error': "🛑 <b>Жүктеу қатесі!</b>\n\n<a href='{}'><b>Бұл медиа файлын</b></a> жүктеп алу мүмкін болмады.\nКейінірек қайталап көріңіз."
+        "start": start_kz,
+        "help": help_kz,
+        "wait": "Жүктелуде, күте тұрыңыз...",
+        "saved": "Жүктеп алынды",
+        "error": "🛑 <b>Жүктеу қатесі!</b>\n\n<a href='{}'><b>Бұл медиа файлын</b></a> жүктеп алу мүмкін болмады.\nКейінірек қайталап көріңіз.",
     },
     "uk": {
-        'start': start_uk,
-        'help': help_uk,
-        'wait': 'Завантаження, будь ласка, зачекайте...',
-        'saved': 'Завантажено',
-        'error': "🛑 <b>Помилка завантаження!</b>\n\n<a href='{}'><b>Цей медіафайл</b></a> не вдалося завантажити.\nБудь ласка, спробуйте пізніше."
+        "start": start_uk,
+        "help": help_uk,
+        "wait": "Завантаження, будь ласка, зачекайте...",
+        "saved": "Завантажено",
+        "error": "🛑 <b>Помилка завантаження!</b>\n\n<a href='{}'><b>Цей медіафайл</b></a> не вдалося завантажити.\nБудь ласка, спробуйте пізніше.",
     },
     "az": {
-        'start': start_az,
-        'help': help_az,
-        'wait': 'Yüklənir, lütfən gözləyin...',
-        'saved': 'Yükləndi',
-        'error': "🛑 <b>Yükləmə xətası!</b>\n\n<a href='{}'><b>Bu media faylı</b></a> yüklənə bilmədi.\nZəhmət olmasa, sonra yenidən cəhd edin."
+        "start": start_az,
+        "help": help_az,
+        "wait": "Yüklənir, lütfən gözləyin...",
+        "saved": "Yükləndi",
+        "error": "🛑 <b>Yükləmə xətası!</b>\n\n<a href='{}'><b>Bu media faylı</b></a> yüklənə bilmədi.\nZəhmət olmasa, sonra yenidən cəhd edin.",
     },
     "es": {
-        'start': start_es,
-        'help': help_es,
-        'wait': 'Cargando, por favor espera...',
-        'saved': 'Descargado',
-        'error': "🛑 <b>Error de descarga!</b>\n\n<a href='{}'><b>Este archivo multimedia</b></a> no se pudo descargar.\nPor favor, inténtalo de nuevo más tarde."
+        "start": start_es,
+        "help": help_es,
+        "wait": "Cargando, por favor espera...",
+        "saved": "Descargado",
+        "error": "🛑 <b>Error de descarga!</b>\n\n<a href='{}'><b>Este archivo multimedia</b></a> no se pudo descargar.\nPor favor, inténtalo de nuevo más tarde.",
     },
     "fr": {
-        'start': start_fr,
-        'help': help_fr,
-        'wait': 'Chargement, veuillez patienter...',
-        'saved': 'Téléchargé',
-        'error': "🛑 <b>Erreur de téléchargement !</b>\n\n<a href='{}'><b>Ce fichier média</b></a> n'a pas pu être téléchargé.\nVeuillez réessayer plus tard."
+        "start": start_fr,
+        "help": help_fr,
+        "wait": "Chargement, veuillez patienter...",
+        "saved": "Téléchargé",
+        "error": "🛑 <b>Erreur de téléchargement !</b>\n\n<a href='{}'><b>Ce fichier média</b></a> n'a pas pu être téléchargé.\nVeuillez réessayer plus tard.",
     },
     "de": {
-        'start': start_de,
-        'help': help_de,
-        'wait': 'Wird geladen, bitte warten...',
-        'saved': 'Heruntergeladen',
-        'error': "🛑 <b>Download-Fehler!</b>\n\n<a href='{}'><b>Diese Mediendatei</b></a> konnte nicht heruntergeladen werden.\nBitte versuchen Sie es später erneut."
+        "start": start_de,
+        "help": help_de,
+        "wait": "Wird geladen, bitte warten...",
+        "saved": "Heruntergeladen",
+        "error": "🛑 <b>Download-Fehler!</b>\n\n<a href='{}'><b>Diese Mediendatei</b></a> konnte nicht heruntergeladen werden.\nBitte versuchen Sie es später erneut.",
     },
     "pt": {
-        'start': start_pt,
-        'help': help_pt,
-        'wait': 'Carregando, por favor aguarde...',
-        'saved': 'Baixado',
-        'error': "🛑 <b>Erro de download!</b>\n\n<a href='{}'><b>Este arquivo de mídia</b></a> não pôde ser baixado.\nPor favor, tente novamente mais tarde."
+        "start": start_pt,
+        "help": help_pt,
+        "wait": "Carregando, por favor aguarde...",
+        "saved": "Baixado",
+        "error": "🛑 <b>Erro de download!</b>\n\n<a href='{}'><b>Este arquivo de mídia</b></a> não pôde ser baixado.\nPor favor, tente novamente mais tarde.",
     },
     "pl": {
-        'start': start_pl,
-        'help': help_pl,
-        'wait': 'Ładowanie, proszę czekać...',
-        'saved': 'Pobrano',
-        'error': "🛑 <b>Błąd pobierania!</b>\n\n<a href='{}'><b>Nie można pobrać tego pliku multimedialnego</b></a>.\nProszę spróbować ponownie później."
+        "start": start_pl,
+        "help": help_pl,
+        "wait": "Ładowanie, proszę czekać...",
+        "saved": "Pobrano",
+        "error": "🛑 <b>Błąd pobierania!</b>\n\n<a href='{}'><b>Nie można pobrać tego pliku multimedialnego</b></a>.\nProszę spróbować ponownie później.",
     },
     "cn": {
-        'start': start_cn,
-        'help': help_ch,
-        'wait': '正在加载，请稍候...',
-        'saved': '已下载',
-        'error': "🛑 <b>下载错误！</b>\n\n<a href='{}'><b>无法下载此媒体文件</b></a>。\n请稍后重试。"
+        "start": start_cn,
+        "help": help_ch,
+        "wait": "正在加载，请稍候...",
+        "saved": "已下载",
+        "error": "🛑 <b>下载错误！</b>\n\n<a href='{}'><b>无法下载此媒体文件</b></a>。\n请稍后重试。",
     },
     "ar": {
-        'start': start_ar,
-        'help': help_ar,
-        'wait': 'جارٍ التحميل، يرجى الانتظار...',
-        'saved': 'تم التنزيل',
-        'error': "🛑 <b>خطأ في التنزيل!</b>\n\n<a href='{}'><b>تعذر تنزيل ملف الوسائط هذا</b></a>.\nيرجى المحاولة لاحقًا."
+        "start": start_ar,
+        "help": help_ar,
+        "wait": "جارٍ التحميل، يرجى الانتظار...",
+        "saved": "تم التنزيل",
+        "error": "🛑 <b>خطأ في التنزيل!</b>\n\n<a href='{}'><b>تعذر تنزيل ملف الوسائط هذا</b></a>.\nيرجى المحاولة لاحقًا.",
     },
     "fa": {
-        'start': start_ir,
-        'help': help_ir,
-        'wait': 'در حال بارگیری، لطفاً صبر کنید...',
-        'saved': 'دانلود شد',
-        'error': "🛑 <b>خطای دانلود!</b>\n\n<a href='{}'><b>این فایل رسانه‌ای</b></a> قابل دانلود نیست.\nلطفاً بعداً دوباره امتحان کنید."
-    }
+        "start": start_ir,
+        "help": help_ir,
+        "wait": "در حال بارگیری، لطفاً صبر کنید...",
+        "saved": "دانلود شد",
+        "error": "🛑 <b>خطای دانلود!</b>\n\n<a href='{}'><b>این فایل رسانه‌ای</b></a> قابل دانلود نیست.\nلطفاً بعداً دوباره امتحان کنید.",
+    },
 }
 
 

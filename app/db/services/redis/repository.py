@@ -12,7 +12,7 @@ from app.utils import mjson
 from app.utils.key_builder import StorageKey
 
 if TYPE_CHECKING:
-    from app.factory.config import AppConfig
+    from app.db.config import AppConfig
 
 T = TypeVar("T", bound=Any)
 
@@ -40,7 +40,9 @@ class RedisRepository:
         value = mjson.decode(value)
         return TypeAdapter[T](validator).validate_python(value)
 
-    async def set(self, key: StorageKey, value: Any, ex: Optional[ExpiryT] = None) -> None:
+    async def set(
+        self, key: StorageKey, value: Any, ex: Optional[ExpiryT] = None
+    ) -> None:
         if isinstance(value, BaseModel):
             value = value.model_dump(exclude_defaults=True)
         await self.client.set(name=key.pack(), value=mjson.encode(value), ex=ex)

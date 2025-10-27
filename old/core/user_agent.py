@@ -5,12 +5,12 @@ import random
 
 class UserAgent:
     ATTRIBUTES_MAP = {
-        'hardware_types': [],
-        'software_types': [],
-        'software_names': [],
-        'software_engines': [],
-        'operating_systems': [],
-        'popularity': [],
+        "hardware_types": [],
+        "software_types": [],
+        "software_names": [],
+        "software_engines": [],
+        "operating_systems": [],
+        "popularity": [],
     }
 
     def __init__(self, limit=None, *args, **kwargs):
@@ -22,10 +22,14 @@ class UserAgent:
         self.load_user_agents()
 
         if limit is not None:
-            self.user_agents = random.sample(self.user_agents, min(limit, len(self.user_agents)))
+            self.user_agents = random.sample(
+                self.user_agents, min(limit, len(self.user_agents))
+            )
 
     def load_user_agents(self):
-        file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'user_agents.jl')
+        file_path = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "user_agents.jl"
+        )
 
         with open(file_path) as user_agents_file:
             for line in user_agents_file:
@@ -43,7 +47,7 @@ class UserAgent:
         return self.user_agents
 
     def get_random_user_agent(self):
-        return random.choice(self.user_agents)['user_agent']
+        return random.choice(self.user_agents)["user_agent"]
 
 
 fake_agent = UserAgent()

@@ -7,7 +7,11 @@ from aiogram import Router, F
 from aiogram.types import CallbackQuery
 from sqlalchemy import select, func
 
-from old.bot.handlers.admins.keyboards import update_user_stat, stat_menu, statistic_lang
+from old.bot.handlers.admins.keyboards import (
+    update_user_stat,
+    stat_menu,
+    statistic_lang,
+)
 from old.bot.utils import IsAdmin
 from old.core.config import bot  # conf must have redis_url (optional)
 from old.core.logger import get_logger
@@ -24,10 +28,11 @@ STATS_CACHE_KEY = "stats"
 STATS_TTL = 10 * 60  # 10 minutes
 
 
-
 @router.callback_query(F.data == "stat_menu", IsAdmin())
 async def chose_statistics(call: CallbackQuery):
-    await call.message.edit_text(text="<b>📊 Statistikani tanlang:</b>", reply_markup=stat_menu())
+    await call.message.edit_text(
+        text="<b>📊 Statistikani tanlang:</b>", reply_markup=stat_menu()
+    )
 
 
 @router.callback_query(F.data.in_(("user_stat", "update_user_stat")), IsAdmin())
@@ -62,7 +67,9 @@ async def total_user_statistics(call: CallbackQuery):
         # store in redis
         if _redis_client is not None:
             try:
-                await _redis_client.set(STATS_CACHE_KEY, json.dumps(stats_obj), ex=STATS_TTL)
+                await _redis_client.set(
+                    STATS_CACHE_KEY, json.dumps(stats_obj), ex=STATS_TTL
+                )
             except Exception:
                 logger.warning("Redis set failed for stats cache")
 
@@ -71,7 +78,9 @@ async def total_user_statistics(call: CallbackQuery):
 
     except Exception:
         logger.exception("total_user_statistics error")
-        await bot.answer_callback_query(call.id, "Server xatoligi — keyinroq urinib ko'ring.")
+        await bot.answer_callback_query(
+            call.id, "Server xatoligi — keyinroq urinib ko'ring."
+        )
 
 
 async def _compute_stats_and_counts() -> Optional[Dict[str, Any]]:
@@ -85,7 +94,9 @@ async def _compute_stats_and_counts() -> Optional[Dict[str, Any]]:
     try:
         async with AsyncSessionLocal() as session:
             # 1) counts by language (ALL users, no is_active filter)
-            stmt = select(User.language, func.count().label("cnt")).group_by(User.language)
+            stmt = select(User.language, func.count().label("cnt")).group_by(
+                User.language
+            )
             res = await session.execute(stmt)
             rows = res.all()  # small: number of languages
 
@@ -124,17 +135,23 @@ def _format_stats_text(stats_obj: Dict[str, Any]) -> str:
     joined_24h = stats_obj.get("joined_24h", 0)
     joined_month = stats_obj.get("joined_month", 0)
     denom = total_users if total_users > 0 else 1
-    codes_sorted = sorted(statistic_lang.keys(), key=lambda c: lang_count.get(c, 0), reverse=True)
+    codes_sorted = sorted(
+        statistic_lang.keys(), key=lambda c: lang_count.get(c, 0), reverse=True
+    )
     display_labels = [statistic_lang[c] for c in codes_sorted]
     max_label_len = max((len(lbl) for lbl in display_labels), default=2)
-    max_count_len = max((len(str(lang_count.get(c, 0))) for c in codes_sorted), default=1)
+    max_count_len = max(
+        (len(str(lang_count.get(c, 0))) for c in codes_sorted), default=1
+    )
 
     lines = []
     for code in codes_sorted:
         label = statistic_lang.get(code, code)
         count = lang_count.get(code, 0)
         pct = (count / denom) * 100
-        lines.append(f"┃ {label.ljust(max_label_len)} : {str(count).rjust(max_count_len)}   {pct:5.1f}%")
+        lines.append(
+            f"┃ {label.ljust(max_label_len)} : {str(count).rjust(max_count_len)}   {pct:5.1f}%"
+        )
     header = (
         "<b>\n"
         "┏━━━━━━━━━━━━━━━━━━━━━\n"
@@ -145,6 +162,8 @@ def _format_stats_text(stats_obj: Dict[str, Any]) -> str:
         f"┃ ✦  ᴀʟʟ ᴜꜱᴇʀꜱ ᴄᴏᴜɴᴛ:  {total_users}\n"
         "┣━━━━━━━━━━━━━━━━━━━━━</b>\n"
     )
-    body = "\n".join(lines) if lines else "<b>┃ Hech qanday foydalanuvchi topilmadi.</b>"
+    body = (
+        "\n".join(lines) if lines else "<b>┃ Hech qanday foydalanuvchi topilmadi.</b>"
+    )
     footer = "<b>\n┗━━━━━━━━━━━━━━━━━━━━━━━━━</b>"
     return header + body + "\n" + footer

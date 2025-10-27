@@ -2,12 +2,12 @@ import asyncio
 from logging.config import fileConfig
 
 from alembic import context
-from sqlalchemy import pool
+from sqlalchemy import URL
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import AsyncEngine, async_engine_from_config
 
-from old.core import conf
-from old.db import Base
+from app.db.config.env import PostgresConfig
+from app.db.models.base import Base
 
 config = context.config
 
@@ -16,13 +16,21 @@ if config.config_file_name is not None:
 
 target_metadata = Base.metadata
 
-config.set_main_option("sqlalchemy.url", conf.db.sqlalchemy_url())
+
+def _get_postgres_dsn() -> URL:
+    # noinspection PyArgumentList
+    _config: PostgresConfig = PostgresConfig()
+    return _config.build_url()
+
+
+# print(_get_postgres_dsn())
+# config.set_main_option("sqlalchemy.url", _get_postgres_dsn())
 
 
 def run_migrations_offline() -> None:
-    url = config.get_main_option("sqlalchemy.url")
+    # url = config.get_main_option("sqlalchemy.url")
     context.configure(
-        url=url,
+        url=_get_postgres_dsn(),
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
@@ -41,19 +49,19 @@ def do_run_migrations(connection: Connection) -> None:
 
 async def _get_connectable() -> AsyncEngine:
     section = config.get_section(config.config_ini_section, {})
-    if getattr(conf.db, "use_pgbouncer", False):
-        return async_engine_from_config(
-            section,
-            prefix="sqlalchemy.",
-            poolclass=pool.NullPool,
-            url=conf.db.sqlalchemy_url(),
-        )
-    else:
-        return async_engine_from_config(
-            section,
-            prefix="sqlalchemy.",
-            url=conf.db.sqlalchemy_url(),
-        )
+    # if getattr(conf.db, "use_pgbouncer", False):
+    #     return async_engine_from_config(
+    #         section,
+    #         prefix="sqlalchemy.",
+    #         poolclass=pool.NullPool,
+    #         url=conf.db.sqlalchemy_url(),
+    #     )
+    # else:
+    return async_engine_from_config(
+        section,
+        prefix="sqlalchemy.",
+        url=_get_postgres_dsn(),
+    )
 
 
 async def run_async_migrations() -> None:

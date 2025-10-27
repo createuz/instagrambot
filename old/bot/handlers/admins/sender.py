@@ -19,41 +19,41 @@ async def send_message_all(chat_id: int, state: FSMContext) -> Optional[bool]:
                 chat_id=chat_id,
                 text=data["caption"],
                 reply_markup=keyboard,
-                disable_web_page_preview=True
+                disable_web_page_preview=True,
             )
         if data["media_type"] == "photo":
             await bot.send_photo(
                 chat_id=chat_id,
                 photo=data["media"],
                 caption=data["caption"],
-                reply_markup=keyboard
+                reply_markup=keyboard,
             )
         if data["media_type"] == "video":
             await bot.send_video(
                 chat_id=chat_id,
                 video=data["media"],
                 caption=data["caption"],
-                reply_markup=keyboard
+                reply_markup=keyboard,
             )
         if data["media_type"] == "video_note":
             await bot.send_video_note(
-                chat_id=chat_id,
-                video_note=data["media"],
-                reply_markup=keyboard
+                chat_id=chat_id, video_note=data["media"], reply_markup=keyboard
             )
         if data["media_type"] == "animation":
             await bot.send_animation(
                 chat_id=chat_id,
                 animation=data["media"],
                 caption=data["caption"],
-                reply_markup=keyboard
+                reply_markup=keyboard,
             )
         return True
     except Exception:
         return None
 
 
-async def send_message_users(user_ids: List[int], state: FSMContext) -> Optional[Tuple[int]]:
+async def send_message_users(
+    user_ids: List[int], state: FSMContext
+) -> Optional[Tuple[int]]:
     try:
         active_users = 0
         inactive_users = 0
@@ -77,39 +77,43 @@ async def send_message_admin(state: FSMContext):
                 chat_id=ADMIN,
                 text=data["caption"],
                 reply_markup=keyboard,
-                disable_web_page_preview=True
+                disable_web_page_preview=True,
             )
         if data["media_type"] == "photo":
             await bot.send_photo(
                 chat_id=ADMIN,
                 photo=data["media"],
                 caption=data["caption"],
-                reply_markup=keyboard
+                reply_markup=keyboard,
             )
         if data["media_type"] == "video":
             await bot.send_video(
                 chat_id=ADMIN,
                 video=data["media"],
                 caption=data["caption"],
-                reply_markup=keyboard
+                reply_markup=keyboard,
             )
         if data["media_type"] == "video_note":
             await bot.send_video_note(
-                chat_id=ADMIN,
-                video_note=data["media"],
-                reply_markup=keyboard
+                chat_id=ADMIN, video_note=data["media"], reply_markup=keyboard
             )
         if data["media_type"] == "animation":
             await bot.send_animation(
                 chat_id=ADMIN,
                 animation=data["media"],
                 caption=data["caption"],
-                reply_markup=keyboard
+                reply_markup=keyboard,
             )
-        await bot.send_message(chat_id=ADMIN, text="Postni yuborishni tasdiqlaysizmi?", reply_markup=confirm_options())
+        await bot.send_message(
+            chat_id=ADMIN,
+            text="Postni yuborishni tasdiqlaysizmi?",
+            reply_markup=confirm_options(),
+        )
         await state.set_state(AdsStates.confirm_send)
     except Exception as e:
-        await bot.send_message(chat_id=ADMIN, text=f"Postni yuborishda xatolik: {str(e)}")
+        await bot.send_message(
+            chat_id=ADMIN, text=f"Postni yuborishda xatolik: {str(e)}"
+        )
         await state.clear()
         return None
 
@@ -119,9 +123,11 @@ async def admin_send_message_all(state: FSMContext):
         admin_lang = await UserRepo.get_language(chat_id=int(ADMIN))
         start_time = time.time()
         total_users = await UserRepo.get_all_users(admin_lang=admin_lang)
-        active_users, inactive_users = await send_message_users(user_ids=total_users, state=state)
+        active_users, inactive_users = await send_message_users(
+            user_ids=total_users, state=state
+        )
         end_time = time.time()
-        msg = f'''┏━━━━━━━━━━━━━━━━━━━━━━━━
+        msg = f"""┏━━━━━━━━━━━━━━━━━━━━━━━━
 ┃  ✦  Sent message Statistic
 ┣━━━━━━━━━━━━━━━━━━━━━━━━
 ┃
@@ -139,7 +145,7 @@ async def admin_send_message_all(state: FSMContext):
 ┃ 
 ┃ ✦ Total time:  {time.strftime("%H:%M:%S", time.gmtime(end_time - start_time))}
 ┃
-┗━━━━━━━━━━━━━━━━━━━━━━━━'''
+┗━━━━━━━━━━━━━━━━━━━━━━━━"""
         await bot.send_message(chat_id=ADMIN, text=f"<b>{msg}</b>")
     except Exception as e:
         await bot.send_message(chat_id=ADMIN, text=f"Xatolik yuz berdi: {str(e)}")

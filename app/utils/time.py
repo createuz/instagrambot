@@ -4,7 +4,7 @@ from __future__ import annotations
 import time
 from datetime import datetime
 
-from app.utils.const import TIMEZONE
+from app.const import TIMEZONE
 
 START_TIME: float = time.time()
 START_MONOTONIC_TIME: float = time.monotonic()

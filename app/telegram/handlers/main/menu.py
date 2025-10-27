@@ -19,10 +19,10 @@ router: Final[Router] = Router(name=__name__)
 @router.message(CommandStart())
 @router.callback_query(CDMenu.filter())
 async def greeting(
-        _: TelegramObject,
-        helper: MessageHelper,
-        i18n: I18nContext,
-        user: UserDto,
+    _: TelegramObject,
+    helper: MessageHelper,
+    i18n: I18nContext,
+    user: UserDto,
 ) -> Any:
     return
     # return await helper.answer(
@@ -33,9 +33,9 @@ async def greeting(
 
 @router.callback_query(CDDeposit.filter())
 async def answer_deposit(
-        _: TelegramObject,
-        helper: MessageHelper,
-        i18n: I18nContext,
+    _: TelegramObject,
+    helper: MessageHelper,
+    i18n: I18nContext,
 ) -> Any:
     return
     # return await helper.answer(

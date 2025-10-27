@@ -140,17 +140,25 @@ async def run():
             while not stop_event.is_set():
                 try:
                     logger.info("starting polling")
-                    await dp.start_polling(bot_obj, allowed_updates=dp.resolve_used_update_types())
+                    await dp.start_polling(
+                        bot_obj, allowed_updates=dp.resolve_used_update_types()
+                    )
                     # start_polling returned normally -> break
                     logger.info("dp.start_polling returned (normal exit)")
                     return
                 except asyncio.CancelledError:
                     raise
                 except Exception as e:
-                    logger.warning("Polling failed: %s. restarting in %.1fs", e, backoff)
+                    logger.warning(
+                        "Polling failed: %s. restarting in %.1fs", e, backoff
+                    )
                     await asyncio.wait(
-                        [asyncio.create_task(stop_event.wait()), asyncio.create_task(asyncio.sleep(backoff))],
-                        return_when=asyncio.FIRST_COMPLETED)
+                        [
+                            asyncio.create_task(stop_event.wait()),
+                            asyncio.create_task(asyncio.sleep(backoff)),
+                        ],
+                        return_when=asyncio.FIRST_COMPLETED,
+                    )
                     if stop_event.is_set():
                         return
                     backoff = min(backoff * 2, max_backoff)

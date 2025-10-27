@@ -36,11 +36,11 @@ class MessageHelper:
         return self.fsm_context
 
     def copy(
-            self,
-            *,
-            update: Optional[Message | CallbackQuery] = None,
-            chat_id: Optional[int] = None,
-            message_id: Optional[int] = None,
+        self,
+        *,
+        update: Optional[Message | CallbackQuery] = None,
+        chat_id: Optional[int] = None,
+        message_id: Optional[int] = None,
     ) -> MessageHelper:
         return MessageHelper(
             update=self.update if update is None else update,
@@ -51,9 +51,9 @@ class MessageHelper:
         )
 
     def resolve_message_id(
-            self,
-            chat_id: Optional[int] = None,
-            message_id: Optional[int] = None,
+        self,
+        chat_id: Optional[int] = None,
+        message_id: Optional[int] = None,
     ) -> tuple[int, Optional[int], bool]:
         if chat_id is None:
             chat_id = self.chat_id
@@ -84,7 +84,11 @@ class MessageHelper:
                 can_be_edited = False
         if chat_id is None:
             raise RuntimeError("Chat is unavailable.")
-        return int(chat_id), (int(message_id) if message_id is not None else None), can_be_edited
+        return (
+            int(chat_id),
+            (int(message_id) if message_id is not None else None),
+            can_be_edited,
+        )
 
     def get_chat_id(self) -> int:
         return self.resolve_message_id()[0]
@@ -98,11 +102,13 @@ class MessageHelper:
         return (await self.fsm.get_data()).get("message_id")
 
     async def delete(
-            self,
-            chat_id: Optional[int] = None,
-            message_id: Optional[int] = None,
+        self,
+        chat_id: Optional[int] = None,
+        message_id: Optional[int] = None,
     ) -> bool:
-        chat_id, message_id, *_ = self.resolve_message_id(chat_id=chat_id, message_id=message_id)
+        chat_id, message_id, *_ = self.resolve_message_id(
+            chat_id=chat_id, message_id=message_id
+        )
         if message_id is not None:
             with silent_bot_request():
                 await self.bot.delete_message(chat_id=chat_id, message_id=message_id)
@@ -110,13 +116,15 @@ class MessageHelper:
         return False
 
     async def delete_many(
-            self,
-            chat_id: Optional[int] = None,
-            message_ids: Optional[list[int]] = None,
+        self,
+        chat_id: Optional[int] = None,
+        message_ids: Optional[list[int]] = None,
     ) -> None:
         if not message_ids:
             return
-        chat_id, *_ = self.resolve_message_id(chat_id=chat_id, message_id=message_ids[0])
+        chat_id, *_ = self.resolve_message_id(
+            chat_id=chat_id, message_id=message_ids[0]
+        )
         with silent_bot_request():
             await self.bot.delete_messages(
                 chat_id=chat_id,
@@ -124,14 +132,14 @@ class MessageHelper:
             )
 
     async def send_new_message(
-            self,
-            *,
-            chat_id: Optional[int] = None,
-            message_id: Optional[int] = None,
-            text: str,
-            reply_markup: Optional[AnyKeyboard] = None,
-            delete: bool = True,
-            **kwargs: Any,
+        self,
+        *,
+        chat_id: Optional[int] = None,
+        message_id: Optional[int] = None,
+        text: str,
+        reply_markup: Optional[AnyKeyboard] = None,
+        delete: bool = True,
+        **kwargs: Any,
     ) -> Message:
         chat_id, message_id, *_ = self.resolve_message_id(
             chat_id=chat_id,
@@ -149,17 +157,17 @@ class MessageHelper:
         return msg
 
     async def answer(
-            self,
-            *,
-            chat_id: Optional[int] = None,
-            message_id: Optional[int] = None,
-            text: str,
-            reply_markup: Optional[InlineKeyboardMarkup] = None,
-            edit: bool = True,
-            reply: bool = False,
-            delete: bool = False,
-            force_edit: bool = False,
-            **kwargs: Any,
+        self,
+        *,
+        chat_id: Optional[int] = None,
+        message_id: Optional[int] = None,
+        text: str,
+        reply_markup: Optional[InlineKeyboardMarkup] = None,
+        edit: bool = True,
+        reply: bool = False,
+        delete: bool = False,
+        force_edit: bool = False,
+        **kwargs: Any,
     ) -> bool | Message:
         chat_id, message_id, can_be_edited = self.resolve_message_id(
             chat_id=chat_id,
@@ -197,16 +205,16 @@ class MessageHelper:
             self.last_updated = datetime_now()
 
     async def answer_current_message(
-            self,
-            *,
-            message_id: Optional[int] = None,
-            text: str,
-            reply_markup: Optional[InlineKeyboardMarkup] = None,
-            fsm_data: Optional[dict[str, Any]] = None,
-            delete_user_message: bool = True,
-            clear_messages: bool = True,
-            send_new: bool = False,
-            **kwargs: Any,
+        self,
+        *,
+        message_id: Optional[int] = None,
+        text: str,
+        reply_markup: Optional[InlineKeyboardMarkup] = None,
+        fsm_data: Optional[dict[str, Any]] = None,
+        delete_user_message: bool = True,
+        clear_messages: bool = True,
+        send_new: bool = False,
+        **kwargs: Any,
     ) -> tuple[Message | bool, dict[str, Any]]:
         if fsm_data is None:
             fsm_data = await self.fsm.get_data()

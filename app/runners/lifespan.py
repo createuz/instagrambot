@@ -7,16 +7,16 @@ from aiogram import Bot
 from aiogram_i18n import I18nMiddleware
 from fastapi import FastAPI
 
+from app.db.services.redis import RedisRepository
 from app.factory.telegram.requests import TelegramRequestHandler
-from app.db.services import RedisRepository
 
 logger: Final[logging.Logger] = logging.getLogger(name=__name__)
 
 
 async def close_sessions(
-        bot: Bot,
-        i18n_middleware: I18nMiddleware,
-        redis: RedisRepository,
+    bot: Bot,
+    i18n_middleware: I18nMiddleware,
+    redis: RedisRepository,
 ) -> None:
     await i18n_middleware.core.shutdown()
     await bot.session.close()

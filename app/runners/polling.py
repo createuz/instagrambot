@@ -8,12 +8,14 @@ from aiogram import Bot, Dispatcher, loggers
 from fastapi import FastAPI
 
 if TYPE_CHECKING:
-    from app.factory.config import AppConfig
+    from app.db.config import AppConfig
 
 
 async def polling_startup(bots: list[Bot], config: AppConfig) -> None:
     for bot in bots:
-        await bot.delete_webhook(drop_pending_updates=config.telegram.drop_pending_updates)
+        await bot.delete_webhook(
+            drop_pending_updates=config.telegram.drop_pending_updates
+        )
     if config.telegram.drop_pending_updates:
         loggers.dispatcher.info("Updates skipped successfully")
 

@@ -6,18 +6,18 @@ from pydantic_settings import (
     YamlConfigSettingsSource,
 )
 
-from app.utils.const import ASSETS_SOURCE_DIR
+ASSETS_SOURCE_DIR = Path(__file__).resolve().parent.parent / "telegram" / "assets"
 
 
 class YAMLSettings(BaseSettings):
     @classmethod
     def settings_customise_sources(
-        cls,
-        settings_cls: type[BaseSettings],
-        init_settings: PydanticBaseSettingsSource,
-        env_settings: PydanticBaseSettingsSource,
-        dotenv_settings: PydanticBaseSettingsSource,
-        file_secret_settings: PydanticBaseSettingsSource,
+            cls,
+            settings_cls: type[BaseSettings],
+            init_settings: PydanticBaseSettingsSource,
+            env_settings: PydanticBaseSettingsSource,
+            dotenv_settings: PydanticBaseSettingsSource,
+            file_secret_settings: PydanticBaseSettingsSource,
     ) -> tuple[PydanticBaseSettingsSource, ...]:
         return (YamlConfigSettingsSource(settings_cls),)
 

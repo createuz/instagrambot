@@ -8,12 +8,12 @@ from aiogram import Bot, Dispatcher, loggers
 from aiogram.methods import SetWebhook
 from fastapi import FastAPI
 
+from app.db.services.redis import RedisRepository
 from app.factory.telegram.requests import TelegramRequestHandler
-from app.db.services import RedisRepository
 from app.utils import mjson
 
 if TYPE_CHECKING:
-    from app.factory.config import AppConfig
+    from app.db.config import AppConfig
 
 
 async def webhook_startup(
@@ -30,7 +30,9 @@ async def webhook_startup(
         drop_pending_updates=config.telegram.drop_pending_updates,
     )
 
-    webhook_hash: str = hashlib.sha256(mjson.bytes_encode(method.model_dump())).hexdigest()
+    webhook_hash: str = hashlib.sha256(
+        mjson.bytes_encode(method.model_dump())
+    ).hexdigest()
     if await redis_repository.is_webhook_set(bot_id=bot.id, webhook_hash=webhook_hash):
         loggers.webhook.info("Skipping webhook setup, already set on url '%s'", url)
         return

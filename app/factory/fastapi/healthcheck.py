@@ -39,12 +39,12 @@ DISPATCHER_TIMEOUT = 0.15
 
 class HealthChecker:
     def __init__(
-            self,
-            *,
-            bot: Optional[Bot] = None,
-            dispatcher: Optional[Dispatcher] = None,
-            redis_repo: Optional[Any] = None,
-            db_engine: Optional[AsyncEngine] = None,
+        self,
+        *,
+        bot: Optional[Bot] = None,
+        dispatcher: Optional[Dispatcher] = None,
+        redis_repo: Optional[Any] = None,
+        db_engine: Optional[AsyncEngine] = None,
     ):
         self.bot = bot
         self.dispatcher = dispatcher
@@ -67,7 +67,9 @@ class HealthChecker:
         if not self.redis:
             return CheckerResult(name="redis", ok=False, message="not configured")
         try:
-            pong = await asyncio.wait_for(self.redis.client.ping(), timeout=REDIS_TIMEOUT)
+            pong = await asyncio.wait_for(
+                self.redis.client.ping(), timeout=REDIS_TIMEOUT
+            )
             return CheckerResult(name="redis", ok=True, message=str(pong))
         except asyncio.TimeoutError:
             return CheckerResult(name="redis", ok=False, message="timeout")
@@ -79,7 +81,9 @@ class HealthChecker:
             return CheckerResult(name="postgres", ok=False, message="not configured")
         try:
             async with self.db_engine.connect() as conn:
-                await asyncio.wait_for(conn.execute(text("SELECT 1")), timeout=POSTGRES_TIMEOUT)
+                await asyncio.wait_for(
+                    conn.execute(text("SELECT 1")), timeout=POSTGRES_TIMEOUT
+                )
             return CheckerResult(name="postgres", ok=True, message="ok")
         except asyncio.TimeoutError:
             return CheckerResult(name="postgres", ok=False, message="timeout")
@@ -94,22 +98,38 @@ class HealthChecker:
                 else:
                     lock = getattr(self.dispatcher, "_running_lock", None)
                     running = bool(lock and lock.locked())
-                return CheckerResult(name="dispatcher", ok=running, message="polling" if running else "not running")
+                return CheckerResult(
+                    name="dispatcher",
+                    ok=running,
+                    message="polling" if running else "not running",
+                )
             if self.bot is not None:
                 try:
-                    info = await asyncio.wait_for(self.bot.get_webhook_info(), timeout=DISPATCHER_TIMEOUT)
+                    info = await asyncio.wait_for(
+                        self.bot.get_webhook_info(), timeout=DISPATCHER_TIMEOUT
+                    )
                     url = getattr(info, "url", None)
                     ok = bool(url)
-                    return CheckerResult(name="dispatcher", ok=ok, message="webhook" if ok else "no webhook")
+                    return CheckerResult(
+                        name="dispatcher",
+                        ok=ok,
+                        message="webhook" if ok else "no webhook",
+                    )
                 except asyncio.TimeoutError:
-                    return CheckerResult(name="dispatcher", ok=False, message="webhook timeout")
+                    return CheckerResult(
+                        name="dispatcher", ok=False, message="webhook timeout"
+                    )
                 except Exception as e:
                     return CheckerResult(name="dispatcher", ok=False, message=str(e))
-            return CheckerResult(name="dispatcher", ok=False, message="no dispatcher/bot provided")
+            return CheckerResult(
+                name="dispatcher", ok=False, message="no dispatcher/bot provided"
+            )
         except Exception as e:
             return CheckerResult(name="dispatcher", ok=False, message=str(e))
 
-    async def run_checks(self, *, include: Optional[List[str]] = None, uptime: Optional[int] = None) -> HealthResponse:
+    async def run_checks(
+        self, *, include: Optional[List[str]] = None, uptime: Optional[int] = None
+    ) -> HealthResponse:
         if uptime is None:
             uptime = get_uptime()
         resp = HealthResponse(uptime=int(uptime or 0), ok=True, results=[])
@@ -123,7 +143,9 @@ class HealthChecker:
         if include is None or "dispatcher" in include:
             tasks["dispatcher"] = asyncio.create_task(self._check_dispatcher())
         if not tasks:
-            resp.results.append(CheckerResult(name="service", ok=True, message="no checks"))
+            resp.results.append(
+                CheckerResult(name="service", ok=True, message="no checks")
+            )
             resp.finalize()
             return resp
 
@@ -132,6 +154,8 @@ class HealthChecker:
             if isinstance(result, CheckerResult):
                 resp.results.append(result)
             else:
-                resp.results.append(CheckerResult(name=name, ok=False, message=str(result)))
+                resp.results.append(
+                    CheckerResult(name=name, ok=False, message=str(result))
+                )
         resp.finalize()
         return resp

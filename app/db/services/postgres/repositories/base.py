@@ -29,7 +29,9 @@ class BaseRepository:
         model: ColumnClauseType[T],
         *conditions: ColumnExpressionArgument[Any],
     ) -> Optional[T]:
-        return cast(Optional[T], await self.session.scalar(select(model).where(*conditions)))
+        return cast(
+            Optional[T], await self.session.scalar(select(model).where(*conditions))
+        )
 
     async def _get_many(
         self,

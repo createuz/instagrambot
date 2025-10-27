@@ -13,9 +13,9 @@ if TYPE_CHECKING:
 
 class UserManager(BaseManager):
     async def get_locale(
-            self,
-            event_from_user: Optional[AiogramUser] = None,
-            user: Optional[UserDto] = None,
+        self,
+        event_from_user: Optional[AiogramUser] = None,
+        user: Optional[UserDto] = None,
     ) -> str:
         locale: Optional[str] = None
         if user is not None:
@@ -24,5 +24,7 @@ class UserManager(BaseManager):
             locale = event_from_user.language_code
         return locale or cast(str, self.default_locale)
 
-    async def set_locale(self, locale: str, user: UserDto, user_service: UserService) -> None:
+    async def set_locale(
+        self, locale: str, user: UserDto, user_service: UserService
+    ) -> None:
         await user_service.update(user=user, language=locale)

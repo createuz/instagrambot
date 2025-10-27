@@ -11,9 +11,11 @@ from redis.asyncio.client import Redis
 T = typing.TypeVar("T")
 
 
-def chunks(list_to_split: typing.Sequence[T], chunk_size: int) -> collections.abc.Iterator[typing.Sequence[T]]:
+def chunks(
+    list_to_split: typing.Sequence[T], chunk_size: int
+) -> collections.abc.Iterator[typing.Sequence[T]]:
     for i in range(0, len(list_to_split), chunk_size):
-        yield list_to_split[i: i + chunk_size]
+        yield list_to_split[i : i + chunk_size]
 
 
 def get_redis_storage(redis: Redis):
@@ -22,9 +24,9 @@ def get_redis_storage(redis: Redis):
 
 
 def get_dispatcher(
-        storage: BaseStorage = MemoryStorage(),
-        fsm_strategy: FSMStrategy | None = FSMStrategy.CHAT,
-        event_isolation: BaseEventIsolation | None = None,
+    storage: BaseStorage = MemoryStorage(),
+    fsm_strategy: FSMStrategy | None = FSMStrategy.CHAT,
+    event_isolation: BaseEventIsolation | None = None,
 ):
     dp = Dispatcher(
         storage=storage,
@@ -35,7 +37,7 @@ def get_dispatcher(
 
 
 MEDIA_TYPES = {
-    types.ContentType.TEXT: 'text',
+    types.ContentType.TEXT: "text",
     types.ContentType.PHOTO: "photo",
     types.ContentType.VIDEO: "video",
     types.ContentType.AUDIO: "audio",

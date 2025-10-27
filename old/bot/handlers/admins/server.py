@@ -18,9 +18,14 @@ BOT_START_TIME = time.time()
 async def run_subprocess_ping() -> str:
     def _ping_blocking() -> str:
         try:
-            ping_cmd = ["ping", "-c", "4", "google.com"] if platform.system() != "Windows" else ["ping", "-n", "4",
-                                                                                                 "google.com"]
-            result = subprocess.run(ping_cmd, capture_output=True, text=True, timeout=10)
+            ping_cmd = (
+                ["ping", "-c", "4", "google.com"]
+                if platform.system() != "Windows"
+                else ["ping", "-n", "4", "google.com"]
+            )
+            result = subprocess.run(
+                ping_cmd, capture_output=True, text=True, timeout=10
+            )
             out = result.stdout.strip().splitlines()
             if not out:
                 return "📶 Ping olinmadi"
@@ -99,7 +104,7 @@ async def gather_system_info() -> str:
             )
 
             def _format_size(num: int) -> str:
-                for unit in ['B', 'KB', 'MB', 'GB', 'TB']:
+                for unit in ["B", "KB", "MB", "GB", "TB"]:
                     if num < 1024.0:
                         return f"{num:.2f} {unit}"
                     num /= 1024.0

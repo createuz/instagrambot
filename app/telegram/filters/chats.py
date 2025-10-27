@@ -38,7 +38,9 @@ class TextFilter(BaseFilter):
 class IsAdmin(BaseFilter):
     def __init__(self) -> None:
         admins: list[str] = os.getenv("ADMINS", "").split(",")
-        self.admin_ids = [int(admin.strip()) for admin in admins if admin.strip().isdigit()]
+        self.admin_ids = [
+            int(admin.strip()) for admin in admins if admin.strip().isdigit()
+        ]
 
     async def __call__(self, message: Message) -> bool:
         return message.from_user.id in self.admin_ids

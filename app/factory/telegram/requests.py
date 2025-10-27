@@ -15,11 +15,11 @@ class TelegramRequestHandler:
     _feed_update_tasks: set[asyncio.Task[Any]]
 
     def __init__(
-            self,
-            dispatcher: Dispatcher,
-            bot: Bot,
-            path: str,
-            secret_token: Optional[str] = None,
+        self,
+        dispatcher: Dispatcher,
+        bot: Bot,
+        path: str,
+        secret_token: Optional[str] = None,
     ) -> None:
         """
         Base handler that helps to handle incoming request from aiohttp
@@ -71,14 +71,16 @@ class TelegramRequestHandler:
             await self.dispatcher.silent_call_request(bot=self.bot, result=result)
 
     async def _handle_request_background(self, update: Update) -> None:
-        feed_update_task: asyncio.Task[Any] = asyncio.create_task(self._feed_update(update=update))
+        feed_update_task: asyncio.Task[Any] = asyncio.create_task(
+            self._feed_update(update=update)
+        )
         self._feed_update_tasks.add(feed_update_task)
         feed_update_task.add_done_callback(self._feed_update_tasks.discard)
 
     async def handle(
-            self,
-            update: Annotated[Update, Body()],
-            x_telegram_bot_api_secret_token: Annotated[str, Header()],
+        self,
+        update: Annotated[Update, Body()],
+        x_telegram_bot_api_secret_token: Annotated[str, Header()],
     ) -> None:
         if not self.verify_secret(x_telegram_bot_api_secret_token):
             raise HTTPException(

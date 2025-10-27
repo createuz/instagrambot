@@ -47,7 +47,9 @@ repo = UserRepo(logger=logger)
 
 
 # ------------------ Keyset iterator (DB producer) ------------------
-async def iter_user_chat_ids(session: AsyncSession, batch_size: int = 2000) -> AsyncIterator[int]:
+async def iter_user_chat_ids(
+    session: AsyncSession, batch_size: int = 2000
+) -> AsyncIterator[int]:
     """
     Keyset pagination yielding chat_id one-by-one, only is_active users.
     """
@@ -84,7 +86,9 @@ class TokenBucket:
                 now = time.monotonic()
                 elapsed = now - self._last
                 if elapsed > 0:
-                    self._tokens = min(self.capacity, self._tokens + elapsed * self.rate)
+                    self._tokens = min(
+                        self.capacity, self._tokens + elapsed * self.rate
+                    )
                     self._last = now
                 if self._tokens >= tokens:
                     self._tokens -= tokens
@@ -108,7 +112,7 @@ async def _send_via_bot(bot, chat_id: int, payload: Dict[str, Any]) -> None:
             text=caption or "",
             reply_markup=reply_markup,
             disable_web_page_preview=payload.get("disable_web_page_preview", True),
-            **extra_kwargs
+            **extra_kwargs,
         )
     elif mt == "photo":
         if media is None:
@@ -118,7 +122,7 @@ async def _send_via_bot(bot, chat_id: int, payload: Dict[str, Any]) -> None:
             photo=media,
             caption=caption or "",
             reply_markup=reply_markup,
-            **extra_kwargs
+            **extra_kwargs,
         )
     elif mt == "video":
         if media is None:
@@ -126,8 +130,9 @@ async def _send_via_bot(bot, chat_id: int, payload: Dict[str, Any]) -> None:
         await bot.send_video(
             chat_id=chat_id,
             video=media,
-            caption=caption or "", reply_markup=reply_markup,
-            **extra_kwargs
+            caption=caption or "",
+            reply_markup=reply_markup,
+            **extra_kwargs,
         )
     elif mt == "animation":
         if media is None:
@@ -135,24 +140,22 @@ async def _send_via_bot(bot, chat_id: int, payload: Dict[str, Any]) -> None:
         await bot.send_animation(
             chat_id=chat_id,
             animation=media,
-            caption=caption or "", reply_markup=reply_markup,
-            **extra_kwargs
+            caption=caption or "",
+            reply_markup=reply_markup,
+            **extra_kwargs,
         )
     elif mt == "video_note":
         if media is None:
             raise ValueError("video_note media is missing in payload")
         await bot.send_video_note(
-            chat_id=chat_id,
-            video_note=media,
-            reply_markup=reply_markup,
-            **extra_kwargs
+            chat_id=chat_id, video_note=media, reply_markup=reply_markup, **extra_kwargs
         )
     else:
         await bot.send_message(
             chat_id=chat_id,
             text=caption or "",
             reply_markup=reply_markup,
-            **extra_kwargs
+            **extra_kwargs,
         )
 
 
@@ -172,16 +175,16 @@ class BroadcastManager:
     """
 
     def __init__(
-            self,
-            session_maker: Callable[..., AsyncSession] = AsyncSessionLocal,
-            bot=None,
-            *,
-            rate: float = 20.0,
-            concurrency: int = 50,
-            batch_size: int = 2000,
-            queue_maxsize: int = 50_000,
-            max_retries: int = 5,
-            retryafter_cap: float = 300.0,
+        self,
+        session_maker: Callable[..., AsyncSession] = AsyncSessionLocal,
+        bot=None,
+        *,
+        rate: float = 20.0,
+        concurrency: int = 50,
+        batch_size: int = 2000,
+        queue_maxsize: int = 50_000,
+        max_retries: int = 5,
+        retryafter_cap: float = 300.0,
     ):
         self.session_maker = session_maker
         self.bot = bot
@@ -206,11 +209,15 @@ class BroadcastManager:
                     await s.commit()
                     return
         except Exception:
-            self.logger.exception("repo.mark_inactive failed for %s, falling back", chat_id)
+            self.logger.exception(
+                "repo.mark_inactive failed for %s, falling back", chat_id
+            )
 
         try:
             async with self.session_maker() as s:
-                await s.execute(update(User).where(User.chat_id == chat_id).values(is_active=False))
+                await s.execute(
+                    update(User).where(User.chat_id == chat_id).values(is_active=False)
+                )
                 try:
                     s.info["writes"] = True
                 except Exception:
@@ -218,17 +225,19 @@ class BroadcastManager:
                 await s.commit()
                 self.logger.info("Marked user %s inactive (fallback)", chat_id)
         except ProgrammingError as pe:
-            self.logger.debug("Could not mark inactive (is_active absent?) for %s: %s", chat_id, pe)
+            self.logger.debug(
+                "Could not mark inactive (is_active absent?) for %s: %s", chat_id, pe
+            )
         except Exception:
             self.logger.exception("Failed to mark user inactive for %s", chat_id)
 
     async def broadcast(
-            self,
-            payload: Dict[str, Any],
-            admin_chat_id: int,
-            *,
-            dedupe: bool = True,
-            external_stop_event: Optional[asyncio.Event] = None
+        self,
+        payload: Dict[str, Any],
+        admin_chat_id: int,
+        *,
+        dedupe: bool = True,
+        external_stop_event: Optional[asyncio.Event] = None,
     ) -> Dict[str, Any]:
         stats = {
             "total_enqueued": 0,
@@ -248,7 +257,9 @@ class BroadcastManager:
         async def producer():
             try:
                 async with self.session_maker() as session:
-                    async for chat_id in iter_user_chat_ids(session, batch_size=self.batch_size):
+                    async for chat_id in iter_user_chat_ids(
+                        session, batch_size=self.batch_size
+                    ):
                         # stop if signaled
                         if stop_event.is_set():
                             break
@@ -279,7 +290,11 @@ class BroadcastManager:
                         stats["sent"] += 1
                     return True
                 except RetryAfter as e:
-                    raw_wait = getattr(e, "timeout", None) or getattr(e, "retry_after", None) or 5
+                    raw_wait = (
+                        getattr(e, "timeout", None)
+                        or getattr(e, "retry_after", None)
+                        or 5
+                    )
                     wait_for = float(raw_wait)
                     if wait_for > self.retryafter_cap:
                         wait_for = self.retryafter_cap
@@ -290,8 +305,13 @@ class BroadcastManager:
                             stats["failed"] += 1
                         await _handle_permanent(chat_id, "retry_after_too_many")
                         return False
-                    self.logger.warning("RetryAfter for %s: sleeping %.1fs (attempt %s/%s)", chat_id, wait_for, attempt,
-                                        self.max_retries)
+                    self.logger.warning(
+                        "RetryAfter for %s: sleeping %.1fs (attempt %s/%s)",
+                        chat_id,
+                        wait_for,
+                        attempt,
+                        self.max_retries,
+                    )
                     await asyncio.sleep(wait_for + min(backoff, 10.0))
                     backoff = min(backoff * 2, 60.0)
                     continue
@@ -314,12 +334,19 @@ class BroadcastManager:
                     await _handle_permanent(chat_id, "unauthorized")
                     return False
                 except TelegramAPIError as e:
-                    self.logger.warning("TelegramAPIError for %s: %s (attempt %s/%s)", chat_id, e, attempt,
-                                        self.max_retries)
+                    self.logger.warning(
+                        "TelegramAPIError for %s: %s (attempt %s/%s)",
+                        chat_id,
+                        e,
+                        attempt,
+                        self.max_retries,
+                    )
                     if attempt >= self.max_retries:
                         async with stats_lock:
                             stats["failed"] += 1
-                        await _handle_permanent(chat_id, "telegram_api_error_max_retries")
+                        await _handle_permanent(
+                            chat_id, "telegram_api_error_max_retries"
+                        )
                         return False
                     await asyncio.sleep(backoff)
                     backoff = min(backoff * 2, 60.0)
@@ -331,7 +358,9 @@ class BroadcastManager:
                     await _handle_permanent(chat_id, "invalid_payload")
                     return False
                 except Exception as e:
-                    self.logger.exception("Unexpected send error for %s: %s", chat_id, e)
+                    self.logger.exception(
+                        "Unexpected send error for %s: %s", chat_id, e
+                    )
                     async with stats_lock:
                         stats["failed"] += 1
                     if attempt >= self.max_retries:
@@ -356,7 +385,9 @@ class BroadcastManager:
                     q.task_done()
 
         producer_task = asyncio.create_task(producer())
-        consumers = [asyncio.create_task(consumer_worker(i)) for i in range(self.concurrency)]
+        consumers = [
+            asyncio.create_task(consumer_worker(i)) for i in range(self.concurrency)
+        ]
 
         try:
             await producer_task
@@ -369,15 +400,21 @@ class BroadcastManager:
             await self._send_admin_report(admin_chat_id, payload, stats)
         return stats
 
-    async def _send_admin_report(self, admin_chat_id: int, payload: Dict[str, Any], stats: Dict[str, Any]):
+    async def _send_admin_report(
+        self, admin_chat_id: int, payload: Dict[str, Any], stats: Dict[str, Any]
+    ):
         total = stats.get("total_enqueued", 0)
         sent = stats.get("sent", 0)
         failed = stats.get("failed", 0)
         blocked = stats.get("blocked", 0)
         not_found = stats.get("not_found", 0)
         unauthorized = stats.get("unauthorized", 0)
-        start = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(stats.get("start_ts", time.time())))
-        end = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(stats.get("end_ts", time.time())))
+        start = time.strftime(
+            "%Y-%m-%d %H:%M:%S", time.gmtime(stats.get("start_ts", time.time()))
+        )
+        end = time.strftime(
+            "%Y-%m-%d %H:%M:%S", time.gmtime(stats.get("end_ts", time.time()))
+        )
         duration = stats.get("end_ts", time.time()) - stats.get("start_ts", time.time())
 
         msg = (

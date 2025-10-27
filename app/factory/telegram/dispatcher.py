@@ -11,7 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 from app.db.services.redis.redis import create_redis
 from app.db.services.services import create_services
 from app.db.session_pool import create_session_pool
-from app.factory.config import AppConfig, Assets
+from app.db.config import AppConfig, Assets
 from app.factory.telegram.i18n import create_i18n_middleware
 from app.telegram.handlers import admin, extra, main
 from app.telegram.middlewares import MessageHelperMiddleware, UserMiddleware

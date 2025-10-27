@@ -17,7 +17,7 @@ from app.runners.polling import polling_lifespan, polling_startup
 from app.runners.webhook import webhook_shutdown, webhook_startup
 
 if TYPE_CHECKING:
-    from app.factory.config import AppConfig
+    from app.db.config import AppConfig
 
 
 # noinspection PyProtectedMember
@@ -41,7 +41,6 @@ def run_app(app: FastAPI, config: AppConfig) -> None:
 
 
 def run_polling(dispatcher: Dispatcher, bot: Bot, config: AppConfig) -> None:
-
     dispatcher.workflow_data.update(is_polling=True)
     app: FastAPI = FastAPI(lifespan=polling_lifespan)
     setup_fastapi(app=app, bot=bot, dispatcher=dispatcher)

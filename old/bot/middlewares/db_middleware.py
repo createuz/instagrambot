@@ -9,7 +9,9 @@ from old.db.sessions.session import AsyncSessionLocal
 
 
 class DBSessionMiddleware(BaseMiddleware):
-    async def __call__(self, handler: Callable[[Any, dict], Awaitable[Any]], event: Any, data: dict):
+    async def __call__(
+        self, handler: Callable[[Any, dict], Awaitable[Any]], event: Any, data: dict
+    ):
         logger = get_logger()
         proxy = LazySessionProxy(session_maker=AsyncSessionLocal)
         data["db"] = proxy
@@ -29,27 +31,40 @@ class DBSessionMiddleware(BaseMiddleware):
 
             # If handler committed explicitly -> skip commit
             if session.info.get("committed_by_handler"):
-                logger.debug("DBSessionMiddleware: skipping commit, handler already committed")
+                logger.debug(
+                    "DBSessionMiddleware: skipping commit, handler already committed"
+                )
                 await session.close()
                 return result
 
             # Commit only if actual writes happened (or SQLAlchemy tracked new/dirty/deleted)
             writes_flag = bool(session.info.get("writes", False))
-            has_changes = bool(session.new) or bool(session.dirty) or bool(session.deleted) or writes_flag
+            has_changes = (
+                bool(session.new)
+                or bool(session.dirty)
+                or bool(session.deleted)
+                or writes_flag
+            )
 
             if has_changes:
                 await session.commit()
-                logger.info("DBSessionMiddleware: committed",
-                            reason="writes_flag" if writes_flag else "session_new_dirty_deleted",
-                            writes=writes_flag, new=len(session.new), dirty=len(session.dirty),
-                            deleted=len(session.deleted))
+                logger.info(
+                    "DBSessionMiddleware: committed",
+                    reason="writes_flag"
+                    if writes_flag
+                    else "session_new_dirty_deleted",
+                    writes=writes_flag,
+                    new=len(session.new),
+                    dirty=len(session.dirty),
+                    deleted=len(session.deleted),
+                )
             else:
                 logger.debug("DBSessionMiddleware: nothing to commit (read-only)")
 
             await session.close()
             return result
 
-        except Exception as exc:
+        except Exception:
             # rollback only if session was created and handler didn't commit
             if proxy.session_created:
                 session = proxy.get_underlying_session()

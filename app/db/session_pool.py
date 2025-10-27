@@ -1,8 +1,13 @@
 from __future__ import annotations
 
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncEngine, AsyncSession
+from sqlalchemy.ext.asyncio import (
+    create_async_engine,
+    async_sessionmaker,
+    AsyncEngine,
+    AsyncSession,
+)
 
-from app.factory.config import AppConfig
+from app.db.config import AppConfig
 
 
 def build_async_engine(config: AppConfig) -> AsyncEngine:
