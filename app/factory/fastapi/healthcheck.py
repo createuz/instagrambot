@@ -7,8 +7,9 @@ from typing import Any, Optional, List
 from aiogram import Bot, Dispatcher
 from pydantic import BaseModel, Field
 from sqlalchemy import text
-from sqlalchemy.ext.asyncio import AsyncEngine
+from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession
 
+from app.db.services.postgres import SQLSessionContext
 from app.utils.time import get_uptime
 
 
@@ -39,17 +40,17 @@ DISPATCHER_TIMEOUT = 0.15
 
 class HealthChecker:
     def __init__(
-        self,
-        *,
-        bot: Optional[Bot] = None,
-        dispatcher: Optional[Dispatcher] = None,
-        redis_repo: Optional[Any] = None,
-        db_engine: Optional[AsyncEngine] = None,
+            self,
+            *,
+            bot: Optional[Bot] = None,
+            dispatcher: Optional[Dispatcher] = None,
+            redis_repo: Optional[Any] = None,
+            session_pool: Optional[async_sessionmaker[AsyncSession]] = None
     ):
         self.bot = bot
         self.dispatcher = dispatcher
         self.redis = redis_repo
-        self.db_engine = db_engine
+        self.session_pool = session_pool
 
     async def _check_telegram(self) -> CheckerResult:
         if not self.bot:
@@ -67,9 +68,7 @@ class HealthChecker:
         if not self.redis:
             return CheckerResult(name="redis", ok=False, message="not configured")
         try:
-            pong = await asyncio.wait_for(
-                self.redis.client.ping(), timeout=REDIS_TIMEOUT
-            )
+            pong = await asyncio.wait_for(self.redis.client.ping(), timeout=REDIS_TIMEOUT)
             return CheckerResult(name="redis", ok=True, message=str(pong))
         except asyncio.TimeoutError:
             return CheckerResult(name="redis", ok=False, message="timeout")
@@ -77,13 +76,11 @@ class HealthChecker:
             return CheckerResult(name="redis", ok=False, message=str(e))
 
     async def _check_postgres(self) -> CheckerResult:
-        if not self.db_engine:
+        if not self.session_pool:
             return CheckerResult(name="postgres", ok=False, message="not configured")
         try:
-            async with self.db_engine.connect() as conn:
-                await asyncio.wait_for(
-                    conn.execute(text("SELECT 1")), timeout=POSTGRES_TIMEOUT
-                )
+            async with SQLSessionContext(session_pool=self.session_pool) as (repository, uow):
+                await asyncio.wait_for(uow.execute(text("SELECT 1")), timeout=POSTGRES_TIMEOUT)
             return CheckerResult(name="postgres", ok=True, message="ok")
         except asyncio.TimeoutError:
             return CheckerResult(name="postgres", ok=False, message="timeout")
@@ -128,7 +125,7 @@ class HealthChecker:
             return CheckerResult(name="dispatcher", ok=False, message=str(e))
 
     async def run_checks(
-        self, *, include: Optional[List[str]] = None, uptime: Optional[int] = None
+            self, *, include: Optional[List[str]] = None, uptime: Optional[int] = None
     ) -> HealthResponse:
         if uptime is None:
             uptime = get_uptime()

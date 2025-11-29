@@ -6,9 +6,7 @@ from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from app.db.config import AppConfig
-from app.db.services.crud import (
-    UserService,
-)
+from app.db.services.crud import UserService
 from app.db.services.redis import RedisRepository
 
 
@@ -18,9 +16,9 @@ class Services(TypedDict):
 
 
 def create_services(
-    session_pool: async_sessionmaker[AsyncSession],
-    redis: Redis,
-    config: AppConfig,
+        session_pool: async_sessionmaker[AsyncSession],
+        redis: Redis,
+        config: AppConfig,
 ) -> Services:
     crud_service_kwargs: dict[str, Any] = {
         "session_pool": session_pool,

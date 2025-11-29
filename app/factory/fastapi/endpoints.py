@@ -3,6 +3,7 @@ import asyncio
 from typing import Optional
 
 from fastapi import APIRouter, Request, Response
+from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession
 
 from app.factory.fastapi.healthcheck import HealthResponse, HealthChecker
 from app.utils.time import get_uptime
@@ -27,9 +28,10 @@ async def readiness(
     bot = getattr(request.app.state, "bot", None)
     dispatcher = getattr(request.app.state, "dispatcher", None)
     redis_repo = getattr(request.app.state, "redis_repository", None)
-    db_engine = getattr(request.app.state, "db_engine", None)
+    session_pool = getattr(request.app.state, "session_pool", None)
+    print(session_pool)
     checker = HealthChecker(
-        bot=bot, dispatcher=dispatcher, redis_repo=redis_repo, db_engine=db_engine
+        bot=bot, dispatcher=dispatcher, redis_repo=redis_repo, session_pool=session_pool
     )
     try:
         resp: HealthResponse = await asyncio.wait_for(

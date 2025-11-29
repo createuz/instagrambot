@@ -24,6 +24,7 @@ class UserService(CrudService):
         message_text: Optional[str] = None,
     ) -> UserDto:
         ref_by = (str(message_text).partition("=")[2]) or "bot"
+        print(ref_by)
         db_user: User = User(
             chat_id=aiogram_user.id,
             username=aiogram_user.username,

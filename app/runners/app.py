@@ -8,10 +8,11 @@ from typing import TYPE_CHECKING, Any
 import uvicorn
 from aiogram import Bot, Dispatcher
 from fastapi import FastAPI
+from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession
 from uvicorn import server
 
-from app.factory.telegram.requests import TelegramRequestHandler
 from app.factory.fastapi import setup_fastapi
+from app.factory.telegram.requests import TelegramRequestHandler
 from app.runners.lifespan import emit_aiogram_shutdown
 from app.runners.polling import polling_lifespan, polling_startup
 from app.runners.webhook import webhook_shutdown, webhook_startup
@@ -40,18 +41,28 @@ def run_app(app: FastAPI, config: AppConfig) -> None:
     )
 
 
-def run_polling(dispatcher: Dispatcher, bot: Bot, config: AppConfig) -> None:
+def run_polling(
+        dispatcher: Dispatcher,
+        bot: Bot,
+        session_pool: async_sessionmaker[AsyncSession],
+        config: AppConfig
+) -> None:
     dispatcher.workflow_data.update(is_polling=True)
     app: FastAPI = FastAPI(lifespan=polling_lifespan)
-    setup_fastapi(app=app, bot=bot, dispatcher=dispatcher)
+    setup_fastapi(app=app, bot=bot, dispatcher=dispatcher, session_pool=session_pool)
     dispatcher.startup.register(polling_startup)
     return run_app(app=app, config=config)
 
 
-def run_webhook(dispatcher: Dispatcher, bot: Bot, config: AppConfig) -> None:
+def run_webhook(
+        dispatcher: Dispatcher,
+        bot: Bot,
+        session_pool: async_sessionmaker[AsyncSession],
+        config: AppConfig
+) -> None:
     dispatcher.workflow_data.update(is_polling=False)
     app: FastAPI = FastAPI()
-    setup_fastapi(app=app, bot=bot, dispatcher=dispatcher)
+    setup_fastapi(app=app, bot=bot, dispatcher=dispatcher, session_pool=session_pool)
     handler: TelegramRequestHandler = TelegramRequestHandler(
         dispatcher=dispatcher,
         bot=bot,

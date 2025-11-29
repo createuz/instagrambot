@@ -1,6 +1,6 @@
 import asyncio
 from types import TracebackType
-from typing import Optional
+from typing import Optional, Type
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
@@ -11,7 +11,6 @@ from .uow import UoW
 class SQLSessionContext:
     _session_pool: async_sessionmaker[AsyncSession]
     _session: Optional[AsyncSession]
-
     __slots__ = ("_session_pool", "_session")
 
     def __init__(self, session_pool: async_sessionmaker[AsyncSession]) -> None:
@@ -23,13 +22,20 @@ class SQLSessionContext:
         return Repository(session=self._session), UoW(session=self._session)
 
     async def __aexit__(
-        self,
-        exc_type: Optional[type[BaseException]],
-        exc_value: Optional[BaseException],
-        traceback: Optional[TracebackType],
+            self,
+            exc_type: Optional[Type[BaseException]],
+            exc_value: Optional[BaseException],
+            traceback: Optional[TracebackType],
     ) -> None:
         if self._session is None:
             return
-        task: asyncio.Task[None] = asyncio.create_task(self._session.close())
-        await asyncio.shield(task)
-        self._session = None
+        if exc_type is not None:
+            try:
+                await self._session.rollback()
+            except Exception:
+                pass
+        try:
+            task: asyncio.Task[None] = asyncio.create_task(self._session.close())
+            await asyncio.shield(task)
+        finally:
+            self._session = None

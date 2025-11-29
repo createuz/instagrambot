@@ -8,21 +8,19 @@ from aiogram_i18n import I18nMiddleware
 from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
+from app.db.config import AppConfig, Assets
 from app.db.services.redis.redis import create_redis
 from app.db.services.services import create_services
-from app.db.session_pool import create_session_pool
-from app.db.config import AppConfig, Assets
 from app.factory.telegram.i18n import create_i18n_middleware
 from app.telegram.handlers import admin, extra, main
 from app.telegram.middlewares import MessageHelperMiddleware, UserMiddleware
 from app.utils import mjson
 
 
-def create_dispatcher(config: AppConfig) -> Dispatcher:
+def create_dispatcher(config: AppConfig, session_pool: async_sessionmaker[AsyncSession]) -> Dispatcher:
     """
     :return: Configured ``Dispatcher`` with installed middlewares and included routers
     """
-    session_pool: async_sessionmaker[AsyncSession] = create_session_pool(config=config)
     redis: Redis = create_redis(config=config)
     i18n_middleware: I18nMiddleware = create_i18n_middleware(config)
 
