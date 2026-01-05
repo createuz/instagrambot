@@ -6,7 +6,7 @@ from sqlalchemy import URL
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import AsyncEngine, async_engine_from_config
 
-from app.db.config.env import PostgresConfig
+from app.utils.config import PostgresConfig
 from app.db.models.base import Base
 
 config = context.config

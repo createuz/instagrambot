@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from redis.asyncio import ConnectionPool, Redis
 
-from app.db.config import AppConfig
+from app.utils.config import AppConfig
 
 
 def create_redis(config: AppConfig) -> Redis:

@@ -13,12 +13,12 @@ from uvicorn import server
 
 from app.factory.fastapi import setup_fastapi
 from app.factory.telegram.requests import TelegramRequestHandler
-from app.runners.lifespan import emit_aiogram_shutdown
-from app.runners.polling import polling_lifespan, polling_startup
-from app.runners.webhook import webhook_shutdown, webhook_startup
+from app.factory.runners.lifespan import emit_aiogram_shutdown
+from app.factory.runners.polling import polling_lifespan, polling_startup
+from app.factory.runners.webhook import webhook_shutdown, webhook_startup
 
 if TYPE_CHECKING:
-    from app.db.config import AppConfig
+    from app.utils.config import AppConfig
 
 
 # noinspection PyProtectedMember

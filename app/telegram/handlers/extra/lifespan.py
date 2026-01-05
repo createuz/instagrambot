@@ -6,8 +6,8 @@ from typing import Final
 from aiogram import Bot, Router
 from aiogram.types import BotCommandScopeAllPrivateChats
 
-from app.db.config import Assets
-from app.runners.lifespan import close_sessions
+from app.utils.config import Assets
+from app.factory.runners.lifespan import close_sessions
 
 logger: Final[logging.Logger] = logging.getLogger(name=__name__)
 router: Final[Router] = Router(name=__name__)

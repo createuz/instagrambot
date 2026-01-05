@@ -1,7 +1,7 @@
 from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
-from app.db.config import AppConfig
+from app.utils.config import AppConfig
 from app.db.services.base import BaseService
 
 

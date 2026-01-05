@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from app.db.config.env import (
+from app.utils.config.env import (
     AppConfig,
     CommonConfig,
     PostgresConfig,

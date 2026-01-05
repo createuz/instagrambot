@@ -13,7 +13,7 @@ from app.factory.telegram.requests import TelegramRequestHandler
 from app.utils import mjson
 
 if TYPE_CHECKING:
-    from app.db.config import AppConfig
+    from app.utils.config import AppConfig
 
 
 async def webhook_startup(

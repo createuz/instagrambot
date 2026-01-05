@@ -5,7 +5,7 @@ from typing import Any, TypedDict
 from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
-from app.db.config import AppConfig
+from app.utils.config import AppConfig
 from app.db.services.crud import UserService
 from app.db.services.redis import RedisRepository
 

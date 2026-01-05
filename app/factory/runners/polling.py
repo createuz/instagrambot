@@ -8,7 +8,7 @@ from aiogram import Bot, Dispatcher, loggers
 from fastapi import FastAPI
 
 if TYPE_CHECKING:
-    from app.db.config import AppConfig
+    from app.utils.config import AppConfig
 
 
 async def polling_startup(bots: list[Bot], config: AppConfig) -> None:

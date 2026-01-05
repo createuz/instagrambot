@@ -12,7 +12,7 @@ from app.utils import mjson
 from app.utils.key_builder import StorageKey
 
 if TYPE_CHECKING:
-    from app.db.config import AppConfig
+    from app.utils.config import AppConfig
 
 T = TypeVar("T", bound=Any)
 

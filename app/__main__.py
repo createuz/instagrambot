@@ -1,11 +1,11 @@
 from aiogram import Bot, Dispatcher
 from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession
 
-from app.db.config import AppConfig
-from app.db.config.app_config import create_app_config
+from app.utils.config import AppConfig
+from app.utils.config.app_config import create_app_config
 from app.db.session_pool import create_session_pool
 from app.factory import create_bot, create_dispatcher
-from app.runners.app import run_polling, run_webhook
+from app.factory.runners.app import run_polling, run_webhook
 from app.utils.logging import setup_logger
 
 

@@ -12,7 +12,7 @@ from aiogram.types import LinkPreviewOptions
 from app.utils import mjson
 
 if TYPE_CHECKING:
-    from app.db.config import AppConfig
+    from app.utils.config import AppConfig
 
 
 def create_bot(config: AppConfig) -> Bot:

@@ -8,7 +8,7 @@ from aiogram_i18n import I18nMiddleware
 from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
-from app.db.config import AppConfig, Assets
+from app.utils.config import AppConfig, Assets
 from app.db.services.redis.redis import create_redis
 from app.db.services.services import create_services
 from app.factory.telegram.i18n import create_i18n_middleware
