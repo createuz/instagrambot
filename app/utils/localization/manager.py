@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Optional, cast
 from aiogram.types import User as AiogramUser
 from aiogram_i18n.managers import BaseManager
 
-from app.db.services.crud import UserService
+from app.db.crud import UserService
 
 if TYPE_CHECKING:
     from app.db.models.dto import UserDto

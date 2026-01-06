@@ -6,7 +6,7 @@ from pydantic_settings import (
     YamlConfigSettingsSource,
 )
 
-ASSETS_SOURCE_DIR = Path(__file__).resolve().parent.parent / "telegram" / "assets"
+ASSETS_SOURCE_DIR = Path(__file__).resolve().parent.parent / "bot" / "i18n"
 
 
 class YAMLSettings(BaseSettings):
