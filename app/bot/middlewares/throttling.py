@@ -5,7 +5,7 @@ from aiogram import BaseMiddleware
 from aiogram.types import CallbackQuery, Message, TelegramObject, Update, User
 from cachetools import TTLCache
 
-from app.api.lifecycle import logger
+from app.api.lifecycle.lifespan import logger
 
 CACHE = TTLCache(maxsize=10_000, ttl=2)
 
@@ -44,5 +44,5 @@ class ThrottlingMiddleware(BaseMiddleware):
                 if event.callback_query.message is not None:
                     await event.callback_query.message.answer(text)
                 return await event.callback_query.answer()
-
         logger.debug('Throttling notification skipped: unsupported event type %s', type(event))
+        return None
